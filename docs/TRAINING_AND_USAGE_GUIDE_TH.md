@@ -161,3 +161,15 @@ API key และ checkpoint ต้องอยู่ฝั่ง server เท�
 - PyTorch reproducibility notes: https://docs.pytorch.org/docs/stable/notes/randomness.html
 
 หมายเหตุ: รายละเอียดทางการแพทย์บนเว็บไซต์ต้องผ่านการทบทวนโดยจักษุแพทย์ก่อนใช้กับบริบทนอกการสาธิต
+
+## 13. ผล baseline ที่ทำซ้ำได้ ณ 1 สิงหาคม 2026
+
+Retinova เทรน ResNet-18 จำนวน 8 epochs บน split ที่แยกผู้ป่วยแล้ว โดยเลือก checkpoint จาก validation macro F1:
+
+- test 957 ภาพ จาก 503 ผู้ป่วย
+- macro F1 = 0.562; patient-bootstrap 95% interval = 0.507–0.603
+- balanced accuracy = 0.617; patient-bootstrap 95% interval = 0.555–0.667
+- recall ต่ำสุดคือ Other 0.264 และ Hypertension 0.444
+- patient overlap ระหว่าง train/validation/test = 0
+
+ผลนี้ดีกว่าการไม่มี baseline ที่ตรวจสอบได้ แต่ยังไม่พอสำหรับใช้งานคลินิก การพบ shortcut บริเวณขอบภาพจาก Grad-CAM ยืนยันว่าต้องเพิ่ม quality control, external validation และผู้เชี่ยวชาญตรวจ failure cases ก่อนเปิด inference สาธารณะ ดูรายละเอียดที่ [Baseline Evaluation v1](EVALUATION_BASELINE_V1.md)

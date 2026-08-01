@@ -21,6 +21,10 @@ class PublicContractTests(unittest.TestCase):
         self.assertNotIn("20,000+", public)
         self.assertNotRegex(public, r"private\s*&\s*encrypted|ข้อมูล.*เข้ารหัส")
 
+    def test_hidden_states_cannot_be_overridden_by_component_css(self):
+        css = (ROOT / "dashboard" / "styles.css").read_text(encoding="utf-8")
+        self.assertIn("[hidden]{display:none!important}", HTML + css)
+
     def test_no_credential_like_literal_is_committed(self):
         source = JS + SERVER
         self.assertNotRegex(source, r"api[_-]?key\s*[:=]\s*['\"][A-Za-z0-9_-]{16,}['\"]")

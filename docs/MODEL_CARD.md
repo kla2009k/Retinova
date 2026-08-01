@@ -1,6 +1,6 @@
 # Retinova Model Card
 
-Status: **development — no production checkpoint approved**
+Status: **baseline trained — no production checkpoint approved**
 Last updated: 2026-08-01
 
 ## Intended task
@@ -35,6 +35,13 @@ The planned method is class-specific Grad-CAM from the final convolutional block
 - Shortcut learning from borders, illumination, acquisition devices, or annotations.
 - Over-trust in probability values and visual explanations.
 
-## Current metrics
+## Current patient-grouped baseline
 
-None approved. Any legacy dashboard values or provider-side metrics are excluded until reproduced with the patient-grouped test policy.
+ResNet-18 baseline v1 on 957 held-out images from 503 patients:
+
+- Macro F1: 0.562 (patient-bootstrap 95% interval 0.507–0.603)
+- Balanced accuracy: 0.617 (patient-bootstrap 95% interval 0.555–0.667)
+- Weakest recall: Other 0.264 and Hypertension 0.444
+- Patient overlap across train/validation/test: 0
+
+See [Baseline Evaluation v1](EVALUATION_BASELINE_V1.md). These values are development evidence, not a clinical performance claim. The checkpoint is withheld pending dataset and derived-weight licensing clarification.

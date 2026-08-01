@@ -1,0 +1,7 @@
+-r requirements.txt
+numpy>=2.0,<3
+pandas>=2.2,<4
+Pillow>=11,<13
+scikit-learn>=1.6,<2
+torch>=2.7,<3
+torchvision>=0.22,<1

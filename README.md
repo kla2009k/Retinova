@@ -7,7 +7,7 @@ Retinova is a research prototype for screening **retinal fundus photographs**. I
 - Website: https://kla2009k.github.io/Retinova/
 - Current mode: safe static preview; local image-readiness checks only
 - Live disease inference: not connected to the public site
-- Grad-CAM: implementation and checkpoint validation in progress
+- Grad-CAM: real class-specific implementation validated offline; not connected publicly
 
 The public preview deliberately does not display invented accuracy, medical findings, or synthetic heatmaps.
 
@@ -36,6 +36,7 @@ Never add the key to `dashboard/app.js` or commit `.env`.
 
 - [Thai training-to-usage guide](docs/TRAINING_AND_USAGE_GUIDE_TH.md)
 - [Model card](docs/MODEL_CARD.md)
+- [Patient-grouped baseline evaluation](docs/EVALUATION_BASELINE_V1.md)
 - [Privacy and safety](docs/PRIVACY.md)
 - [Product specification](docs/RETINOVA_SPEC.md)
 - [Implementation plan](docs/IMPLEMENTATION_PLAN.md)
@@ -56,6 +57,20 @@ The local ODIR-derived table contains 6,392 per-image rows across eight mutually
 | Hypertension | 128 |
 
 These are dataset counts, not claims about model accuracy.
+
+## Reproduce the baseline
+
+```powershell
+python -m scripts.build_retinova_manifest
+python -m scripts.train_retinova --config configs/train_resnet18.json
+python -m scripts.evaluate_retinova `
+  --checkpoint models/resnet18_patient_grouped_v1/retinova_resnet18_best.pt
+python -m scripts.gradcam_retinova `
+  --checkpoint models/resnet18_patient_grouped_v1/retinova_resnet18_best.pt `
+  --image path/to/fundus.jpg
+```
+
+The measured baseline test macro F1 is 0.562 and balanced accuracy is 0.617. See the evaluation report for patient-bootstrap intervals and class-level failures. Checkpoints and ODIR images remain local until licensing is clarified.
 
 ## License and intended use
 

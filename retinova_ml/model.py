@@ -1,0 +1,14 @@
+"""Versioned Retinova image-classification model factory."""
+from torch import nn
+from torchvision.models import ResNet18_Weights, resnet18
+
+
+def build_resnet18(num_classes=8, pretrained=True):
+    weights = ResNet18_Weights.IMAGENET1K_V1 if pretrained else None
+    model = resnet18(weights=weights)
+    model.fc = nn.Linear(model.fc.in_features, num_classes)
+    return model
+
+
+def gradcam_target_layer(model):
+    return model.layer4[-1].conv2
