@@ -1,0 +1,40 @@
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# Local runtime output
+dashboard/test_log.jsonl
+*.log
+
+# Large datasets and generated training artifacts
+archive_4/
+models/
+artifacts/
+runs/
+*.pth
+*.pt
+*.onnx
+
+# Duplicate/reference images kept outside the deployed app
+/97453_0.jpg
+/97454_0.jpg
+/97455_0.jpg
+/download.jpg
+/download (1).jpg
+/retinal-vessel-segmentation-ground-truth-data.png
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

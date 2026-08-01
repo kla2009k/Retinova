@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "source": "DESIGN.md",
+  "name": "Retinova Clinical Light Table",
+  "personality": ["calm", "precise", "accountable"],
+  "tokens": {
+    "color": {
+      "ink": "#10233F",
+      "blue": "#246BCE",
+      "teal": "#14877C",
+      "amber": "#B86612",
+      "danger": "#B42318",
+      "paper": "#F7F8F5",
+      "surface": "#FFFFFF",
+      "line": "#D8E0E8"
+    },
+    "font": {
+      "display": "Prompt, system-ui, sans-serif",
+      "body": "Sarabun, system-ui, sans-serif"
+    },
+    "radius": {
+      "small": "8px",
+      "medium": "12px",
+      "large": "14px"
+    }
+  }
+}

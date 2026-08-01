@@ -1,0 +1,62 @@
+# Retinova
+
+Retinova is a research prototype for screening **retinal fundus photographs**. It is not an iris-identification system and it is not a medical diagnosis.
+
+## Public preview
+
+- Website: https://kla2009k.github.io/Retinova/
+- Current mode: safe static preview; local image-readiness checks only
+- Live disease inference: not connected to the public site
+- Grad-CAM: implementation and checkpoint validation in progress
+
+The public preview deliberately does not display invented accuracy, medical findings, or synthetic heatmaps.
+
+![QR code for the Retinova public preview](docs/retinova-qr.png)
+
+## Run locally
+
+```powershell
+python -m pip install -r requirements.txt
+cd dashboard
+python serve_with_log.py
+```
+
+Open `http://127.0.0.1:8000`.
+
+Optional legacy Roboflow inference must stay server-side:
+
+```powershell
+$env:ROBOFLOW_API_KEY="your-rotated-key"
+python serve_with_log.py
+```
+
+Never add the key to `dashboard/app.js` or commit `.env`.
+
+## Documentation
+
+- [Thai training-to-usage guide](docs/TRAINING_AND_USAGE_GUIDE_TH.md)
+- [Model card](docs/MODEL_CARD.md)
+- [Privacy and safety](docs/PRIVACY.md)
+- [Product specification](docs/RETINOVA_SPEC.md)
+- [Implementation plan](docs/IMPLEMENTATION_PLAN.md)
+
+## Current dataset audit
+
+The local ODIR-derived table contains 6,392 per-image rows across eight mutually exclusive labels. The existing 2,103-image Roboflow subset was randomly split per image, so patients with two eyes can leak across splits. All new evaluation must therefore split by patient identifier before model selection.
+
+| Label | Images |
+|---|---:|
+| Normal | 2,873 |
+| Diabetes | 1,608 |
+| Other | 708 |
+| Cataract | 293 |
+| Glaucoma | 284 |
+| AMD | 266 |
+| Myopia | 232 |
+| Hypertension | 128 |
+
+These are dataset counts, not claims about model accuracy.
+
+## License and intended use
+
+The repository currently has no clinical-use license or regulatory approval. Use it for education, research, and supervised demonstrations only. Dataset use remains subject to the original dataset terms.

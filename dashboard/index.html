@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Retinova ต้นแบบระบบคัดกรองภาพถ่ายจอประสาทตาเพื่อการวิจัยและการศึกษา">
+  <meta name="theme-color" content="#10233f">
+  <title>Retinova — Retinal screening, explained</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@500;600;700&family=Sarabun:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip" href="#main">ข้ามไปเนื้อหาหลัก</a>
+  <header class="topbar">
+    <a class="brand" href="#top" aria-label="Retinova หน้าแรก">
+      <span class="brand-mark" aria-hidden="true"><span></span></span>
+      <span>Retinova<small>Retinal screening, explained.</small></span>
+    </a>
+    <nav aria-label="เมนูหลัก">
+      <a href="#analyze">ทดลองใช้</a><a href="#workflow">การทำงาน</a><a href="#model">โมเดล</a><a href="#safety">ความปลอดภัย</a>
+    </nav>
+    <button class="lang" id="langButton" type="button" aria-label="Switch language">EN</button>
+  </header>
+
+  <main id="main">
+    <section class="hero" id="top">
+      <div class="hero-copy">
+        <div class="eyebrow"><span class="pulse"></span><span data-th="PUBLIC PREVIEW · ระบบสาธิต" data-en="PUBLIC PREVIEW · DEMONSTRATION">PUBLIC PREVIEW · ระบบสาธิต</span></div>
+        <h1 data-th="มองเห็นเหตุผลเบื้องหลังการคัดกรองจอประสาทตา" data-en="See the reasoning behind retinal screening">มองเห็นเหตุผลเบื้องหลังการคัดกรองจอประสาทตา</h1>
+        <p class="lead" data-th="Retinova กำลังพัฒนาระบบ AI สำหรับภาพถ่ายจอประสาทตา (retinal fundus) ที่แสดงแหล่งที่มาของโมเดล ความไม่แน่นอน และ Grad-CAM จากโมเดลจริง" data-en="Retinova is developing AI for retinal fundus photographs with visible model provenance, uncertainty, and model-derived Grad-CAM.">Retinova กำลังพัฒนาระบบ AI สำหรับภาพถ่ายจอประสาทตา (retinal fundus) ที่แสดงแหล่งที่มาของโมเดล ความไม่แน่นอน และ Grad-CAM จากโมเดลจริง</p>
+        <div class="actions"><a class="button primary" href="#analyze" data-th="เปิดพื้นที่ทดลอง" data-en="Open preview">เปิดพื้นที่ทดลอง</a><a class="button secondary" href="#model" data-th="ดูหลักฐานของระบบ" data-en="Inspect model evidence">ดูหลักฐานของระบบ</a></div>
+        <p class="scope"><strong data-th="ขอบเขตชัดเจน:" data-en="Clear scope:">ขอบเขตชัดเจน:</strong> <span data-th="นี่คือภาพจอประสาทตา ไม่ใช่การสแกนม่านตา และระบบนี้ไม่ใช่การวินิจฉัยโรค" data-en="This uses retinal fundus images—not iris identity scans—and is not a medical diagnosis.">นี่คือภาพจอประสาทตา ไม่ใช่การสแกนม่านตา และระบบนี้ไม่ใช่การวินิจฉัยโรค</span></p>
+      </div>
+      <aside class="status-board" aria-label="สถานะระบบ">
+        <div class="board-head"><span data-th="สถานะหลักฐาน" data-en="Evidence status">สถานะหลักฐาน</span><b>01 AUG 2026</b></div>
+        <div class="status-row"><span data-th="หน้าเว็บสาธารณะ" data-en="Public interface">หน้าเว็บสาธารณะ</span><strong class="ok" data-th="พร้อมสาธิต" data-en="Demo ready">พร้อมสาธิต</strong></div>
+        <div class="status-row"><span data-th="ชุดข้อมูล" data-en="Dataset">ชุดข้อมูล</span><strong>ODIR-derived</strong></div>
+        <div class="status-row"><span data-th="ผลทำนายสด" data-en="Live inference">ผลทำนายสด</span><strong class="wait" data-th="ยังไม่เชื่อมต่อ" data-en="Not connected">ยังไม่เชื่อมต่อ</strong></div>
+        <div class="status-row"><span>Grad-CAM</span><strong class="wait" data-th="รอ checkpoint" data-en="Awaiting checkpoint">รอ checkpoint</strong></div>
+        <p data-th="เราไม่แสดงค่าความแม่นยำหรือภาพ heatmap จนกว่าจะตรวจสอบจากชุดทดสอบที่แยกตามผู้ป่วยแล้ว" data-en="We do not publish accuracy or heatmaps until they are verified on a patient-grouped test set.">เราไม่แสดงค่าความแม่นยำหรือภาพ heatmap จนกว่าจะตรวจสอบจากชุดทดสอบที่แยกตามผู้ป่วยแล้ว</p>
+      </aside>
+    </section>
+
+    <section class="section" id="analyze">
+      <div class="section-title"><span>01</span><div><p data-th="พื้นที่ทดลอง" data-en="Preview workspace">พื้นที่ทดลอง</p><h2 data-th="ตรวจคุณภาพภาพก่อนส่งเข้าโมเดล" data-en="Check image quality before inference">ตรวจคุณภาพภาพก่อนส่งเข้าโมเดล</h2></div></div>
+      <div class="workspace">
+        <div class="upload-card">
+          <label class="dropzone" id="dropzone" for="imageInput">
+            <input id="imageInput" type="file" accept="image/jpeg,image/png" hidden>
+            <span class="upload-icon" aria-hidden="true">↥</span>
+            <strong data-th="วางภาพ fundus หรือเลือกไฟล์" data-en="Drop a fundus image or choose a file">วางภาพ fundus หรือเลือกไฟล์</strong>
+            <small data-th="JPG/PNG สูงสุด 10 MB · ภาพจะไม่ถูกอัปโหลดใน Public Preview" data-en="JPG/PNG up to 10 MB · Public Preview does not upload your image">JPG/PNG สูงสุด 10 MB · ภาพจะไม่ถูกอัปโหลดใน Public Preview</small>
+          </label>
+          <div class="preview-frame" id="previewFrame" hidden><img id="previewImage" alt="ภาพจอประสาทตาที่ผู้ใช้เลือก"><button id="removeImage" type="button" data-th="นำภาพออก" data-en="Remove image">นำภาพออก</button></div>
+          <button class="button primary full" id="analyzeButton" type="button" disabled data-th="ตรวจความพร้อมของภาพ" data-en="Check image readiness">ตรวจความพร้อมของภาพ</button>
+        </div>
+        <div class="result-card" aria-live="polite">
+          <div class="result-top"><span data-th="ผลตรวจสอบ" data-en="Readiness result">ผลตรวจสอบ</span><span class="demo-chip" data-th="ไม่ใช่ผลโมเดล" data-en="NOT MODEL OUTPUT">ไม่ใช่ผลโมเดล</span></div>
+          <div class="empty-result" id="emptyResult"><span>◉</span><h3 data-th="ยังไม่มีภาพ" data-en="No image selected">ยังไม่มีภาพ</h3><p data-th="Public Preview ตรวจเฉพาะชนิดไฟล์ ขนาด และการเปิดอ่านภาพในเบราว์เซอร์" data-en="Public Preview checks only file type, size, and whether the browser can decode the image.">Public Preview ตรวจเฉพาะชนิดไฟล์ ขนาด และการเปิดอ่านภาพในเบราว์เซอร์</p></div>
+          <div class="check-result" id="checkResult" hidden>
+            <div class="check-line"><span data-th="ไฟล์ภาพ" data-en="Image file">ไฟล์ภาพ</span><strong id="fileCheck">—</strong></div>
+            <div class="check-line"><span data-th="ความละเอียด" data-en="Resolution">ความละเอียด</span><strong id="resolutionCheck">—</strong></div>
+            <div class="check-line"><span data-th="ความเป็นส่วนตัว" data-en="Privacy">ความเป็นส่วนตัว</span><strong class="ok" data-th="ประมวลผลในเครื่อง" data-en="On-device only">ประมวลผลในเครื่อง</strong></div>
+            <div class="notice"><b data-th="ขั้นต่อไป" data-en="Next step">ขั้นต่อไป</b><p data-th="เมื่อ backend และ checkpoint ผ่านการตรวจสอบ ปุ่มนี้จะคืนคลาส ความน่าจะเป็น รุ่นโมเดล และ Grad-CAM ที่สร้างจาก prediction เดียวกัน" data-en="After the backend and checkpoint are validated, this action will return class probabilities, model version, and Grad-CAM from the same prediction.">เมื่อ backend และ checkpoint ผ่านการตรวจสอบ ปุ่มนี้จะคืนคลาส ความน่าจะเป็น รุ่นโมเดล และ Grad-CAM ที่สร้างจาก prediction เดียวกัน</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section muted" id="workflow">
+      <div class="section-title"><span>02</span><div><p data-th="ลำดับการทำงาน" data-en="Clinical workflow">ลำดับการทำงาน</p><h2 data-th="ทุกผลลัพธ์ต้องย้อนกลับไปหาหลักฐานได้" data-en="Every output must trace back to evidence">ทุกผลลัพธ์ต้องย้อนกลับไปหาหลักฐานได้</h2></div></div>
+      <div class="steps">
+        <article><b>01</b><h3 data-th="รับภาพ" data-en="Acquire">รับภาพ</h3><p data-th="ตรวจชนิด ขนาด ความละเอียด และคุณภาพก่อน inference" data-en="Validate type, size, resolution, and quality before inference.">ตรวจชนิด ขนาด ความละเอียด และคุณภาพก่อน inference</p></article>
+        <article><b>02</b><h3 data-th="ประมวลผล" data-en="Infer">ประมวลผล</h3><p data-th="โมเดลจำแนก 8 กลุ่มจากภาพ fundus เดี่ยว พร้อมรายงาน version" data-en="A versioned model classifies one fundus image into eight research categories.">โมเดลจำแนก 8 กลุ่มจากภาพ fundus เดี่ยว พร้อมรายงาน version</p></article>
+        <article><b>03</b><h3 data-th="อธิบาย" data-en="Explain">อธิบาย</h3><p data-th="สร้าง Grad-CAM จากชั้น convolution และคลาสเดียวกับผลทำนาย" data-en="Generate Grad-CAM from the same prediction class and convolutional layer.">สร้าง Grad-CAM จากชั้น convolution และคลาสเดียวกับผลทำนาย</p></article>
+        <article><b>04</b><h3 data-th="ส่งต่อ" data-en="Escalate">ส่งต่อ</h3><p data-th="แสดงความไม่แน่นอนและคำแนะนำพบจักษุแพทย์โดยไม่อ้างว่าเป็น diagnosis" data-en="Show uncertainty and referral guidance without claiming diagnosis.">แสดงความไม่แน่นอนและคำแนะนำพบจักษุแพทย์โดยไม่อ้างว่าเป็น diagnosis</p></article>
+      </div>
+    </section>
+
+    <section class="section" id="model">
+      <div class="section-title"><span>03</span><div><p data-th="Model facts" data-en="Model facts">Model facts</p><h2 data-th="สิ่งที่ทีมพูดบนเวทีได้ในวันนี้" data-en="What the team can claim today">สิ่งที่ทีมพูดบนเวทีได้ในวันนี้</h2></div></div>
+      <div class="facts">
+        <div class="fact-main"><h3 data-th="ปัญหาที่กำลังแก้" data-en="Target task">ปัญหาที่กำลังแก้</h3><p data-th="การจำแนกภาพ fundus เดี่ยว 8 กลุ่ม: Normal, Diabetes, Glaucoma, Cataract, AMD, Hypertension, Myopia และ Other" data-en="Single-fundus-image classification into eight groups: Normal, Diabetes, Glaucoma, Cataract, AMD, Hypertension, Myopia, and Other.">การจำแนกภาพ fundus เดี่ยว 8 กลุ่ม: Normal, Diabetes, Glaucoma, Cataract, AMD, Hypertension, Myopia และ Other</p><a href="https://github.com/kla2009k/Retinova/blob/main/docs/TRAINING_AND_USAGE_GUIDE_TH.md" data-th="อ่านคู่มือการเทรนฉบับเต็ม →" data-en="Read the training guide →">อ่านคู่มือการเทรนฉบับเต็ม →</a></div>
+        <dl><div><dt data-th="ข้อมูลตั้งต้น" data-en="Source data">ข้อมูลตั้งต้น</dt><dd>ODIR-derived local dataset</dd></div><div><dt data-th="หน่วยแบ่งข้อมูล" data-en="Split unit">หน่วยแบ่งข้อมูล</dt><dd data-th="ผู้ป่วย ไม่ใช่ภาพ" data-en="Patient, not image">ผู้ป่วย ไม่ใช่ภาพ</dd></div><div><dt data-th="โมเดลใช้งานจริง" data-en="Production model">โมเดลใช้งานจริง</dt><dd data-th="ยังไม่อนุมัติ" data-en="Not yet approved">ยังไม่อนุมัติ</dd></div><div><dt data-th="Grad-CAM สาธารณะ" data-en="Public Grad-CAM">Grad-CAM สาธารณะ</dt><dd data-th="ยังไม่เผยแพร่" data-en="Not yet published">ยังไม่เผยแพร่</dd></div></dl>
+      </div>
+    </section>
+
+    <section class="section safety" id="safety">
+      <div><p class="kicker" data-th="ข้อจำกัดสำคัญ" data-en="Important limitation">ข้อจำกัดสำคัญ</p><h2 data-th="เครื่องมือคัดกรองไม่ใช่คำวินิจฉัย" data-en="A screening tool is not a diagnosis">เครื่องมือคัดกรองไม่ใช่คำวินิจฉัย</h2></div>
+      <p data-th="หากมีอาการตามัวเฉียบพลัน เห็นแสงแฟลช จุดดำเพิ่มขึ้นมาก ปวดตารุนแรง หรือการมองเห็นลดลง โปรดรับการประเมินจากบุคลากรทางการแพทย์โดยเร็ว อย่ารอผลจากเว็บไซต์นี้" data-en="For sudden blurred vision, flashes, a rapid increase in floaters, severe eye pain, or vision loss, seek prompt professional care. Do not wait for this website.">หากมีอาการตามัวเฉียบพลัน เห็นแสงแฟลช จุดดำเพิ่มขึ้นมาก ปวดตารุนแรง หรือการมองเห็นลดลง โปรดรับการประเมินจากบุคลากรทางการแพทย์โดยเร็ว อย่ารอผลจากเว็บไซต์นี้</p>
+    </section>
+  </main>
+  <footer><div class="brand"><span class="brand-mark" aria-hidden="true"><span></span></span><span>Retinova<small>Research prototype · 2026</small></span></div><p data-th="สร้างเพื่อการศึกษาและการวิจัย ไม่เก็บภาพใน Public Preview" data-en="Built for education and research. Public Preview stores no images.">สร้างเพื่อการศึกษาและการวิจัย ไม่เก็บภาพใน Public Preview</p></footer>
+  <script src="app.js"></script>
+</body>
+</html>

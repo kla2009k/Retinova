@@ -1,0 +1,9 @@
+{
+  "version": 1,
+  "framework": "html",
+  "files": ["dashboard/index.html"],
+  "insertBefore": "</body>",
+  "commentSyntax": "html",
+  "cspChecked": true,
+  "cspShape": null
+}
