@@ -52,7 +52,7 @@ ODIR ต้นฉบับถูกออกแบบเป็นข้อมู
 
 ## 5. โมเดลและการเทรน
 
-baseline ที่ควรเริ่มคือ EfficientNet-B0 หรือ ResNet-18 ที่ pretrain บน ImageNet แล้วเปลี่ยนหัว classifier เป็น 8 outputs เหตุผลคือขนาดพอเหมาะ ตรวจสอบง่าย และชั้น convolution สุดท้ายรองรับ Grad-CAM โดยตรง
+เราเปรียบเทียบ EfficientNet-B0 กับ ResNet-18 ที่ pretrain บน ImageNet แล้วเปลี่ยนหัว classifier เป็น 8 outputs ภายใต้ manifest และเงื่อนไขหลักชุดเดียวกัน จากนั้นเลือก EfficientNet-B0 เพราะ validation macro F1 สูงกว่า ไม่ได้เลือกจาก test set ชั้นที่ใช้ทำ Grad-CAM คือ `features.8` สำหรับ EfficientNet-B0 และ `layer4.1.conv2` สำหรับ ResNet-18
 
 ลำดับการเทรน:
 
@@ -164,12 +164,13 @@ API key และ checkpoint ต้องอยู่ฝั่ง server เท�
 
 ## 13. ผล baseline ที่ทำซ้ำได้ ณ 1 สิงหาคม 2026
 
-Retinova เทรน ResNet-18 จำนวน 8 epochs บน split ที่แยกผู้ป่วยแล้ว โดยเลือก checkpoint จาก validation macro F1:
+Retinova เทรนตัวเปรียบเทียบ ResNet-18 และ EfficientNet-B0 อย่างละไม่เกิน 8 epochs บน split ที่แยกผู้ป่วยชุดเดียวกัน โดยเลือก checkpoint และ architecture จาก validation macro F1:
 
 - test 957 ภาพ จาก 503 ผู้ป่วย
-- macro F1 = 0.562; patient-bootstrap 95% interval = 0.507–0.603
-- balanced accuracy = 0.617; patient-bootstrap 95% interval = 0.555–0.667
-- recall ต่ำสุดคือ Other 0.264 และ Hypertension 0.444
+- EfficientNet-B0 validation macro F1 = 0.577 เทียบกับ ResNet-18 = 0.552 จึงเลือก EfficientNet-B0
+- EfficientNet-B0 test macro F1 = 0.581; patient-bootstrap 95% interval = 0.525–0.622
+- EfficientNet-B0 balanced accuracy = 0.642; patient-bootstrap 95% interval = 0.579–0.689
+- recall ต่ำสุดของโมเดลที่เลือกคือ Other 0.340 และ Hypertension 0.389
 - patient overlap ระหว่าง train/validation/test = 0
 
-ผลนี้ดีกว่าการไม่มี baseline ที่ตรวจสอบได้ แต่ยังไม่พอสำหรับใช้งานคลินิก การพบ shortcut บริเวณขอบภาพจาก Grad-CAM ยืนยันว่าต้องเพิ่ม quality control, external validation และผู้เชี่ยวชาญตรวจ failure cases ก่อนเปิด inference สาธารณะ ดูรายละเอียดที่ [Baseline Evaluation v1](EVALUATION_BASELINE_V1.md)
+ใน Grad-CAM ตัวอย่าง glaucoma ของ EfficientNet heatmap สนใจบริเวณ optic disc แต่โมเดลยังทำนายผิดเป็น Normal จึงห้ามใช้ภาพอธิบายเป็นหลักฐานว่าคำตอบถูก ผลรวมยังไม่พอสำหรับใช้งานคลินิก ต้องเพิ่ม quality control, calibration, external validation และผู้เชี่ยวชาญตรวจ failure cases ก่อนเปิด inference สาธารณะ ดูรายละเอียดที่ [Baseline Evaluation v1](EVALUATION_BASELINE_V1.md)

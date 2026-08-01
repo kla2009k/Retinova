@@ -62,15 +62,15 @@ These are dataset counts, not claims about model accuracy.
 
 ```powershell
 python -m scripts.build_retinova_manifest
-python -m scripts.train_retinova --config configs/train_resnet18.json
+python -m scripts.train_retinova --config configs/train_efficientnet_b0.json
 python -m scripts.evaluate_retinova `
-  --checkpoint models/resnet18_patient_grouped_v1/retinova_resnet18_best.pt
+  --checkpoint models/efficientnet_b0_patient_grouped_v1/retinova_efficientnet_b0_best.pt
 python -m scripts.gradcam_retinova `
-  --checkpoint models/resnet18_patient_grouped_v1/retinova_resnet18_best.pt `
+  --checkpoint models/efficientnet_b0_patient_grouped_v1/retinova_efficientnet_b0_best.pt `
   --image path/to/fundus.jpg
 ```
 
-The measured baseline test macro F1 is 0.562 and balanced accuracy is 0.617. See the evaluation report for patient-bootstrap intervals and class-level failures. Checkpoints and ODIR images remain local until licensing is clarified.
+EfficientNet-B0 was selected over ResNet-18 by validation macro F1 (0.577 versus 0.552), before comparing held-out test results. Its test macro F1 is 0.581 and balanced accuracy is 0.642. See the evaluation report for patient-bootstrap intervals, the controlled comparison, and class-level failures. Checkpoints and ODIR images remain local until licensing is clarified.
 
 ## Run the real local model + Grad-CAM web mode
 
@@ -78,7 +78,7 @@ After training (or with the local checkpoint created in this workspace):
 
 ```powershell
 python -m scripts.serve_retinova `
-  --checkpoint models/resnet18_patient_grouped_v1/retinova_resnet18_best.pt
+  --checkpoint models/efficientnet_b0_patient_grouped_v1/retinova_efficientnet_b0_best.pt
 ```
 
 Open `http://127.0.0.1:8000`. On localhost only, the page detects `/health`; the analysis button then calls the local checkpoint and returns probabilities plus class-specific Grad-CAM. The server binds to loopback, does not log images, and is not the public GitHub Pages deployment.

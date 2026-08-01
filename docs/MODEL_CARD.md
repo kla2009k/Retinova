@@ -25,7 +25,7 @@ Local ODIR-derived data. The audited label table contains 6,392 image rows. The 
 
 ## Explainability
 
-The planned method is class-specific Grad-CAM from the final convolutional block of the same checkpoint used for prediction. It is an attribution map, not a lesion segmentation or causal explanation.
+The implemented method is class-specific Grad-CAM from the final convolutional feature block of the same checkpoint used for prediction. EfficientNet-B0 uses `features.8`; ResNet-18 uses `layer4.1.conv2`. It is an attribution map, not a lesion segmentation or causal explanation.
 
 ## Known risks
 
@@ -37,11 +37,11 @@ The planned method is class-specific Grad-CAM from the final convolutional block
 
 ## Current patient-grouped baseline
 
-ResNet-18 baseline v1 on 957 held-out images from 503 patients:
+EfficientNet-B0 was selected over ResNet-18 using validation macro F1 (0.577 versus 0.552). On 957 held-out images from 503 patients, the selected candidate achieved:
 
-- Macro F1: 0.562 (patient-bootstrap 95% interval 0.507–0.603)
-- Balanced accuracy: 0.617 (patient-bootstrap 95% interval 0.555–0.667)
-- Weakest recall: Other 0.264 and Hypertension 0.444
+- Macro F1: 0.581 (patient-bootstrap 95% interval 0.525–0.622)
+- Balanced accuracy: 0.642 (patient-bootstrap 95% interval 0.579–0.689)
+- Weakest recall: Other 0.340 and Hypertension 0.389
 - Patient overlap across train/validation/test: 0
 
-See [Baseline Evaluation v1](EVALUATION_BASELINE_V1.md). These values are development evidence, not a clinical performance claim. The checkpoint is withheld pending dataset and derived-weight licensing clarification.
+The ResNet-18 comparator reached test macro F1 0.562 and balanced accuracy 0.617. See [Baseline Evaluation v1](EVALUATION_BASELINE_V1.md). These values are development evidence, not a clinical performance claim. Both checkpoints are withheld pending dataset and derived-weight licensing clarification.
