@@ -33,6 +33,15 @@ class PublicContractTests(unittest.TestCase):
     def test_chat_does_not_render_user_html(self):
         self.assertNotIn("insertAdjacentHTML", JS)
 
+    def test_model_api_is_probed_only_on_localhost(self):
+        self.assertIn("['127.0.0.1', 'localhost'].includes(location.hostname)", JS)
+        self.assertIn("fetch('/predict'", JS)
+
+    def test_local_model_server_is_loopback_and_single_request(self):
+        server = (ROOT / "scripts" / "serve_retinova.py").read_text(encoding="utf-8")
+        self.assertIn('HTTPServer(("127.0.0.1", args.port)', server)
+        self.assertNotIn("ThreadingHTTPServer", server)
+
     def test_server_contract_uses_environment_and_documented_port(self):
         self.assertIn('os.environ.get("ROBOFLOW_API_KEY")', SERVER)
         self.assertIn('int(os.environ.get("PORT", "8000"))', SERVER)

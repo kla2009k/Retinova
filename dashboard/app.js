@@ -12,6 +12,14 @@ const langButton = document.querySelector('#langButton');
 
 let selectedFile = null;
 let language = 'th';
+let localModelReady = false;
+
+const classNames = {
+  N: ['ปกติ', 'Normal'], D: ['เบาหวาน', 'Diabetes'], G: ['ต้อหิน', 'Glaucoma'],
+  C: ['ต้อกระจก', 'Cataract'], A: ['จอประสาทตาเสื่อม', 'AMD'],
+  H: ['ความดันโลหิต', 'Hypertension'], M: ['สายตาสั้นผิดปกติ', 'Myopia'],
+  O: ['ความผิดปกติอื่น', 'Other'],
+};
 
 function translated(element) {
   return element.dataset[language] || element.textContent;
@@ -62,6 +70,65 @@ function checkReadiness() {
   checkResult.hidden = false;
   fileCheck.textContent = `${selectedFile.type.replace('image/', '').toUpperCase()} · ${(selectedFile.size / 1024 / 1024).toFixed(2)} MB`;
   resolutionCheck.textContent = `${image.naturalWidth} × ${image.naturalHeight} px`;
+  if (localModelReady) runLocalInference();
+}
+
+function fileAsDataUrl(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = () => reject(new Error('file read failed'));
+    reader.readAsDataURL(file);
+  });
+}
+
+async function runLocalInference() {
+  const buttonLabel = analyzeButton.textContent;
+  analyzeButton.disabled = true;
+  analyzeButton.textContent = language === 'th' ? 'กำลังประมวลผลโมเดลจริง…' : 'Running the real model…';
+  try {
+    const response = await fetch('/predict', {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({image: await fileAsDataUrl(selectedFile)}),
+    });
+    const result = await response.json();
+    if (!response.ok) throw new Error(result.error || 'inference failed');
+    renderModelResult(result);
+  } catch (error) {
+    alert((language === 'th' ? 'โมเดลในเครื่องทำงานไม่สำเร็จ: ' : 'Local model failed: ') + error.message);
+  } finally {
+    analyzeButton.disabled = false;
+    analyzeButton.textContent = buttonLabel;
+  }
+}
+
+function renderModelResult(result) {
+  const modelOutput = document.querySelector('#modelOutput');
+  document.querySelector('#modelPrediction').textContent = classNames[result.prediction]?.[language === 'th' ? 0 : 1] || result.prediction;
+  document.querySelector('#modelProbability').textContent = `${(result.probability * 100).toFixed(1)}%`;
+  document.querySelector('#gradcamImage').src = result.gradcam_data_url;
+  const list = document.querySelector('#probabilityList');
+  list.replaceChildren();
+  Object.entries(result.probabilities).sort((a, b) => b[1] - a[1]).slice(0, 3).forEach(([name, value]) => {
+    const item = document.createElement('li');
+    item.textContent = `${name} · ${(value * 100).toFixed(1)}%`;
+    list.append(item);
+  });
+  const provenance = result.provenance;
+  document.querySelector('#modelProvenance').textContent = `${provenance.architecture} · ${provenance.target_class} · ${provenance.target_layer} · ${provenance.model_revision.slice(0, 8)}`;
+  modelOutput.hidden = false;
+}
+
+async function detectLocalModel() {
+  if (!['127.0.0.1', 'localhost'].includes(location.hostname)) return;
+  try {
+    const response = await fetch('/health', {cache: 'no-store'});
+    const status = await response.json();
+    localModelReady = response.ok && status.mode === 'local-research-model';
+    if (localModelReady) analyzeButton.textContent = language === 'th' ? 'วิเคราะห์ด้วยโมเดลจริงในเครื่อง' : 'Analyze with local model';
+  } catch (_error) {
+    localModelReady = false;
+  }
 }
 
 input.addEventListener('change', () => selectFile(input.files[0]));
@@ -80,3 +147,4 @@ langButton.addEventListener('click', () => applyLanguage(language === 'th' ? 'en
 dropzone.addEventListener('drop', (event) => selectFile(event.dataTransfer.files[0]));
 
 applyLanguage('th');
+detectLocalModel();

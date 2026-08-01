@@ -72,6 +72,17 @@ python -m scripts.gradcam_retinova `
 
 The measured baseline test macro F1 is 0.562 and balanced accuracy is 0.617. See the evaluation report for patient-bootstrap intervals and class-level failures. Checkpoints and ODIR images remain local until licensing is clarified.
 
+## Run the real local model + Grad-CAM web mode
+
+After training (or with the local checkpoint created in this workspace):
+
+```powershell
+python -m scripts.serve_retinova `
+  --checkpoint models/resnet18_patient_grouped_v1/retinova_resnet18_best.pt
+```
+
+Open `http://127.0.0.1:8000`. On localhost only, the page detects `/health`; the analysis button then calls the local checkpoint and returns probabilities plus class-specific Grad-CAM. The server binds to loopback, does not log images, and is not the public GitHub Pages deployment.
+
 ## License and intended use
 
 The repository currently has no clinical-use license or regulatory approval. Use it for education, research, and supervised demonstrations only. Dataset use remains subject to the original dataset terms.
