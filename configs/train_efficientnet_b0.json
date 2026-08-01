@@ -1,10 +1,10 @@
 {
   "manifest": "artifacts/retinova_manifest.csv",
-  "output_dir": "models/resnet18_patient_grouped_v1",
-  "architecture": "resnet18",
+  "output_dir": "models/efficientnet_b0_patient_grouped_v1",
+  "architecture": "efficientnet_b0",
   "seed": 42,
   "image_size": 224,
-  "interpolation": "bilinear",
+  "interpolation": "bicubic",
   "batch_size": 48,
   "workers": 2,
   "epochs": 8,

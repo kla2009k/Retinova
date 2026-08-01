@@ -12,10 +12,11 @@ import torch
 from torch import nn
 from torch.utils.data import DataLoader, Dataset
 from torchvision import transforms
+from torchvision.transforms import InterpolationMode
 
 from . import CLASS_NAMES
 from .data import manifest_fingerprint
-from .model import build_resnet18
+from .model import build_model
 
 
 NORMALIZE = transforms.Normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225))
@@ -31,11 +32,24 @@ def set_seed(seed):
     torch.backends.cudnn.deterministic = True
 
 
-def build_transform(training, image_size=224):
+def _interpolation_mode(name):
+    modes = {"bilinear": InterpolationMode.BILINEAR, "bicubic": InterpolationMode.BICUBIC}
+    try:
+        return modes[name]
+    except KeyError as error:
+        raise ValueError(
+            f"unsupported interpolation: {name!r}; expected one of {tuple(modes)}"
+        ) from error
+
+
+def build_transform(training, image_size=224, interpolation="bilinear"):
+    mode = _interpolation_mode(interpolation)
     if training:
         return transforms.Compose(
             [
-                transforms.RandomResizedCrop(image_size, scale=(0.82, 1.0), ratio=(0.95, 1.05)),
+                transforms.RandomResizedCrop(
+                    image_size, scale=(0.82, 1.0), ratio=(0.95, 1.05), interpolation=mode
+                ),
                 transforms.RandomHorizontalFlip(),
                 transforms.RandomRotation(8),
                 transforms.ColorJitter(brightness=0.12, contrast=0.12, saturation=0.08),
@@ -44,7 +58,12 @@ def build_transform(training, image_size=224):
             ]
         )
     return transforms.Compose(
-        [transforms.Resize(256), transforms.CenterCrop(image_size), transforms.ToTensor(), NORMALIZE]
+        [
+            transforms.Resize(256, interpolation=mode),
+            transforms.CenterCrop(image_size),
+            transforms.ToTensor(),
+            NORMALIZE,
+        ]
     )
 
 
@@ -63,11 +82,13 @@ class FundusDataset(Dataset):
         return self.transform(image), int(row["label_index"])
 
 
-def make_loaders(manifest, batch_size, workers, image_size, seed=42):
+def make_loaders(manifest, batch_size, workers, image_size, seed=42, interpolation="bilinear"):
     loaders = {}
     for split in ("train", "val", "test"):
         subset = manifest.loc[manifest["split"] == split]
-        dataset = FundusDataset(subset, build_transform(split == "train", image_size))
+        dataset = FundusDataset(
+            subset, build_transform(split == "train", image_size, interpolation=interpolation)
+        )
         generator = torch.Generator().manual_seed(seed)
         loaders[split] = DataLoader(
             dataset,
@@ -193,9 +214,11 @@ def train_from_config(config_path):
         config["workers"],
         config["image_size"],
         seed=config["seed"],
+        interpolation=config.get("interpolation", "bilinear"),
     )
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    model = build_resnet18(len(CLASS_NAMES), pretrained=config["pretrained"]).to(device)
+    architecture = config.get("architecture", "resnet18")
+    model = build_model(architecture, len(CLASS_NAMES), pretrained=config["pretrained"]).to(device)
     counts = (
         manifest.loc[manifest["split"] == "train", "label_index"]
         .value_counts()
@@ -210,7 +233,7 @@ def train_from_config(config_path):
     )
     scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=config["epochs"])
     scaler = torch.amp.GradScaler("cuda", enabled=device.type == "cuda")
-    checkpoint_path = output_dir / "retinova_resnet18_best.pt"
+    checkpoint_path = output_dir / f"retinova_{architecture}_best.pt"
     history = []
     best_f1 = -1.0
     stale_epochs = 0
@@ -231,12 +254,17 @@ def train_from_config(config_path):
             torch.save(
                 {
                     "state_dict": model.state_dict(),
-                    "architecture": "resnet18",
+                    "architecture": architecture,
                     "class_names": CLASS_NAMES,
                     "image_size": config["image_size"],
                     "normalization": {
                         "mean": [0.485, 0.456, 0.406],
                         "std": [0.229, 0.224, 0.225],
+                    },
+                    "preprocessing": {
+                        "resize_short_side": 256,
+                        "center_crop": config["image_size"],
+                        "interpolation": config.get("interpolation", "bilinear"),
                     },
                     "best_validation_macro_f1": best_f1,
                     "config": config,

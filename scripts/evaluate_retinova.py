@@ -9,7 +9,7 @@ from torch import nn
 
 from retinova_ml import CLASS_NAMES
 from retinova_ml.data import manifest_fingerprint
-from retinova_ml.model import build_resnet18
+from retinova_ml.model import build_model
 from retinova_ml.training import bootstrap_patient_metrics, make_loaders, run_epoch
 
 
@@ -31,8 +31,11 @@ def main():
         workers=config["workers"],
         image_size=checkpoint["image_size"],
         seed=config["seed"],
+        interpolation=config.get("interpolation", "bilinear"),
     )
-    model = build_resnet18(len(CLASS_NAMES), pretrained=False).to(device)
+    model = build_model(
+        checkpoint.get("architecture", "resnet18"), len(CLASS_NAMES), pretrained=False
+    ).to(device)
     model.load_state_dict(checkpoint["state_dict"])
     train_counts = (
         manifest.loc[manifest["split"] == "train", "label_index"]

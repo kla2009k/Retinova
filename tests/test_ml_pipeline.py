@@ -7,7 +7,8 @@ from torch import nn
 
 from retinova_ml.data import assign_grouped_splits, manifest_fingerprint
 from retinova_ml.gradcam import GradCAM
-from retinova_ml.training import bootstrap_patient_metrics, compute_metrics
+from retinova_ml.model import build_model, gradcam_target
+from retinova_ml.training import bootstrap_patient_metrics, build_transform, compute_metrics
 
 
 class GroupedSplitTests(unittest.TestCase):
@@ -59,6 +60,20 @@ class TinyClassifier(nn.Module):
 
 
 class GradCAMTests(unittest.TestCase):
+    def test_supported_backbones_expose_logits_and_gradcam_layer(self):
+        for architecture in ("resnet18", "efficientnet_b0"):
+            model = build_model(architecture, num_classes=8, pretrained=False).eval()
+            with torch.no_grad():
+                logits = model(torch.randn(1, 3, 64, 64))
+            layer, layer_name = gradcam_target(model, architecture)
+            self.assertEqual((1, 8), tuple(logits.shape))
+            self.assertIsInstance(layer, nn.Module)
+            self.assertTrue(layer_name)
+
+    def test_unknown_backbone_is_rejected(self):
+        with self.assertRaisesRegex(ValueError, "unsupported architecture"):
+            build_model("mystery_net", num_classes=8, pretrained=False)
+
     def test_cam_is_normalized_and_matches_input_size(self):
         torch.manual_seed(11)
         model = TinyClassifier().eval()
@@ -82,6 +97,11 @@ class GradCAMTests(unittest.TestCase):
 
 
 class EvaluationTests(unittest.TestCase):
+    def test_transform_accepts_bicubic_and_rejects_unknown_interpolation(self):
+        self.assertIsNotNone(build_transform(False, 224, interpolation="bicubic"))
+        with self.assertRaisesRegex(ValueError, "unsupported interpolation"):
+            build_transform(False, 224, interpolation="nearestish")
+
     def test_metrics_include_per_class_specificity(self):
         metrics = compute_metrics([0, 0, 1, 1], [0, 1, 1, 1], class_names=["A", "B"])
         self.assertAlmostEqual(1.0, metrics["per_class_specificity"]["A"])
