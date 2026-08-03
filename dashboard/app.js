@@ -9,17 +9,32 @@ const checkResult = document.querySelector('#checkResult');
 const fileCheck = document.querySelector('#fileCheck');
 const resolutionCheck = document.querySelector('#resolutionCheck');
 const langButton = document.querySelector('#langButton');
+const searchForm = document.querySelector('#searchForm');
+const searchInput = document.querySelector('#searchInput');
+const mainContent = document.querySelector('#mainContent');
+
+const validViews = new Set(['home', 'analyze', 'eye-health', 'evidence']);
+const viewTitles = {
+  home: ['หน้าแรก', 'Home'],
+  analyze: ['วิเคราะห์ภาพ', 'Analyze'],
+  'eye-health': ['ความรู้ดวงตา', 'Eye health'],
+  evidence: ['หลักฐานโมเดล', 'Evidence'],
+};
+const classNames = {
+  N: ['ปกติ', 'Normal'],
+  D: ['เบาหวาน', 'Diabetes'],
+  G: ['ต้อหิน', 'Glaucoma'],
+  C: ['ต้อกระจก', 'Cataract'],
+  A: ['จอประสาทตาเสื่อม', 'AMD'],
+  H: ['ความดันโลหิต', 'Hypertension'],
+  M: ['สายตาสั้นผิดปกติ', 'Myopia'],
+  O: ['ความผิดปกติอื่น', 'Other'],
+};
 
 let selectedFile = null;
 let language = 'th';
 let localModelReady = false;
-
-const classNames = {
-  N: ['ปกติ', 'Normal'], D: ['เบาหวาน', 'Diabetes'], G: ['ต้อหิน', 'Glaucoma'],
-  C: ['ต้อกระจก', 'Cataract'], A: ['จอประสาทตาเสื่อม', 'AMD'],
-  H: ['ความดันโลหิต', 'Hypertension'], M: ['สายตาสั้นผิดปกติ', 'Myopia'],
-  O: ['ความผิดปกติอื่น', 'Other'],
-};
+let activeView = 'home';
 
 function translated(element) {
   return element.dataset[language] || element.textContent;
@@ -31,7 +46,42 @@ function applyLanguage(nextLanguage) {
   document.querySelectorAll('[data-th][data-en]').forEach((element) => {
     element.textContent = translated(element);
   });
+  document.querySelectorAll('[data-th-placeholder][data-en-placeholder]').forEach((element) => {
+    element.placeholder = element.dataset[`${language}Placeholder`];
+  });
   langButton.textContent = language === 'th' ? 'EN' : 'TH';
+  document.title = `Retinova — ${viewTitles[activeView][language === 'th' ? 0 : 1]}`;
+  updateClock();
+}
+
+function showView(viewName, updateUrl = true) {
+  const nextView = validViews.has(viewName) ? viewName : 'home';
+  activeView = nextView;
+  document.querySelectorAll('.app-view').forEach((view) => {
+    view.hidden = view.dataset.page !== nextView;
+  });
+  document.querySelectorAll('.nav-item').forEach((button) => {
+    const active = button.dataset.view === nextView;
+    button.classList.toggle('active', active);
+    if (active) button.setAttribute('aria-current', 'page');
+    else button.removeAttribute('aria-current');
+  });
+  document.title = `Retinova — ${viewTitles[nextView][language === 'th' ? 0 : 1]}`;
+  if (updateUrl) history.replaceState(null, '', `#${nextView}`);
+  window.scrollTo({top: 0, behavior: 'auto'});
+  mainContent.focus({preventScroll: true});
+}
+
+function updateClock() {
+  const now = new Date();
+  document.querySelector('#clockTime').textContent = new Intl.DateTimeFormat(
+    language === 'th' ? 'th-TH' : 'en-GB',
+    {hour: '2-digit', minute: '2-digit', hour12: false},
+  ).format(now);
+  document.querySelector('#clockDate').textContent = new Intl.DateTimeFormat(
+    language === 'th' ? 'th-TH' : 'en-GB',
+    {weekday: 'short', day: 'numeric', month: 'short', year: 'numeric'},
+  ).format(now);
 }
 
 function resetImage() {
@@ -44,6 +94,7 @@ function resetImage() {
   analyzeButton.disabled = true;
   checkResult.hidden = true;
   emptyResult.hidden = false;
+  document.querySelector('#modelOutput').hidden = true;
 }
 
 function selectFile(file) {
@@ -88,7 +139,8 @@ async function runLocalInference() {
   analyzeButton.textContent = language === 'th' ? 'กำลังประมวลผลโมเดลจริง…' : 'Running the real model…';
   try {
     const response = await fetch('/predict', {
-      method: 'POST', headers: {'Content-Type': 'application/json'},
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({image: await fileAsDataUrl(selectedFile)}),
     });
     const result = await response.json();
@@ -104,18 +156,23 @@ async function runLocalInference() {
 
 function renderModelResult(result) {
   const modelOutput = document.querySelector('#modelOutput');
-  document.querySelector('#modelPrediction').textContent = classNames[result.prediction]?.[language === 'th' ? 0 : 1] || result.prediction;
+  const translatedClass = classNames[result.prediction];
+  document.querySelector('#modelPrediction').textContent = translatedClass?.[language === 'th' ? 0 : 1] || result.prediction;
   document.querySelector('#modelProbability').textContent = `${(result.probability * 100).toFixed(1)}%`;
   document.querySelector('#gradcamImage').src = result.gradcam_data_url;
   const list = document.querySelector('#probabilityList');
   list.replaceChildren();
-  Object.entries(result.probabilities).sort((a, b) => b[1] - a[1]).slice(0, 3).forEach(([name, value]) => {
-    const item = document.createElement('li');
-    item.textContent = `${name} · ${(value * 100).toFixed(1)}%`;
-    list.append(item);
-  });
+  Object.entries(result.probabilities)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 3)
+    .forEach(([name, value]) => {
+      const item = document.createElement('li');
+      item.textContent = `${name} · ${(value * 100).toFixed(1)}%`;
+      list.append(item);
+    });
   const provenance = result.provenance;
   document.querySelector('#modelProvenance').textContent = `${provenance.architecture} · ${provenance.target_class} · ${provenance.target_layer} · ${provenance.model_revision.slice(0, 8)}`;
+  document.querySelector('#previewNotice').hidden = true;
   modelOutput.hidden = false;
 }
 
@@ -125,16 +182,37 @@ async function detectLocalModel() {
     const response = await fetch('/health', {cache: 'no-store'});
     const status = await response.json();
     localModelReady = response.ok && status.mode === 'local-research-model';
-    if (localModelReady) analyzeButton.textContent = language === 'th' ? 'วิเคราะห์ด้วยโมเดลจริงในเครื่อง' : 'Analyze with local model';
+    if (localModelReady) {
+      analyzeButton.textContent = language === 'th' ? 'วิเคราะห์ด้วยโมเดลจริงในเครื่อง' : 'Analyze with local model';
+      const modeChip = document.querySelector('#modeChip');
+      modeChip.textContent = language === 'th' ? 'เชื่อมต่อโมเดลวิจัยในเครื่อง' : 'Local research model connected';
+      modeChip.classList.add('success');
+    }
   } catch (_error) {
     localModelReady = false;
   }
 }
 
+function searchDestination(query) {
+  const normalized = query.trim().toLowerCase();
+  if (/วิเคราะห์|analy|upload|ภาพ/.test(normalized)) return 'analyze';
+  if (/ดวงตา|จอประสาท|retina|eye|โรค/.test(normalized)) return 'eye-health';
+  if (/หลักฐาน|โมเดล|metric|evidence|f1|grad/.test(normalized)) return 'evidence';
+  return 'home';
+}
+
+document.querySelectorAll('[data-view]').forEach((button) => {
+  button.addEventListener('click', () => showView(button.dataset.view));
+});
 input.addEventListener('change', () => selectFile(input.files[0]));
 removeButton.addEventListener('click', resetImage);
 analyzeButton.addEventListener('click', checkReadiness);
 langButton.addEventListener('click', () => applyLanguage(language === 'th' ? 'en' : 'th'));
+searchForm.addEventListener('submit', (event) => {
+  event.preventDefault();
+  showView(searchDestination(searchInput.value));
+  searchInput.blur();
+});
 
 ['dragenter', 'dragover'].forEach((eventName) => dropzone.addEventListener(eventName, (event) => {
   event.preventDefault();
@@ -147,4 +225,7 @@ langButton.addEventListener('click', () => applyLanguage(language === 'th' ? 'en
 dropzone.addEventListener('drop', (event) => selectFile(event.dataTransfer.files[0]));
 
 applyLanguage('th');
+showView(location.hash.slice(1), false);
+updateClock();
+setInterval(updateClock, 30_000);
 detectLocalModel();
