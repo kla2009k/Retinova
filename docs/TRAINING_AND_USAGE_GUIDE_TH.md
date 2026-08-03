@@ -124,6 +124,10 @@ API key และ checkpoint ต้องอยู่ฝั่ง server เท�
 6. ระบบ public รุ่นนี้ยังไม่ส่งภาพ ไม่คืนชื่อโรค และไม่สร้าง heatmap
 7. หน้า “ผลล่าสุด” จะว่าง เพราะเพิ่มรายการเฉพาะเมื่อ local model คืนผลจริง และไม่มีประวัติผู้ป่วยจำลอง
 
+ผู้ใช้โทรศัพท์สามารถกด “เปิดกล้องสด” เลือกกล้องหลัง/หน้า และจับภาพเข้า flow เดียวกับไฟล์อัปโหลด กล้องใช้ได้บน HTTPS หรือ localhost ที่ browser รองรับ `getUserMedia()` เท่านั้น ระบบไม่ขอ audio และหยุด media tracks เมื่อปิดกล้อง เปลี่ยนหน้า ซ่อนแท็บ หรือออกจากหน้า
+
+ต้องแยกให้ชัดระหว่าง “เปิดกล้องได้” กับ “ได้ภาพ fundus”: กล้องโทรศัพท์เปล่าได้ภาพตาภายนอกซึ่งอยู่นอก training domain ถ้าภาพจากกล้องไม่ได้ยืนยันการใช้อะแดปเตอร์ fundus/condensing lens เว็บจะบล็อก local inference และทำเพียง file readiness check ดูขั้นตอนเต็มที่ [คู่มือกล้องสดและสถานะโมเดล](CAMERA_AND_MODEL_USAGE_TH.md)
+
 ในโหมด local server ระบบเพิ่ม prediction, probability, model version, เวลา inference และ Grad-CAM จริง โดย slider เทียบกับภาพต้นฉบับได้ ค่า probability ถูกระบุชัดว่าไม่ใช่ Eye Health Score รายการผลล่าสุดอยู่ใน memory ของแท็บเท่านั้น ไม่เก็บภาพหรือ Grad-CAM และหายเมื่อ refresh/ปิดแท็บ
 
 ถ้าตั้ง environment variable `RETINOVA_TEAM_PASSCODE` ก่อนเปิด local server, endpoint `/predict` จะรับเฉพาะ session ที่ล็อกอินสำเร็จ รหัสผ่านไม่ถูกเก็บใน `localStorage`/`sessionStorage`; server ใช้ cookie แบบ HttpOnly และลบ session เมื่อ logout อย่างไรก็ตามนี่เป็นเพียง access gate สำหรับเดโมในเครื่อง ไม่ใช่ระบบบัญชีหรือเวชระเบียน production

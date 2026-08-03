@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#081c2b">
   <title>Retinova — Retinal screening, explained</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%234da6ef'/%3E%3Cpath d='M10 32s8-13 22-13 22 13 22 13-8 13-22 13S10 32 10 32Z' fill='none' stroke='white' stroke-width='4'/%3E%3Ccircle cx='32' cy='32' r='7' fill='white'/%3E%3C/svg%3E">
-  <link rel="stylesheet" href="styles.css?v=20260803b">
+  <link rel="stylesheet" href="styles.css?v=20260803c">
 </head>
 <body>
   <a class="skip-link" href="#mainContent">ข้ามไปเนื้อหาหลัก</a>
@@ -142,6 +142,31 @@
           <div class="analysis-grid">
             <article class="panel upload-panel">
               <header><svg><use href="#i-image"/></svg><h2 data-th="ภาพสำหรับวิเคราะห์" data-en="Image input">ภาพสำหรับวิเคราะห์</h2></header>
+              <div class="input-methods" aria-label="วิธีนำเข้าภาพ">
+                <button id="openCameraButton" type="button"><svg><use href="#i-eye"/></svg><span><strong data-th="เปิดกล้องสด" data-en="Open live camera">เปิดกล้องสด</strong><small data-th="ใช้กล้องหลังของโทรศัพท์" data-en="Use the phone's rear camera">ใช้กล้องหลังของโทรศัพท์</small></span></button>
+                <span data-th="หรือเลือกไฟล์ด้านล่าง" data-en="or choose a file below">หรือเลือกไฟล์ด้านล่าง</span>
+              </div>
+              <section class="camera-panel" id="cameraPanel" aria-labelledby="cameraTitle" hidden>
+                <div class="camera-boundary"><svg><use href="#i-info"/></svg><div><strong id="cameraTitle" data-th="กล้องมือถือเปล่า ๆ ไม่ใช่กล้อง fundus" data-en="A bare phone camera is not a fundus camera">กล้องมือถือเปล่า ๆ ไม่ใช่กล้อง fundus</strong><p data-th="การถ่ายจอประสาทตาต้องใช้อะแดปเตอร์ fundus/เลนส์ condensing ที่เหมาะสมและผู้ปฏิบัติงานที่ได้รับการฝึก กล้องเปล่าถ่ายได้เพียงตาภายนอก ซึ่งไม่ตรงกับข้อมูลที่ใช้เทรนโมเดล" data-en="Retinal imaging requires a suitable fundus adapter/condensing lens and a trained operator. A bare camera captures the external eye, which does not match the model's training data.">การถ่ายจอประสาทตาต้องใช้อะแดปเตอร์ fundus/เลนส์ condensing ที่เหมาะสมและผู้ปฏิบัติงานที่ได้รับการฝึก กล้องเปล่าถ่ายได้เพียงตาภายนอก ซึ่งไม่ตรงกับข้อมูลที่ใช้เทรนโมเดล</p></div></div>
+                <div class="camera-stage">
+                  <video id="cameraVideo" playsinline muted autoplay aria-label="ภาพสดจากกล้อง"></video>
+                  <div class="camera-guide" aria-hidden="true"><span></span></div>
+                  <span class="camera-live"><i></i> LIVE · DEVICE ONLY</span>
+                </div>
+                <canvas id="cameraCanvas" hidden></canvas>
+                <label class="fundus-equipment-check"><input id="fundusEquipmentCheck" type="checkbox"><span><strong data-th="ภาพนี้ใช้ชุดถ่าย fundus" data-en="This capture uses fundus optics">ภาพนี้ใช้ชุดถ่าย fundus</strong><small data-th="ติ๊กเฉพาะเมื่อใช้ fundus adapter/condensing lens และภาพสดเห็นจอประสาทตาเป็นวง ไม่ใช่ตาภายนอก หากไม่ติ๊ก ระบบจะอนุญาตให้ตรวจไฟล์แต่จะไม่ส่งเข้าโมเดล" data-en="Check only when a fundus adapter/condensing lens is attached and the live view shows the circular retina, not the external eye. Otherwise, file checks remain available but model inference is blocked.">ติ๊กเฉพาะเมื่อใช้ fundus adapter/condensing lens และภาพสดเห็นจอประสาทตาเป็นวง ไม่ใช่ตาภายนอก หากไม่ติ๊ก ระบบจะอนุญาตให้ตรวจไฟล์แต่จะไม่ส่งเข้าโมเดล</small></span></label>
+                <p class="camera-status" id="cameraStatus" role="status" data-th="กำลังรอสิทธิ์ใช้กล้อง…" data-en="Waiting for camera permission…">กำลังรอสิทธิ์ใช้กล้อง…</p>
+                <div class="camera-actions">
+                  <button id="switchCameraButton" class="secondary-action" type="button" data-th="สลับกล้อง" data-en="Switch camera">สลับกล้อง</button>
+                  <button id="capturePhotoButton" class="capture-action" type="button" disabled><span></span><b data-th="ถ่ายภาพ" data-en="Capture">ถ่ายภาพ</b></button>
+                  <button id="closeCameraButton" class="secondary-action" type="button" data-th="ปิดกล้อง" data-en="Close camera">ปิดกล้อง</button>
+                </div>
+                <ul class="camera-safety">
+                  <li data-th="Retinova ไม่เปิดไฟฉายหรือแฟลชอัตโนมัติ และไม่ควรจ่อแสงสว่างจ้าใกล้ตา" data-en="Retinova never enables the torch or flash automatically; do not aim a bright light close to the eye.">Retinova ไม่เปิดไฟฉายหรือแฟลชอัตโนมัติ และไม่ควรจ่อแสงสว่างจ้าใกล้ตา</li>
+                  <li data-th="ภาพอยู่ในหน่วยความจำของแท็บนี้ กล้องจะหยุดเมื่อปิดหน้ากล้อง สลับหน้า หรือซ่อนแท็บ" data-en="The frame stays in this tab's memory. The camera stops when this panel closes, the page changes, or the tab is hidden.">ภาพอยู่ในหน่วยความจำของแท็บนี้ กล้องจะหยุดเมื่อปิดหน้ากล้อง สลับหน้า หรือซ่อนแท็บ</li>
+                  <li data-th="เว็บไซต์สาธารณะตรวจได้เฉพาะคุณสมบัติไฟล์ ส่วน prediction และ Grad-CAM ใช้ได้เฉพาะ local model server" data-en="The public site checks file properties only. Prediction and Grad-CAM require the local model server.">เว็บไซต์สาธารณะตรวจได้เฉพาะคุณสมบัติไฟล์ ส่วน prediction และ Grad-CAM ใช้ได้เฉพาะ local model server</li>
+                </ul>
+              </section>
               <label class="dropzone" id="dropzone" for="imageInput">
                 <input id="imageInput" type="file" accept="image/jpeg,image/png" hidden>
                 <span class="upload-symbol"><svg><use href="#i-upload"/></svg></span>
@@ -159,6 +184,7 @@
                 <div class="check-line"><span data-th="ไฟล์ภาพ" data-en="Image file">ไฟล์ภาพ</span><strong id="fileCheck">—</strong></div>
                 <div class="check-line"><span data-th="ความละเอียด" data-en="Resolution">ความละเอียด</span><strong id="resolutionCheck">—</strong></div>
                 <div class="check-line"><span data-th="การจัดเก็บ" data-en="Storage">การจัดเก็บ</span><strong class="success" data-th="ไม่บันทึกใน Public Preview" data-en="Not stored in Public Preview">ไม่บันทึกใน Public Preview</strong></div>
+                <div class="camera-qualification-notice" id="cameraQualificationNotice" hidden><strong data-th="ไม่ส่งภาพนี้เข้าโมเดล" data-en="This frame will not enter the model">ไม่ส่งภาพนี้เข้าโมเดล</strong><p data-th="ภาพมาจากกล้องสดโดยไม่ได้ยืนยันชุดถ่าย fundus ภาพตาภายนอกอยู่นอกขอบเขตข้อมูลฝึก จึงแสดงได้เฉพาะการตรวจคุณสมบัติไฟล์" data-en="This live-camera frame was captured without confirmed fundus optics. External-eye photos are outside the training domain, so only file properties are shown.">ภาพมาจากกล้องสดโดยไม่ได้ยืนยันชุดถ่าย fundus ภาพตาภายนอกอยู่นอกขอบเขตข้อมูลฝึก จึงแสดงได้เฉพาะการตรวจคุณสมบัติไฟล์</p></div>
                 <div class="preview-notice" id="previewNotice"><strong data-th="ขอบเขตโหมดนี้" data-en="Mode boundary">ขอบเขตโหมดนี้</strong><p data-th="เว็บสาธารณะไม่ส่งภาพเข้าโมเดลและไม่สร้าง heatmap เพื่อหลีกเลี่ยงผลทางการแพทย์ที่ยังไม่ผ่านการตรวจสอบ" data-en="The public site does not send images to a model or generate heatmaps, avoiding unvalidated medical output.">เว็บสาธารณะไม่ส่งภาพเข้าโมเดลและไม่สร้าง heatmap เพื่อหลีกเลี่ยงผลทางการแพทย์ที่ยังไม่ผ่านการตรวจสอบ</p></div>
                 <div class="model-output" id="modelOutput" hidden>
                   <div class="model-decision"><div><small data-th="ผลโมเดลวิจัยในเครื่อง" data-en="Local research-model output">ผลโมเดลวิจัยในเครื่อง</small><h3 id="modelPrediction">—</h3></div><div class="probability-value"><strong id="modelProbability">—</strong><small data-th="ความน่าจะเป็นของโมเดล · ไม่ใช่ Eye Health Score" data-en="Model probability · not an Eye Health Score">ความน่าจะเป็นของโมเดล · ไม่ใช่ Eye Health Score</small></div></div>
@@ -212,6 +238,6 @@
   </div>
 
   <noscript>Retinova ต้องใช้ JavaScript เพื่อสลับหน้าจอและตรวจไฟล์ภาพ</noscript>
-  <script src="app.js?v=20260803b"></script>
+  <script src="app.js?v=20260803c"></script>
 </body>
 </html>

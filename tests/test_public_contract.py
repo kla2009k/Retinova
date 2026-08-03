@@ -70,6 +70,53 @@ class PublicContractTests(unittest.TestCase):
         self.assertIn("clipPath", JS)
         self.assertNotIn("radial-gradient", JS)
 
+    def test_mobile_camera_capture_has_explicit_controls_and_medical_boundary(self):
+        for element_id in (
+            "openCameraButton",
+            "cameraPanel",
+            "cameraVideo",
+            "capturePhotoButton",
+            "switchCameraButton",
+            "closeCameraButton",
+            "cameraCanvas",
+            "cameraStatus",
+            "fundusEquipmentCheck",
+            "cameraQualificationNotice",
+        ):
+            self.assertIn(f'id="{element_id}"', HTML)
+        self.assertRegex(HTML, r'id="cameraVideo"[^>]+playsinline[^>]+muted')
+        self.assertRegex(HTML, r"กล้องมือถือเปล่า\s*ๆ[^<]+ไม่ใช่[^<]+fundus")
+        self.assertRegex(HTML, r"เลนส์|อะแดปเตอร์|adapter")
+
+    def test_camera_uses_secure_browser_media_and_releases_hardware(self):
+        self.assertIn("window.isSecureContext", JS)
+        self.assertIn("navigator.mediaDevices.getUserMedia", JS)
+        self.assertRegex(JS, r"facingMode:\s*\{ideal:\s*cameraFacingMode\}")
+        self.assertIn("getTracks().forEach((track) => track.stop())", JS)
+        self.assertIn("document.addEventListener('visibilitychange'", JS)
+        self.assertIn("window.addEventListener('pagehide'", JS)
+        self.assertNotIn("torch", JS.lower())
+        self.assertNotIn("flash", JS.lower())
+
+    def test_captured_frame_reuses_the_existing_private_file_flow(self):
+        self.assertIn("cameraCanvas.toBlob", JS)
+        self.assertIn("selectFile(capturedFile)", JS)
+        self.assertIn("image/jpeg", JS)
+        self.assertNotIn("localStorage", JS)
+        self.assertNotIn("sessionStorage", JS)
+
+    def test_bare_phone_capture_cannot_reach_the_research_model(self):
+        self.assertIn("selectedCaptureHasFundusOptics", JS)
+        self.assertIn("fundusEquipmentCheck.checked", JS)
+        self.assertRegex(
+            JS,
+            r"selectedInputSource === 'camera'\s*&&\s*!selectedCaptureHasFundusOptics",
+        )
+        self.assertRegex(
+            HTML,
+            r'id="fundusEquipmentCheck"[^>]+type="checkbox"',
+        )
+
     def test_optional_local_auth_uses_server_side_http_only_sessions(self):
         server = (ROOT / "scripts" / "serve_retinova.py").read_text(encoding="utf-8")
         self.assertIn('os.environ.get("RETINOVA_TEAM_PASSCODE")', server)

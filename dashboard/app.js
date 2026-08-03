@@ -20,6 +20,12 @@ const teamPasscode = document.querySelector('#teamPasscode');
 const teamLoginStatus = document.querySelector('#teamLoginStatus');
 const comparisonSlider = document.querySelector('#comparisonSlider');
 const comparisonOverlay = document.querySelector('#comparisonOverlay');
+const cameraPanel = document.querySelector('#cameraPanel');
+const cameraVideo = document.querySelector('#cameraVideo');
+const cameraCanvas = document.querySelector('#cameraCanvas');
+const cameraStatus = document.querySelector('#cameraStatus');
+const capturePhotoButton = document.querySelector('#capturePhotoButton');
+const fundusEquipmentCheck = document.querySelector('#fundusEquipmentCheck');
 
 const validViews = new Set(['home', 'analyze', 'history', 'eye-health', 'evidence']);
 const viewTitles = {
@@ -48,6 +54,10 @@ let localModelReady = false;
 let localAuthRequired = false;
 let teamAuthenticated = false;
 let activeView = 'home';
+let cameraStream = null;
+let cameraFacingMode = 'environment';
+let selectedInputSource = 'file';
+let selectedCaptureHasFundusOptics = false;
 
 function translated(element) {
   return element.dataset[language] || element.textContent;
@@ -74,6 +84,7 @@ function applyLanguage(nextLanguage) {
 
 function showView(viewName, updateUrl = true) {
   const nextView = validViews.has(viewName) ? viewName : 'home';
+  if (activeView === 'analyze' && nextView !== 'analyze') stopCamera();
   activeView = nextView;
   document.querySelectorAll('.app-view').forEach((view) => {
     view.hidden = view.dataset.page !== nextView;
@@ -129,9 +140,12 @@ function updateClock() {
 }
 
 function resetImage() {
+  stopCamera();
   if (image.src.startsWith('blob:')) URL.revokeObjectURL(image.src);
   input.value = '';
   selectedFile = null;
+  selectedInputSource = 'file';
+  selectedCaptureHasFundusOptics = false;
   image.removeAttribute('src');
   frame.hidden = true;
   dropzone.hidden = false;
@@ -139,8 +153,106 @@ function resetImage() {
   checkResult.hidden = true;
   emptyResult.hidden = false;
   document.querySelector('#modelOutput').hidden = true;
+  document.querySelector('#previewNotice').hidden = false;
+  document.querySelector('#cameraQualificationNotice').hidden = true;
   document.querySelector('#originalCompareImage').removeAttribute('src');
   document.querySelector('#gradcamCompareImage').removeAttribute('src');
+}
+
+function setCameraStatus(thaiText, englishText) {
+  cameraStatus.dataset.th = thaiText;
+  cameraStatus.dataset.en = englishText;
+  cameraStatus.textContent = language === 'th' ? thaiText : englishText;
+}
+
+function cameraErrorMessage(error) {
+  const messages = {
+    NotAllowedError: ['ไม่ได้รับสิทธิ์ใช้กล้อง กรุณาอนุญาตในตั้งค่าเว็บไซต์แล้วลองใหม่', 'Camera permission was denied. Allow it in site settings and try again.'],
+    NotFoundError: ['ไม่พบกล้องที่ใช้งานได้บนอุปกรณ์นี้', 'No available camera was found on this device.'],
+    NotReadableError: ['กล้องอาจถูกใช้งานโดยแอปอื่น กรุณาปิดแอปนั้นแล้วลองใหม่', 'The camera may be in use by another app. Close it and try again.'],
+    OverconstrainedError: ['กล้องไม่รองรับการตั้งค่าที่ขอ กรุณาลองสลับกล้อง', 'The camera does not support the requested settings. Try switching cameras.'],
+  };
+  return messages[error.name] || ['เปิดกล้องไม่สำเร็จ กรุณาตรวจสิทธิ์และลองใหม่', 'Could not start the camera. Check permission and try again.'];
+}
+
+function stopCamera(hidePanel = true) {
+  if (cameraStream) {
+    cameraStream.getTracks().forEach((track) => track.stop());
+    cameraStream = null;
+  }
+  cameraVideo.srcObject = null;
+  capturePhotoButton.disabled = true;
+  if (hidePanel) cameraPanel.hidden = true;
+  if (hidePanel && !selectedFile) dropzone.hidden = false;
+}
+
+async function startCamera(resetEquipmentChoice = true) {
+  if (resetEquipmentChoice) fundusEquipmentCheck.checked = false;
+  cameraPanel.hidden = false;
+  dropzone.hidden = true;
+  capturePhotoButton.disabled = true;
+  if (!window.isSecureContext || !navigator.mediaDevices?.getUserMedia) {
+    setCameraStatus(
+      'เบราว์เซอร์นี้เปิดกล้องไม่ได้ ต้องใช้ HTTPS หรือ localhost และเบราว์เซอร์ที่รองรับ',
+      'Camera access requires HTTPS or localhost and a supported browser.',
+    );
+    return;
+  }
+  stopCamera(false);
+  setCameraStatus('กำลังขอสิทธิ์ใช้กล้อง…', 'Requesting camera permission…');
+  try {
+    // Standards: https://www.w3.org/TR/mediacapture-streams/#dom-mediadevices-getusermedia
+    // Secure-context guidance: https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia
+    cameraStream = await navigator.mediaDevices.getUserMedia({
+      video: {
+        facingMode: {ideal: cameraFacingMode},
+        width: {ideal: 1920},
+        height: {ideal: 1080},
+      },
+      audio: false,
+    });
+    cameraVideo.srcObject = cameraStream;
+    await cameraVideo.play();
+    capturePhotoButton.disabled = false;
+    setCameraStatus(
+      cameraFacingMode === 'environment' ? 'กล้องหลังพร้อม · ภาพยังอยู่บนอุปกรณ์' : 'กล้องหน้าพร้อม · ภาพยังอยู่บนอุปกรณ์',
+      cameraFacingMode === 'environment' ? 'Rear camera ready · frame remains on device' : 'Front camera ready · frame remains on device',
+    );
+  } catch (error) {
+    stopCamera(false);
+    const [thaiText, englishText] = cameraErrorMessage(error);
+    setCameraStatus(thaiText, englishText);
+  }
+}
+
+async function switchCamera() {
+  cameraFacingMode = cameraFacingMode === 'environment' ? 'user' : 'environment';
+  await startCamera(false);
+}
+
+function captureCameraFrame() {
+  if (!cameraStream || cameraVideo.readyState < HTMLMediaElement.HAVE_CURRENT_DATA) return;
+  const sourceWidth = cameraVideo.videoWidth;
+  const sourceHeight = cameraVideo.videoHeight;
+  const maximumEdge = 1920;
+  const scale = Math.min(1, maximumEdge / Math.max(sourceWidth, sourceHeight));
+  cameraCanvas.width = Math.round(sourceWidth * scale);
+  cameraCanvas.height = Math.round(sourceHeight * scale);
+  const context = cameraCanvas.getContext('2d', {alpha: false});
+  context.drawImage(cameraVideo, 0, 0, cameraCanvas.width, cameraCanvas.height);
+  capturePhotoButton.disabled = true;
+  cameraCanvas.toBlob((blob) => {
+    if (!blob) {
+      capturePhotoButton.disabled = false;
+      setCameraStatus('สร้างภาพไม่สำเร็จ กรุณาลองถ่ายใหม่', 'Could not create the image. Try again.');
+      return;
+    }
+    const capturedFile = new File([blob], `retinova-capture-${Date.now()}.jpg`, {type: 'image/jpeg'});
+    selectedInputSource = 'camera';
+    selectedCaptureHasFundusOptics = fundusEquipmentCheck.checked;
+    stopCamera();
+    selectFile(capturedFile);
+  }, 'image/jpeg', 0.92);
 }
 
 function selectFile(file) {
@@ -151,6 +263,7 @@ function selectFile(file) {
     resetImage();
     return;
   }
+  if (image.src.startsWith('blob:')) URL.revokeObjectURL(image.src);
   selectedFile = file;
   image.src = URL.createObjectURL(file);
   image.onload = () => {
@@ -167,6 +280,9 @@ function checkReadiness() {
   checkResult.hidden = false;
   fileCheck.textContent = `${selectedFile.type.replace('image/', '').toUpperCase()} · ${(selectedFile.size / 1024 / 1024).toFixed(2)} MB`;
   resolutionCheck.textContent = `${image.naturalWidth} × ${image.naturalHeight} px`;
+  const cameraOutsideModelScope = selectedInputSource === 'camera' && !selectedCaptureHasFundusOptics;
+  document.querySelector('#cameraQualificationNotice').hidden = !cameraOutsideModelScope;
+  if (cameraOutsideModelScope) return;
   if (localModelReady) runLocalInference();
   else if (localAuthRequired && !teamAuthenticated) {
     alert(language === 'th' ? 'การใช้โมเดลจริงต้องเข้าสู่ระบบทีมก่อน' : 'Team Login is required to use the real model.');
@@ -357,11 +473,19 @@ document.querySelector('#clearHistoryButton').addEventListener('click', () => {
   sessionHistory.splice(0, sessionHistory.length);
   renderSessionHistory();
 });
+document.querySelector('#openCameraButton').addEventListener('click', () => startCamera());
+document.querySelector('#switchCameraButton').addEventListener('click', switchCamera);
+document.querySelector('#closeCameraButton').addEventListener('click', () => stopCamera());
+capturePhotoButton.addEventListener('click', captureCameraFrame);
 teamLoginForm.addEventListener('submit', loginTeam);
 comparisonSlider.addEventListener('input', () => {
   comparisonOverlay.style.clipPath = `inset(0 0 0 ${comparisonSlider.value}%)`;
 });
-input.addEventListener('change', () => selectFile(input.files[0]));
+input.addEventListener('change', () => {
+  selectedInputSource = 'file';
+  selectedCaptureHasFundusOptics = false;
+  selectFile(input.files[0]);
+});
 removeButton.addEventListener('click', resetImage);
 analyzeButton.addEventListener('click', checkReadiness);
 langButton.addEventListener('click', () => applyLanguage(language === 'th' ? 'en' : 'th'));
@@ -379,7 +503,15 @@ searchForm.addEventListener('submit', (event) => {
   event.preventDefault();
   dropzone.classList.remove('drag');
 }));
-dropzone.addEventListener('drop', (event) => selectFile(event.dataTransfer.files[0]));
+dropzone.addEventListener('drop', (event) => {
+  selectedInputSource = 'file';
+  selectedCaptureHasFundusOptics = false;
+  selectFile(event.dataTransfer.files[0]);
+});
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) stopCamera();
+});
+window.addEventListener('pagehide', () => stopCamera());
 
 applyLanguage('th');
 updateClock();

@@ -10,6 +10,7 @@ Retinova is a research prototype for screening **retinal fundus photographs**. I
 - Grad-CAM: real class-specific implementation validated offline; not connected publicly
 - Welcome page: Guest access is public; Team Login is enabled only by the optional localhost server
 - Session results: no fabricated patient records; only real local results are held in page memory and disappear on refresh
+- Mobile camera: live rear/front camera capture on HTTPS/localhost; bare-phone external-eye captures are blocked from model inference
 
 The public preview deliberately does not display invented accuracy, medical findings, or synthetic heatmaps.
 
@@ -37,6 +38,7 @@ Never add the key to `dashboard/app.js` or commit `.env`.
 ## Documentation
 
 - [Thai training-to-usage guide](docs/TRAINING_AND_USAGE_GUIDE_TH.md)
+- [Thai live-camera and current model guide](docs/CAMERA_AND_MODEL_USAGE_TH.md)
 - [Thai team presentation script and judge Q&A](docs/TEAM_PRESENTATION_SCRIPT_TH.md)
 - [Model card](docs/MODEL_CARD.md)
 - [Patient-grouped baseline evaluation](docs/EVALUATION_BASELINE_V1.md)
@@ -100,6 +102,12 @@ Remove-Item Env:RETINOVA_TEAM_PASSCODE
 The passcode is compared server-side and is never written to browser storage. A successful login receives an in-memory, eight-hour `HttpOnly; SameSite=Strict` localhost cookie. `/predict` returns HTTP 401 without that session. Logging out deletes the server session and cookie. If `RETINOVA_TEAM_PASSCODE` is unset, the loopback server remains in open-local demonstration mode.
 
 This is a team demonstration gate, not a production identity system or medical-record login. It has no user accounts, password reset, database, audit trail, TLS termination, or role-based authorization. Do not expose this development server to a network.
+
+### Live phone camera
+
+The analysis page uses the standard browser `getUserMedia()` API, preferring the rear camera, without audio or automatic illumination. It captures a JPEG in page memory and reuses the existing file-validation path. Camera tracks stop when the panel closes, the view changes, the tab is hidden, or the page exits.
+
+A bare smartphone camera does not produce the retinal fundus photographs used for model training. Captures without an explicit fundus-adapter/condensing-lens acknowledgement may be inspected for file properties but are blocked from local inference. See the camera guide for the hardware boundary, privacy flow, and phone-to-model deployment options.
 
 ### Truthful replacements for unsupported legacy UI
 

@@ -172,6 +172,39 @@ svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width:
 .page-heading .mode-chip { margin-top: 12px; padding: 8px 12px; border: 1px solid var(--line); border-radius: 999px; color: var(--text-soft); letter-spacing: 0; text-transform: none; white-space: nowrap; }
 .analysis-grid { display: grid; grid-template-columns: 1.12fr .88fr; gap: 20px; }
 .upload-panel, .result-panel { min-height: 600px; padding: 28px; }
+.input-methods { display: grid; gap: 10px; margin-top: 20px; text-align: center; color: var(--text-muted); font-size: 12px; }
+.input-methods > button { display: flex; align-items: center; gap: 13px; padding: 15px 17px; border: 1px solid rgba(82, 199, 223, .35); border-radius: 15px; background: rgba(82, 199, 223, .07); color: var(--text); text-align: left; cursor: pointer; }
+.input-methods > button:hover { border-color: var(--cyan); background: rgba(82, 199, 223, .12); }
+.input-methods > button > svg { width: 27px; height: 27px; flex: 0 0 auto; color: var(--cyan); }
+.input-methods > button strong, .input-methods > button small { display: block; }
+.input-methods > button small { margin-top: 2px; color: var(--text-muted); }
+.camera-panel { margin-top: 18px; }
+.camera-boundary { display: flex; gap: 12px; padding: 15px; border: 1px solid rgba(242, 185, 75, .28); border-radius: 14px; background: rgba(242, 185, 75, .07); }
+.camera-boundary > svg { width: 20px; flex: 0 0 auto; color: var(--amber); }
+.camera-boundary strong { color: #ffd992; }
+.camera-boundary p { margin: 4px 0 0; color: var(--text-soft); font-size: 12px; }
+.camera-stage { aspect-ratio: 4 / 3; position: relative; margin-top: 14px; overflow: hidden; border-radius: 18px; background: #02080d; }
+.camera-stage video { width: 100%; height: 100%; display: block; object-fit: cover; }
+.camera-guide { position: absolute; inset: 0; display: grid; place-items: center; pointer-events: none; }
+.camera-guide::before, .camera-guide::after, .camera-guide span { content: ""; position: absolute; border-radius: 50%; }
+.camera-guide::before { width: min(70%, 310px); aspect-ratio: 1; border: 2px solid rgba(255, 255, 255, .7); box-shadow: 0 0 0 999px rgba(0, 8, 14, .2); }
+.camera-guide::after { width: min(36%, 155px); aspect-ratio: 1; border: 1px dashed rgba(82, 199, 223, .85); }
+.camera-guide span { width: 8px; height: 8px; background: var(--cyan); box-shadow: 0 0 0 5px rgba(82, 199, 223, .16); }
+.camera-live { position: absolute; top: 11px; left: 11px; display: flex; align-items: center; gap: 7px; padding: 5px 8px; border-radius: 7px; background: rgba(5, 18, 28, .78); font-size: 9px; font-weight: 800; letter-spacing: .08em; }
+.camera-live i { width: 7px; height: 7px; border-radius: 50%; background: var(--danger); box-shadow: 0 0 0 4px rgba(255, 113, 131, .14); }
+.fundus-equipment-check { display: flex; align-items: flex-start; gap: 10px; margin-top: 11px; padding: 12px; border: 1px solid var(--line); border-radius: 12px; background: rgba(255, 255, 255, .025); cursor: pointer; }
+.fundus-equipment-check input { width: 19px; height: 19px; flex: 0 0 auto; margin-top: 2px; accent-color: var(--cyan); }
+.fundus-equipment-check strong, .fundus-equipment-check small { display: block; }
+.fundus-equipment-check small { margin-top: 3px; color: var(--text-muted); font-size: 11px; }
+.camera-status { min-height: 22px; margin: 9px 0; color: var(--text-soft); font-size: 12px; text-align: center; }
+.camera-actions { display: grid; grid-template-columns: 1fr 1.35fr 1fr; gap: 9px; }
+.camera-actions button { min-height: 48px; border-radius: 13px; cursor: pointer; }
+.secondary-action { border: 1px solid var(--line); background: var(--navy-750); }
+.capture-action { display: flex; align-items: center; justify-content: center; gap: 9px; border: 0; background: linear-gradient(110deg, var(--blue), var(--cyan)); color: white; }
+.capture-action:disabled { opacity: .45; cursor: not-allowed; }
+.capture-action > span { width: 18px; height: 18px; border: 3px solid white; border-radius: 50%; box-shadow: 0 0 0 2px rgba(255, 255, 255, .3); }
+.camera-safety { display: grid; gap: 6px; margin: 13px 0 0; padding-left: 20px; color: var(--text-muted); font-size: 11px; }
+.camera-safety li::marker { color: var(--cyan); }
 .dropzone { min-height: 400px; margin-top: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 28px; border: 2px dashed #37628a; border-radius: 20px; background: rgba(255, 255, 255, .025); cursor: pointer; transition: border-color .2s, background .2s; }
 .dropzone:hover, .dropzone.drag { border-color: var(--cyan); background: rgba(82, 199, 223, .055); }
 .upload-symbol { width: 82px; height: 82px; display: grid; place-items: center; margin-bottom: 22px; border-radius: 22px; background: linear-gradient(135deg, var(--blue), var(--cyan)); }
@@ -191,6 +224,9 @@ svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width:
 .check-line span { color: var(--text-soft); }
 .preview-notice { margin-top: 20px; padding: 16px; border-left: 3px solid var(--blue); background: rgba(77, 166, 239, .08); }
 .preview-notice p { margin: 5px 0 0; color: var(--text-soft); font-size: 14px; }
+.camera-qualification-notice { margin-top: 20px; padding: 16px; border-left: 3px solid var(--amber); background: rgba(242, 185, 75, .08); }
+.camera-qualification-notice strong { color: #ffd992; }
+.camera-qualification-notice p { margin: 5px 0 0; color: var(--text-soft); font-size: 13px; }
 .model-output { margin-top: 22px; }
 .model-decision { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; margin-bottom: 16px; }
 .model-decision small { color: var(--text-muted); }
@@ -329,6 +365,8 @@ svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width:
   .model-state { grid-template-columns: 105px 1fr; gap: 15px; }
   .score-ring { width: 102px; height: 102px; }
   .check-line { display: grid; gap: 3px; }
+  .camera-actions { grid-template-columns: 1fr 1fr; }
+  .capture-action { grid-column: 1 / -1; grid-row: 1; }
 }
 
 @media (prefers-reduced-motion: reduce) {
