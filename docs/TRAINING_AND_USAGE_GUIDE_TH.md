@@ -117,12 +117,16 @@ API key และ checkpoint ต้องอยู่ฝั่ง server เท�
 ## 9. วิธีใช้ Public Preview ปัจจุบัน
 
 1. เปิด `https://kla2009k.github.io/Retinova/`
-2. เลือก JPG/PNG ไม่เกิน 10 MB
-3. หน้าเว็บแสดงภาพเฉพาะใน browser และตรวจว่าไฟล์เปิดอ่านได้
-4. กด “ตรวจความพร้อมของภาพ” เพื่อดูชนิด ขนาด และความละเอียด
-5. ระบบรุ่นนี้ยังไม่ส่งภาพ ไม่คืนชื่อโรค และไม่สร้าง heatmap
+2. กด “เข้าชมแบบผู้เยี่ยมชม” หน้า Team Login บน GitHub Pages เป็นคำอธิบายโหมด local และจะไม่เปิดให้ส่งรหัสผ่าน
+3. เลือก JPG/PNG ไม่เกิน 10 MB
+4. หน้าเว็บแสดงภาพเฉพาะใน browser และตรวจว่าไฟล์เปิดอ่านได้
+5. กด “ตรวจความพร้อมของภาพ” เพื่อดูชนิด ขนาด และความละเอียด
+6. ระบบ public รุ่นนี้ยังไม่ส่งภาพ ไม่คืนชื่อโรค และไม่สร้าง heatmap
+7. หน้า “ผลล่าสุด” จะว่าง เพราะเพิ่มรายการเฉพาะเมื่อ local model คืนผลจริง และไม่มีประวัติผู้ป่วยจำลอง
 
-เมื่อ backend รุ่นตรวจสอบแล้วพร้อม ขั้นตอน 3–5 จะเพิ่ม quality score, prediction, probability, model version และ Grad-CAM โดยหน้าตาจะยังแสดงสถานะหลักฐานชัดเจน
+ในโหมด local server ระบบเพิ่ม prediction, probability, model version, เวลา inference และ Grad-CAM จริง โดย slider เทียบกับภาพต้นฉบับได้ ค่า probability ถูกระบุชัดว่าไม่ใช่ Eye Health Score รายการผลล่าสุดอยู่ใน memory ของแท็บเท่านั้น ไม่เก็บภาพหรือ Grad-CAM และหายเมื่อ refresh/ปิดแท็บ
+
+ถ้าตั้ง environment variable `RETINOVA_TEAM_PASSCODE` ก่อนเปิด local server, endpoint `/predict` จะรับเฉพาะ session ที่ล็อกอินสำเร็จ รหัสผ่านไม่ถูกเก็บใน `localStorage`/`sessionStorage`; server ใช้ cookie แบบ HttpOnly และลบ session เมื่อ logout อย่างไรก็ตามนี่เป็นเพียง access gate สำหรับเดโมในเครื่อง ไม่ใช่ระบบบัญชีหรือเวชระเบียน production
 
 ## 10. คำที่ควรและไม่ควรพูด
 

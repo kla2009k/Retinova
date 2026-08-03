@@ -26,7 +26,7 @@ class PublicContractTests(unittest.TestCase):
         self.assertIn('class="app-shell"', HTML)
         self.assertIn('class="sidebar"', HTML)
         self.assertIn('class="topbar"', HTML)
-        for view in ("home", "analyze", "eye-health", "evidence"):
+        for view in ("home", "analyze", "history", "eye-health", "evidence"):
             self.assertIn(f'data-view="{view}"', HTML)
             self.assertIn(f'id="view-{view}"', HTML)
         self.assertIn("--navy-950:#081c2b", re.sub(r"\s+", "", CSS))
@@ -44,6 +44,40 @@ class PublicContractTests(unittest.TestCase):
         self.assertIn('id="modelOutput"', HTML)
         self.assertNotIn("Eye health score", public)
         self.assertNotIn("AI Confidence", public)
+
+    def test_welcome_gate_supports_guest_and_optional_local_team_login(self):
+        self.assertIn('id="welcomeGate"', HTML)
+        self.assertIn('id="guestButton"', HTML)
+        self.assertIn('id="teamLoginForm"', HTML)
+        self.assertRegex(HTML, r'id="teamPasscode"[^>]+autocomplete="current-password"')
+        self.assertIn("fetch('/session'", JS)
+        self.assertIn("credentials: 'same-origin'", JS)
+        self.assertNotIn("localStorage", JS)
+        self.assertNotIn("sessionStorage", JS)
+
+    def test_history_is_session_only_and_never_stores_images(self):
+        self.assertIn('id="view-history"', HTML)
+        self.assertIn('id="historyList"', HTML)
+        self.assertIn("const sessionHistory = []", JS)
+        self.assertIn("MAX_SESSION_RESULTS", JS)
+        self.assertIn("renderSessionHistory", JS)
+        self.assertNotRegex(JS, r"sessionHistory\.push\([^)]*(image|gradcam)")
+
+    def test_real_gradcam_comparison_has_no_synthetic_heatmap(self):
+        self.assertIn('id="comparisonSlider"', HTML)
+        self.assertIn('id="originalCompareImage"', HTML)
+        self.assertIn('id="gradcamCompareImage"', HTML)
+        self.assertIn("clipPath", JS)
+        self.assertNotIn("radial-gradient", JS)
+
+    def test_optional_local_auth_uses_server_side_http_only_sessions(self):
+        server = (ROOT / "scripts" / "serve_retinova.py").read_text(encoding="utf-8")
+        self.assertIn('os.environ.get("RETINOVA_TEAM_PASSCODE")', server)
+        self.assertIn("hmac.compare_digest", server)
+        self.assertIn("secrets.token_urlsafe", server)
+        self.assertIn("HttpOnly", server)
+        self.assertIn("SameSite=Strict", server)
+        self.assertIn('self.path == "/session"', server)
 
     def test_hidden_states_cannot_be_overridden_by_component_css(self):
         css = (ROOT / "dashboard" / "styles.css").read_text(encoding="utf-8")

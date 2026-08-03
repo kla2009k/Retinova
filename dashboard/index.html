@@ -6,10 +6,8 @@
   <meta name="description" content="Retinova ต้นแบบระบบคัดกรองภาพถ่ายจอประสาทตาเพื่อการวิจัยและการศึกษา">
   <meta name="theme-color" content="#081c2b">
   <title>Retinova — Retinal screening, explained</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@500;600;700&family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=20260803">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%234da6ef'/%3E%3Cpath d='M10 32s8-13 22-13 22 13 22 13-8 13-22 13S10 32 10 32Z' fill='none' stroke='white' stroke-width='4'/%3E%3Ccircle cx='32' cy='32' r='7' fill='white'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css?v=20260803b">
 </head>
 <body>
   <a class="skip-link" href="#mainContent">ข้ามไปเนื้อหาหลัก</a>
@@ -25,9 +23,42 @@
     <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></symbol>
     <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7h.01"/></symbol>
     <symbol id="i-pulse" viewBox="0 0 24 24"><path d="M2 12h4l2-7 4 14 3-9 2 2h5"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
   </svg>
 
-  <div class="app-shell">
+  <section class="welcome-gate" id="welcomeGate" aria-labelledby="welcomeTitle">
+    <div class="welcome-hero">
+      <div class="welcome-brand"><span class="brand-icon"><svg><use href="#i-eye"/></svg></span><span><strong>Retinova</strong><small>SMART RETINAL RESEARCH</small></span></div>
+      <span class="welcome-kicker">EVIDENCE-AWARE AI · PUBLIC PREVIEW</span>
+      <h1 id="welcomeTitle" data-th="มองเห็นหลักฐาน ก่อนเชื่อผลจาก AI" data-en="See the evidence before trusting an AI result">มองเห็นหลักฐาน<br>ก่อนเชื่อผลจาก AI</h1>
+      <p data-th="ต้นแบบคัดกรองภาพถ่ายจอประสาทตาที่แสดงผลประเมินจริง ข้อจำกัด และ Grad-CAM จริงจากโมเดลในเครื่อง" data-en="A retinal-fundus research prototype that shows measured evaluation, limitations, and real Grad-CAM from the local model.">ต้นแบบคัดกรองภาพถ่ายจอประสาทตาที่แสดงผลประเมินจริง ข้อจำกัด และ Grad-CAM จริงจากโมเดลในเครื่อง</p>
+      <ul>
+        <li><svg><use href="#i-chart"/></svg><span data-th="ผล test แบบแยกผู้ป่วย: macro F1 0.581 (95% CI 0.525–0.622)" data-en="Patient-grouped test result: macro F1 0.581 (95% CI 0.525–0.622)">ผล test แบบแยกผู้ป่วย: macro F1 0.581 (95% CI 0.525–0.622)</span></li>
+        <li><svg><use href="#i-eye"/></svg><span data-th="เปรียบเทียบภาพต้นฉบับกับ Grad-CAM จริงเมื่อใช้ local model" data-en="Compare the original image with real Grad-CAM when using the local model">เปรียบเทียบภาพต้นฉบับกับ Grad-CAM จริงเมื่อใช้ local model</span></li>
+        <li><svg><use href="#i-shield"/></svg><span data-th="ไม่สร้างประวัติผู้ป่วย และไม่เก็บภาพหรือรหัสผ่านในเบราว์เซอร์" data-en="No fabricated patient records; images and passwords are not stored in the browser">ไม่สร้างประวัติผู้ป่วย และไม่เก็บภาพหรือรหัสผ่านในเบราว์เซอร์</span></li>
+      </ul>
+    </div>
+
+    <aside class="login-card" aria-label="เข้าสู่ Retinova">
+      <div class="welcome-language" aria-label="Language"><button type="button" data-welcome-language="th" class="active">ไทย</button><button type="button" data-welcome-language="en">EN</button></div>
+      <span class="login-eyebrow" data-th="ยินดีต้อนรับ" data-en="Welcome">ยินดีต้อนรับ</span>
+      <h2 data-th="เข้าสู่ Retinova" data-en="Enter Retinova">เข้าสู่ Retinova</h2>
+      <p data-th="เลือกเข้าเว็บสาธิต หรือเข้าสู่ระบบทีมเพื่อใช้โมเดลที่รันอยู่บนเครื่องนี้" data-en="Continue to the public demo, or use Team Login for a model running on this computer.">เลือกเข้าเว็บสาธิต หรือเข้าสู่ระบบทีมเพื่อใช้โมเดลที่รันอยู่บนเครื่องนี้</p>
+
+      <button class="guest-button" id="guestButton" type="button"><span data-th="เข้าชมแบบผู้เยี่ยมชม" data-en="Continue as guest">เข้าชมแบบผู้เยี่ยมชม</span><small data-th="ดูหน้าจอ หลักฐาน และตรวจคุณสมบัติไฟล์" data-en="Explore the UI, evidence, and file readiness">ดูหน้าจอ หลักฐาน และตรวจคุณสมบัติไฟล์</small></button>
+      <div class="login-divider"><span data-th="หรือ · เฉพาะ local server" data-en="or · local server only">หรือ · เฉพาะ local server</span></div>
+
+      <form id="teamLoginForm" class="team-login">
+        <label for="teamPasscode" data-th="รหัสผ่านทีม" data-en="Team passcode">รหัสผ่านทีม</label>
+        <div class="passcode-field"><svg><use href="#i-shield"/></svg><input id="teamPasscode" name="passcode" type="password" autocomplete="current-password" required placeholder="••••••••"></div>
+        <button id="teamLoginButton" class="primary-action full" type="submit" disabled data-th="เข้าสู่ระบบทีม" data-en="Team login">เข้าสู่ระบบทีม</button>
+        <p id="teamLoginStatus" class="login-status" role="status" data-th="เปิดเว็บผ่าน local server ที่ตั้ง RETINOVA_TEAM_PASSCODE เพื่อใช้งาน" data-en="Open the local server with RETINOVA_TEAM_PASSCODE configured to enable this login.">เปิดเว็บผ่าน local server ที่ตั้ง RETINOVA_TEAM_PASSCODE เพื่อใช้งาน</p>
+      </form>
+      <p class="login-boundary"><svg><use href="#i-info"/></svg><span data-th="GitHub Pages ไม่มีระบบบัญชีและไม่รับรหัสผ่าน หน้านี้จึงไม่ใช่ระบบเวชระเบียน" data-en="GitHub Pages has no account system and receives no passwords. This is not a medical-record system.">GitHub Pages ไม่มีระบบบัญชีและไม่รับรหัสผ่าน หน้านี้จึงไม่ใช่ระบบเวชระเบียน</span></p>
+    </aside>
+  </section>
+
+  <div class="app-shell" id="appShell" hidden>
     <aside class="sidebar">
       <button class="brand" type="button" data-view="home" aria-label="Retinova หน้าแรก">
         <span class="brand-icon"><svg><use href="#i-eye"/></svg></span>
@@ -37,6 +68,7 @@
       <nav class="side-nav" aria-label="เมนูหลัก">
         <button class="nav-item active" type="button" data-view="home" aria-current="page"><svg><use href="#i-home"/></svg><span data-th="หน้าแรก" data-en="Home">หน้าแรก</span></button>
         <button class="nav-item" type="button" data-view="analyze"><svg><use href="#i-image"/></svg><span data-th="วิเคราะห์ภาพ" data-en="Analyze">วิเคราะห์ภาพ</span></button>
+        <button class="nav-item" type="button" data-view="history"><svg><use href="#i-clock"/></svg><span data-th="ผลล่าสุด" data-en="Session results">ผลล่าสุด</span></button>
         <button class="nav-item" type="button" data-view="eye-health"><svg><use href="#i-heart"/></svg><span data-th="ความรู้ดวงตา" data-en="Eye health">ความรู้ดวงตา</span></button>
         <button class="nav-item" type="button" data-view="evidence"><svg><use href="#i-chart"/></svg><span data-th="หลักฐานโมเดล" data-en="Evidence">หลักฐานโมเดล</span></button>
       </nav>
@@ -59,7 +91,7 @@
           <span class="public-badge"><i></i> PUBLIC PREVIEW</span>
           <button class="lang-button" id="langButton" type="button" aria-label="Switch language">EN</button>
           <div class="clock" aria-label="เวลาปัจจุบัน"><strong id="clockTime">--:--</strong><span id="clockDate">—</span></div>
-          <span class="avatar" aria-hidden="true">ร</span>
+          <button class="avatar" id="sessionButton" type="button" aria-label="ออกจากเซสชัน" title="ออกจากเซสชัน">ร</button>
         </div>
       </header>
 
@@ -129,8 +161,13 @@
                 <div class="check-line"><span data-th="การจัดเก็บ" data-en="Storage">การจัดเก็บ</span><strong class="success" data-th="ไม่บันทึกใน Public Preview" data-en="Not stored in Public Preview">ไม่บันทึกใน Public Preview</strong></div>
                 <div class="preview-notice" id="previewNotice"><strong data-th="ขอบเขตโหมดนี้" data-en="Mode boundary">ขอบเขตโหมดนี้</strong><p data-th="เว็บสาธารณะไม่ส่งภาพเข้าโมเดลและไม่สร้าง heatmap เพื่อหลีกเลี่ยงผลทางการแพทย์ที่ยังไม่ผ่านการตรวจสอบ" data-en="The public site does not send images to a model or generate heatmaps, avoiding unvalidated medical output.">เว็บสาธารณะไม่ส่งภาพเข้าโมเดลและไม่สร้าง heatmap เพื่อหลีกเลี่ยงผลทางการแพทย์ที่ยังไม่ผ่านการตรวจสอบ</p></div>
                 <div class="model-output" id="modelOutput" hidden>
-                  <div class="model-decision"><div><small data-th="ผลโมเดลวิจัยในเครื่อง" data-en="Local research-model output">ผลโมเดลวิจัยในเครื่อง</small><h3 id="modelPrediction">—</h3></div><strong id="modelProbability">—</strong></div>
-                  <div class="gradcam-wrap"><img id="gradcamImage" alt="Grad-CAM จากคลาสที่โมเดลทำนาย"><span>Grad-CAM</span></div>
+                  <div class="model-decision"><div><small data-th="ผลโมเดลวิจัยในเครื่อง" data-en="Local research-model output">ผลโมเดลวิจัยในเครื่อง</small><h3 id="modelPrediction">—</h3></div><div class="probability-value"><strong id="modelProbability">—</strong><small data-th="ความน่าจะเป็นของโมเดล · ไม่ใช่ Eye Health Score" data-en="Model probability · not an Eye Health Score">ความน่าจะเป็นของโมเดล · ไม่ใช่ Eye Health Score</small></div></div>
+                  <figure class="gradcam-comparison">
+                    <div class="comparison-stage"><img id="originalCompareImage" alt="ภาพต้นฉบับที่เลือก"><div class="comparison-overlay" id="comparisonOverlay"><img id="gradcamCompareImage" alt="Grad-CAM จริงจากคลาสที่โมเดลทำนาย"></div><span class="compare-label original-label" data-th="ภาพต้นฉบับ" data-en="Original">ภาพต้นฉบับ</span><span class="compare-label heatmap-label">REAL GRAD-CAM</span></div>
+                    <label for="comparisonSlider" data-th="เลื่อนเพื่อเทียบภาพต้นฉบับกับ Grad-CAM" data-en="Slide to compare the original with Grad-CAM">เลื่อนเพื่อเทียบภาพต้นฉบับกับ Grad-CAM</label>
+                    <input id="comparisonSlider" type="range" min="0" max="100" value="50" aria-label="สัดส่วนภาพต้นฉบับและ Grad-CAM">
+                    <figcaption data-th="Grad-CAM แสดงบริเวณที่มีอิทธิพลต่อคลาสที่ทำนาย ไม่ใช่ขอบเขตรอยโรค" data-en="Grad-CAM shows regions influencing the predicted class; it is not a lesion boundary.">Grad-CAM แสดงบริเวณที่มีอิทธิพลต่อคลาสที่ทำนาย ไม่ใช่ขอบเขตรอยโรค</figcaption>
+                  </figure>
                   <ol id="probabilityList"></ol>
                   <p class="provenance" id="modelProvenance"></p>
                   <p class="model-warning" data-th="ผลคัดกรองวิจัย ไม่ใช่การวินิจฉัย และ Grad-CAM ไม่ใช่ขอบเขตรอยโรค" data-en="Research screening output, not a diagnosis. Grad-CAM is not a lesion boundary.">ผลคัดกรองวิจัย ไม่ใช่การวินิจฉัย และ Grad-CAM ไม่ใช่ขอบเขตรอยโรค</p>
@@ -143,6 +180,14 @@
             <header><svg><use href="#i-pulse"/></svg><h2 data-th="กระบวนการของระบบ" data-en="System pipeline">กระบวนการของระบบ</h2></header>
             <ol><li><span>1</span><b data-th="รับภาพ" data-en="Receive">รับภาพ</b></li><li><span>2</span><b data-th="ตรวจไฟล์" data-en="Validate">ตรวจไฟล์</b></li><li><span>3</span><b data-th="ปรับภาพ" data-en="Preprocess">ปรับภาพ</b></li><li><span>4</span><b data-th="จำแนก" data-en="Classify">จำแนก</b></li><li><span>5</span><b>Grad-CAM</b></li><li><span>6</span><b data-th="รายงานข้อจำกัด" data-en="Report limits">รายงานข้อจำกัด</b></li></ol>
           </article>
+        </section>
+
+        <section class="app-view" id="view-history" data-page="history" hidden>
+          <div class="page-heading"><div><span data-th="เฉพาะแท็บนี้" data-en="This tab only">เฉพาะแท็บนี้</span><h1 data-th="ผลวิเคราะห์ล่าสุด" data-en="Session analysis results">ผลวิเคราะห์ล่าสุด</h1><p data-th="แสดงเฉพาะผลที่โมเดลจริงประมวลผลในเซสชันนี้ ไม่ใช่ประวัติผู้ป่วย และจะหายเมื่อรีเฟรชหรือปิดแท็บ" data-en="Only real model outputs from this session are shown. This is not patient history and disappears when the tab is refreshed or closed.">แสดงเฉพาะผลที่โมเดลจริงประมวลผลในเซสชันนี้ ไม่ใช่ประวัติผู้ป่วย และจะหายเมื่อรีเฟรชหรือปิดแท็บ</p></div></div>
+          <div class="history-grid">
+            <article class="panel history-summary"><header><svg><use href="#i-shield"/></svg><h2 data-th="ขอบเขตข้อมูล" data-en="Data boundary">ขอบเขตข้อมูล</h2></header><dl><div><dt data-th="จำนวนผลในเซสชัน" data-en="Results this session">จำนวนผลในเซสชัน</dt><dd id="historyCount">0</dd></div><div><dt data-th="ภาพที่จัดเก็บ" data-en="Images stored">ภาพที่จัดเก็บ</dt><dd class="success">0</dd></div><div><dt>Eye Health Score</dt><dd data-th="ไม่สร้าง" data-en="Not generated">ไม่สร้าง</dd></div></dl><p data-th="ระบบเก็บเพียงเวลา คลาส ความน่าจะเป็น รุ่นโมเดล และเวลา inference ไว้ในหน่วยความจำชั่วคราวของหน้าเว็บ" data-en="Only time, class, probability, model revision, and inference time are kept temporarily in page memory.">ระบบเก็บเพียงเวลา คลาส ความน่าจะเป็น รุ่นโมเดล และเวลา inference ไว้ในหน่วยความจำชั่วคราวของหน้าเว็บ</p></article>
+            <article class="panel history-panel" aria-live="polite"><header><svg><use href="#i-clock"/></svg><h2 data-th="รายการผลจริง" data-en="Real result list">รายการผลจริง</h2><button id="clearHistoryButton" class="text-action" type="button" data-th="ล้างรายการ" data-en="Clear">ล้างรายการ</button></header><div id="historyEmpty" class="history-empty"><svg><use href="#i-pulse"/></svg><strong data-th="ยังไม่มีผลจาก local model" data-en="No local-model results yet">ยังไม่มีผลจาก local model</strong><p data-th="รายการจะเพิ่มหลังจากวิเคราะห์ภาพด้วยโมเดลจริงเท่านั้น" data-en="An item is added only after a real local-model inference.">รายการจะเพิ่มหลังจากวิเคราะห์ภาพด้วยโมเดลจริงเท่านั้น</p></div><ol id="historyList" hidden></ol></article>
+          </div>
         </section>
 
         <section class="app-view" id="view-eye-health" data-page="eye-health" hidden>
@@ -167,6 +212,6 @@
   </div>
 
   <noscript>Retinova ต้องใช้ JavaScript เพื่อสลับหน้าจอและตรวจไฟล์ภาพ</noscript>
-  <script src="app.js?v=20260803"></script>
+  <script src="app.js?v=20260803b"></script>
 </body>
 </html>

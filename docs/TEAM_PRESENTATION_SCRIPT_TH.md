@@ -42,9 +42,9 @@
 
 ### 8. เว็บทำงานอย่างไร
 
-> GitHub Pages ที่แชร์ด้วย QR เป็น public preview แบบ static ไม่มี API key, checkpoint หรือการส่งภาพไปวิเคราะห์ ผู้ใช้เลือกภาพเพื่อทดสอบชนิดไฟล์ ขนาด และความละเอียดใน browser เท่านั้น เราตั้งใจไม่เปิดผลโรคสาธารณะ เพราะ checkpoint และสิทธิ์การเผยแพร่ข้อมูลยังต้องตรวจสอบ
+> GitHub Pages ที่แชร์ด้วย QR เริ่มจากหน้า Welcome ผู้ใช้กดเข้าแบบ Guest ได้ หน้า Team Login จะทำงานจริงเฉพาะ local server ที่ทีมตั้ง passcode ไว้เท่านั้น ตัว public preview ไม่มีระบบบัญชี ไม่มี API key, checkpoint หรือการส่งภาพไปวิเคราะห์ ผู้ใช้เลือกภาพเพื่อทดสอบชนิดไฟล์ ขนาด และความละเอียดใน browser เท่านั้น เราตั้งใจไม่เปิดผลโรคสาธารณะ เพราะ checkpoint และสิทธิ์การเผยแพร่ข้อมูลยังต้องตรวจสอบ
 
-> สำหรับเดโมโมเดลจริง เรารัน Python server เฉพาะ localhost หน้าเว็บจะตรวจพบ endpoint health แล้วเปลี่ยนปุ่มเป็นวิเคราะห์ด้วยโมเดลจริง ภาพถูกส่งให้ checkpoint ในเครื่อง ระบบคืน probability ทั้ง 8 คลาสพร้อม Grad-CAM และ provenance เซิร์ฟเวอร์ bind ที่ 127.0.0.1 และไม่เขียนภาพลง log
+> สำหรับเดโมโมเดลจริง เรารัน Python server เฉพาะ localhost หน้าเว็บจะตรวจพบ endpoint health และถ้าตั้ง RETINOVA_TEAM_PASSCODE ไว้ ผู้ใช้ต้องล็อกอินก่อนเรียก predict รหัสผ่านตรวจที่ server และ session cookie เป็น HttpOnly ภาพถูกส่งให้ checkpoint ในเครื่อง ระบบคืน probability ทั้ง 8 คลาสพร้อม Grad-CAM และ provenance หน้าเว็บมี slider เทียบภาพต้นฉบับกับ Grad-CAM จริง และเพิ่มรายการผลจริงเฉพาะในหน่วยความจำของแท็บโดยไม่เก็บภาพ ชื่อคน หรือชื่อไฟล์ เซิร์ฟเวอร์ bind ที่ 127.0.0.1 และไม่เขียนภาพลง log
 
 ### 9. สรุป
 
@@ -55,18 +55,23 @@
 ### Public preview
 
 1. เปิด `https://kla2009k.github.io/Retinova/` หรือสแกน `docs/retinova-qr.png`
-2. เลือกภาพ JPG/PNG ไม่เกิน 10 MB
-3. กดตรวจความพร้อมของภาพ
-4. อธิบายว่าภาพอยู่ใน browser และหน้านี้ตั้งใจไม่คืนผลโรค
+2. กด “เข้าชมแบบผู้เยี่ยมชม” และอธิบายว่า Team Login ไม่รับรหัสบน GitHub Pages
+3. เลือกภาพ JPG/PNG ไม่เกิน 10 MB
+4. กดตรวจความพร้อมของภาพ
+5. เปิดหน้าผลล่าสุดและชี้ว่าเป็นศูนย์ เพราะ public preview ไม่สร้างผลโมเดลหรือประวัติผู้ป่วย
+6. อธิบายว่าภาพอยู่ใน browser และหน้านี้ตั้งใจไม่คืนผลโรค
 
 ### Local real-model mode
 
 ```powershell
+$env:RETINOVA_TEAM_PASSCODE="รหัสยาวแบบสุ่มสำหรับการเดโม"
 python -m scripts.serve_retinova `
   --checkpoint models/efficientnet_b0_patient_grouped_v1/retinova_efficientnet_b0_best.pt
 ```
 
-จากนั้นเปิด `http://127.0.0.1:8000`, เลือกภาพ fundus และกดวิเคราะห์ด้วยโมเดลจริง ควรชี้ให้เห็น probability ทุกคลาส, Grad-CAM, architecture, target class, target layer และคำเตือน
+จากนั้นเปิด `http://127.0.0.1:8000`, ใส่รหัสผ่านทีม, เลือกภาพ fundus และกดวิเคราะห์ด้วยโมเดลจริง ควรชี้ให้เห็น probability ทุกคลาส, slider เปรียบเทียบ Grad-CAM จริง, architecture, target class, target layer, model revision, เวลา inference และคำเตือน จากนั้นเปิด “ผลล่าสุด” เพื่อแสดงว่ารายการมาจากผลที่เพิ่งรันจริงและหายเมื่อ refresh
+
+**คำอธิบายสิ่งที่ไม่ใช้จากเว็บรุ่นเก่า:** เราไม่ใช้เลข 94.2% เพราะไม่มี test report รองรับ, ไม่สร้างชื่อหรือประวัติผู้ป่วยจำลอง, ไม่สร้าง Eye Health Score ที่ไม่มีนิยามการตรวจสอบ และไม่วาด heatmap ด้วย CSS สิ่งทดแทนคือ metrics จาก patient-grouped test, session result จริง, model probability ที่ติดป้ายข้อจำกัด และ Grad-CAM จาก checkpoint เดียวกับ prediction
 
 ## คำถามกรรมการที่น่าจะเจอ
 
