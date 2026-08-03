@@ -1,6 +1,7 @@
 """Local prediction and Grad-CAM adapter for the Retinova research UI."""
 import base64
 from io import BytesIO
+from time import perf_counter
 
 import numpy as np
 from PIL import Image, ImageOps
@@ -28,6 +29,7 @@ class RetinovaPredictor:
         self.model.eval()
 
     def predict(self, image_bytes):
+        started_at = perf_counter()
         with Image.open(BytesIO(image_bytes)) as encoded:
             source = encoded.convert("RGB")
         if min(source.size) < self.image_size:
@@ -52,6 +54,7 @@ class RetinovaPredictor:
                 for name, value in zip(self.class_names, probabilities, strict=True)
             },
             "gradcam_data_url": overlay,
+            "inference_ms": round((perf_counter() - started_at) * 1000),
             "provenance": {
                 "architecture": self.architecture,
                 "model_revision": self.checkpoint.get("git_revision", "unknown"),
