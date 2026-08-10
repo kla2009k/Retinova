@@ -56,6 +56,22 @@ class PublicContractTests(unittest.TestCase):
         self.assertIn('src="assets/anatomy.jpg"', HTML)
         self.assertIn('src="assets/fundus-pair.jpg"', HTML)
 
+    def test_poster_viewport_uses_the_measured_reference_geometry(self):
+        compact_css = re.sub(r"\s+", "", CSS)
+        self.assertIn("--poster-sidebar:167px", compact_css)
+        self.assertIn("--poster-gap:15px", compact_css)
+        self.assertIn("--poster-right:27px", compact_css)
+        self.assertIn("--poster-topbar:51px", compact_css)
+        self.assertIn("--poster-hero:249px", compact_css)
+        self.assertIn("appShell.dataset.activeView=nextView", re.sub(r"\s+", "", JS))
+
+    def test_reference_copy_and_mobile_capture_remain_available(self):
+        self.assertIn('data-en="Care for your eye health with Artificial Intelligence"', HTML)
+        self.assertIn('class="sample-row"', HTML)
+        self.assertIn('id="openCameraButton"', HTML)
+        self.assertIn("applyLanguage('en')", JS)
+        self.assertIn('data-th="เริ่มวิเคราะห์ดวงตา"', HTML)
+
     def test_reference_layout_never_reintroduces_fabricated_poster_results(self):
         public = HTML + JS
         self.assertNotIn("Eye Health Score", public)

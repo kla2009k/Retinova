@@ -87,6 +87,7 @@ function showView(viewName, updateUrl = true) {
   const nextView = validViews.has(viewName) ? viewName : 'home';
   if (activeView === 'analyze' && nextView !== 'analyze') stopCamera();
   activeView = nextView;
+  appShell.dataset.activeView = nextView;
   document.querySelectorAll('.app-view').forEach((view) => {
     view.hidden = view.dataset.page !== nextView;
   });
@@ -547,7 +548,7 @@ document.addEventListener('visibilitychange', () => {
 });
 window.addEventListener('pagehide', () => stopCamera());
 
-applyLanguage('th');
+applyLanguage('en');
 updateClock();
 setInterval(updateClock, 30_000);
 detectLocalModel();

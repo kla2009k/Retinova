@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#081c2b">
   <title>Retinova — Retinal screening, explained</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%234da6ef'/%3E%3Cpath d='M10 32s8-13 22-13 22 13 22 13-8 13-22 13S10 32 10 32Z' fill='none' stroke='white' stroke-width='4'/%3E%3Ccircle cx='32' cy='32' r='7' fill='white'/%3E%3C/svg%3E">
-  <link rel="stylesheet" href="styles.css?v=20260810a">
+  <link rel="stylesheet" href="styles.css?v=20260810b">
 </head>
 <body>
   <a class="skip-link" href="#mainContent">ข้ามไปเนื้อหาหลัก</a>
@@ -25,6 +25,8 @@
     <symbol id="i-pulse" viewBox="0 0 24 24"><path d="M2 12h4l2-7 4 14 3-9 2 2h5"/></symbol>
     <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
     <symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-2.8 2.8-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6v.2h-4V21a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1L4.2 17l.1-.1a1.7 1.7 0 0 0 .3-1.9A1.7 1.7 0 0 0 3 14H2.8v-4H3a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9L4.2 7 7 4.2l.1.1a1.7 1.7 0 0 0 1.9.3A1.7 1.7 0 0 0 10 3v-.2h4V3a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1L19.8 7l-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.2v4H21a1.7 1.7 0 0 0-1.6 1Z"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></symbol>
   </svg>
 
   <section class="welcome-gate" id="welcomeGate" aria-labelledby="welcomeTitle">
@@ -63,7 +65,7 @@
     <aside class="sidebar">
       <button class="brand" type="button" data-view="home" aria-label="Retinova หน้าแรก">
         <span class="brand-icon"><svg><use href="#i-eye"/></svg></span>
-        <span><strong>Retinova</strong><small>Smart retinal research</small></span>
+        <span><strong>Retinova</strong><small>Smart Eye Health</small></span>
       </button>
 
       <nav class="side-nav" aria-label="เมนูหลัก">
@@ -77,9 +79,9 @@
 
       <div class="safety-card">
         <svg><use href="#i-shield"/></svg>
-        <strong data-th="ต้นแบบเพื่อการวิจัย" data-en="Research prototype">ต้นแบบเพื่อการวิจัย</strong>
-        <p data-th="ไม่ใช่การวินิจฉัยหรือคำแนะนำแทนจักษุแพทย์" data-en="Not a diagnosis or a substitute for an ophthalmologist.">ไม่ใช่การวินิจฉัยหรือคำแนะนำแทนจักษุแพทย์</p>
-        <button type="button" data-view="evidence" data-th="อ่านข้อจำกัด" data-en="Read limitations">อ่านข้อจำกัด</button>
+        <strong data-th="ควรปรึกษาจักษุแพทย์" data-en="Consult an ophthalmologist">ควรปรึกษาจักษุแพทย์</strong>
+        <p data-th="เมื่อมีอาการฉุกเฉิน อย่ารอผลจากเว็บไซต์" data-en="For urgent symptoms, do not wait for a website result.">เมื่อมีอาการฉุกเฉิน อย่ารอผลจากเว็บไซต์</p>
+        <button type="button" data-view="eye-health" data-th="อ่านสัญญาณฉุกเฉิน" data-en="Read urgent signs">อ่านสัญญาณฉุกเฉิน</button>
       </div>
     </aside>
 
@@ -91,6 +93,8 @@
         </form>
         <div class="top-actions">
           <span class="public-badge"><i></i> PUBLIC PREVIEW</span>
+          <span class="utility-icon" aria-hidden="true"><svg><use href="#i-sun"/></svg></span>
+          <span class="utility-icon notification-icon" aria-hidden="true"><svg><use href="#i-bell"/></svg><i></i></span>
           <button class="lang-button" id="langButton" type="button" aria-label="Switch language">EN</button>
           <div class="clock" aria-label="เวลาปัจจุบัน"><strong id="clockTime">--:--</strong><span id="clockDate">—</span></div>
           <button class="avatar" id="sessionButton" type="button" aria-label="ออกจากเซสชัน" title="ออกจากเซสชัน">ร</button>
@@ -102,21 +106,21 @@
           <div class="hero-panel">
             <div class="hero-content">
               <span class="ready-chip"><i></i><span data-th="ระบบสาธิตพร้อมใช้งาน" data-en="Public demonstration ready">ระบบสาธิตพร้อมใช้งาน</span></span>
-              <h1 data-th="ดูแลสุขภาพจอประสาทตา ด้วย AI ที่ตรวจสอบย้อนกลับได้" data-en="Care for retinal health with evidence-aware AI">ดูแลสุขภาพจอประสาทตา<br>ด้วย AI ที่ตรวจสอบย้อนกลับได้</h1>
-              <p data-th="ทดลองตรวจความพร้อมของภาพ fundus และสำรวจหลักฐานของโมเดล โดยไม่กล่าวอ้างว่าเป็นการวินิจฉัย" data-en="Check fundus-image readiness and explore model evidence without presenting research output as a diagnosis.">ทดลองตรวจความพร้อมของภาพ fundus และสำรวจหลักฐานของโมเดล โดยไม่กล่าวอ้างว่าเป็นการวินิจฉัย</p>
-              <button class="primary-action" type="button" data-view="analyze"><span>＋</span><span data-th="เริ่มตรวจภาพจอประสาทตา" data-en="Start retinal image check">เริ่มตรวจภาพจอประสาทตา</span></button>
+              <h1 data-th="ดูแลสุขภาพดวงตา ด้วยปัญญาประดิษฐ์" data-en="Care for your eye health with Artificial Intelligence">ดูแลสุขภาพดวงตา<br>ด้วยปัญญาประดิษฐ์</h1>
+              <p data-th="ตรวจภาพ fundus ได้ทันที เมื่อเชื่อมต่อโมเดลในเครื่อง Retinova จะแสดงผลคัดกรองพร้อมคำอธิบายที่ตรวจสอบย้อนกลับได้" data-en="Check a fundus image instantly. With the local model connected, Retinova shows a screening result with traceable explanations.">ตรวจภาพ fundus ได้ทันที เมื่อเชื่อมต่อโมเดลในเครื่อง Retinova จะแสดงผลคัดกรองพร้อมคำอธิบายที่ตรวจสอบย้อนกลับได้</p>
+              <button class="primary-action" type="button" data-view="analyze"><span>＋</span><span data-th="เริ่มวิเคราะห์ดวงตา" data-en="Start eye analysis">เริ่มวิเคราะห์ดวงตา</span></button>
             </div>
             <div class="hero-eye" aria-hidden="true"><span></span><svg><use href="#i-eye"/></svg></div>
           </div>
 
           <div class="dashboard-grid">
             <article class="panel latest-scan-panel">
-              <header><svg><use href="#i-image"/></svg><h2 data-th="ภาพตัวอย่างสำหรับเริ่มต้น" data-en="Getting-started sample">ภาพตัวอย่างสำหรับเริ่มต้น</h2><span class="illustration-chip" data-th="ภาพสาธิต · ไม่ใช่ผลผู้ป่วย" data-en="Demo image · not a patient result">ภาพสาธิต · ไม่ใช่ผลผู้ป่วย</span></header>
+              <header><svg><use href="#i-image"/></svg><h2 data-th="การสแกนล่าสุด" data-en="Latest scan">การสแกนล่าสุด</h2><span class="illustration-chip" data-th="ภาพสาธิต · ไม่ใช่ผลผู้ป่วย" data-en="Demo image · not a patient result">ภาพสาธิต · ไม่ใช่ผลผู้ป่วย</span></header>
               <button class="sample-preview" type="button" data-view="analyze" aria-label="ไปยังหน้าวิเคราะห์ภาพ"><img src="assets/fundus-pair.jpg" alt="ตัวอย่างภาพ fundus คู่กับแผนผังเส้นเลือด"><span data-th="เริ่มด้วยภาพของคุณ →" data-en="Continue with your image →">เริ่มด้วยภาพของคุณ →</span></button>
             </article>
 
             <article class="panel analysis-summary-panel">
-              <header><svg><use href="#i-pulse"/></svg><h2 data-th="สถานะการวิเคราะห์" data-en="Analysis status">สถานะการวิเคราะห์</h2><span class="research-pill" data-th="สาธิต" data-en="Preview">สาธิต</span></header>
+              <header><svg><use href="#i-pulse"/></svg><h2 data-th="ผลการวิเคราะห์" data-en="Analysis result">ผลการวิเคราะห์</h2><span class="research-pill" data-th="สาธิต" data-en="Preview">สาธิต</span></header>
               <div class="model-state">
                 <div class="score-ring score-ring-ready"><svg><use href="#i-shield"/></svg><strong data-th="พร้อม" data-en="Ready">พร้อม</strong><span data-th="ตรวจคุณสมบัติไฟล์" data-en="file readiness">ตรวจคุณสมบัติไฟล์</span></div>
                 <div><small data-th="โหมดเว็บไซต์สาธารณะ" data-en="Public website mode">โหมดเว็บไซต์สาธารณะ</small><h3 data-th="ยังไม่มีผลวิเคราะห์" data-en="No analysis result yet">ยังไม่มีผลวิเคราะห์</h3><p data-th="อัปโหลดภาพเพื่อเริ่ม ระบบจะไม่สร้างคะแนนสุขภาพหรือผลโรคจำลอง" data-en="Upload an image to begin. No health score or fabricated finding is generated.">อัปโหลดภาพเพื่อเริ่ม ระบบจะไม่สร้างคะแนนสุขภาพหรือผลโรคจำลอง</p></div>
@@ -169,6 +173,12 @@
                 <strong data-th="ลากภาพมาวาง หรือคลิกเลือกไฟล์" data-en="Drop an image here, or choose a file">ลากภาพมาวาง หรือคลิกเลือกไฟล์</strong>
                 <small data-th="รองรับ JPG/PNG สูงสุด 10 MB · Public Preview ไม่อัปโหลดภาพ" data-en="JPG/PNG up to 10 MB · Public Preview does not upload images">รองรับ JPG/PNG สูงสุด 10 MB · Public Preview ไม่อัปโหลดภาพ</small>
               </label>
+              <div class="sample-row" aria-label="ตัวอย่างภาพที่รองรับ">
+                <span data-th="ตัวอย่าง" data-en="Sample">ตัวอย่าง</span>
+                <button type="button" data-view="eye-health"><img src="assets/fundus-pair.jpg" alt="ตัวอย่างภาพ fundus เพื่อการศึกษา"><small data-th="ภาพ fundus" data-en="Fundus image">ภาพ fundus</small></button>
+                <button type="button" data-view="eye-health"><img src="assets/anatomy.jpg" alt="ตัวอย่างกายวิภาคจอประสาทตาเพื่อการศึกษา"><small data-th="กายวิภาค" data-en="Anatomy">กายวิภาค</small></button>
+                <em data-th="ภาพประกอบเท่านั้น" data-en="Illustration only">ภาพประกอบเท่านั้น</em>
+              </div>
               <div class="preview-frame" id="previewFrame" hidden><img id="previewImage" alt="ภาพจอประสาทตาที่ผู้ใช้เลือก"><button id="removeImage" type="button" data-th="นำภาพออก" data-en="Remove">นำภาพออก</button></div>
               <button class="primary-action full" id="analyzeButton" type="button" disabled data-th="ตรวจความพร้อมของภาพ" data-en="Check image readiness">ตรวจความพร้อมของภาพ</button>
             </article>
@@ -178,7 +188,7 @@
               <div class="empty-result capture-details-panel" id="emptyResult">
                 <div class="capture-detail-heading"><svg><use href="#i-info"/></svg><div><h3 data-th="ข้อมูลภาพก่อนวิเคราะห์" data-en="Image details before analysis">ข้อมูลภาพก่อนวิเคราะห์</h3><p data-th="ข้อมูลส่วนนี้อธิบายภาพ ไม่ใช่ประวัติผู้ป่วย และไม่ถูกบันทึก" data-en="These details describe the image, not a patient record, and are not stored.">ข้อมูลส่วนนี้อธิบายภาพ ไม่ใช่ประวัติผู้ป่วย และไม่ถูกบันทึก</p></div></div>
                 <dl class="capture-facts"><div><dt data-th="ชนิดภาพที่รองรับ" data-en="Supported image">ชนิดภาพที่รองรับ</dt><dd>Retinal fundus</dd></div><div><dt data-th="ไฟล์" data-en="File">ไฟล์</dt><dd>JPG / PNG</dd></div><div><dt data-th="แหล่งภาพ" data-en="Source">แหล่งภาพ</dt><dd data-th="อัปโหลดหรือกล้องพร้อมชุด fundus" data-en="Upload or camera with fundus optics">อัปโหลดหรือกล้องพร้อมชุด fundus</dd></div><div><dt data-th="การจัดเก็บ" data-en="Storage">การจัดเก็บ</dt><dd data-th="ไม่เก็บใน Public Preview" data-en="Not stored in Public Preview">ไม่เก็บใน Public Preview</dd></div></dl>
-                <div class="capture-boundary"><svg><use href="#i-shield"/></svg><span data-th="ภาพตาภายนอกจากกล้องมือถือเปล่าอยู่นอกขอบเขตโมเดล" data-en="External-eye photos from a bare phone camera are outside the model's scope.">ภาพตาภายนอกจากกล้องมือถือเปล่าอยู่นอกขอบเขตโมเดล</span></div>
+                <div class="capture-boundary"><svg><use href="#i-shield"/></svg><span data-th="ภาพตาภายนอกจากมือถือเปล่าอยู่นอกขอบเขตโมเดล" data-en="Bare-phone external-eye photos are outside the model scope.">ภาพตาภายนอกจากมือถือเปล่าอยู่นอกขอบเขตโมเดล</span></div>
               </div>
               <div class="check-result" id="checkResult" hidden>
                 <div class="check-line"><span data-th="ไฟล์ภาพ" data-en="Image file">ไฟล์ภาพ</span><strong id="fileCheck">—</strong></div>
@@ -209,7 +219,7 @@
         </section>
 
         <section class="app-view" id="view-history" data-page="history" hidden>
-          <div class="page-heading"><div><span data-th="เฉพาะแท็บนี้" data-en="This tab only">เฉพาะแท็บนี้</span><h1 data-th="ผลวิเคราะห์ล่าสุด" data-en="Session analysis results">ผลวิเคราะห์ล่าสุด</h1><p data-th="แสดงเฉพาะผลที่โมเดลจริงประมวลผลในเซสชันนี้ ไม่ใช่ประวัติผู้ป่วย และจะหายเมื่อรีเฟรชหรือปิดแท็บ" data-en="Only real model outputs from this session are shown. This is not patient history and disappears when the tab is refreshed or closed.">แสดงเฉพาะผลที่โมเดลจริงประมวลผลในเซสชันนี้ ไม่ใช่ประวัติผู้ป่วย และจะหายเมื่อรีเฟรชหรือปิดแท็บ</p></div></div>
+          <div class="page-heading"><div><span data-th="เฉพาะแท็บนี้" data-en="This tab only">เฉพาะแท็บนี้</span><h1 data-th="ประวัติการสแกน" data-en="Scan history">ประวัติการสแกน</h1><p data-th="แสดงเฉพาะผลจริงจากโมเดลในแท็บนี้ และไม่มีข้อมูลถูกจัดเก็บ" data-en="Only real local-model results from this tab are shown; nothing is stored.">แสดงเฉพาะผลจริงจากโมเดลในแท็บนี้ และไม่มีข้อมูลถูกจัดเก็บ</p></div></div>
           <article class="panel history-chart-panel"><header><svg><use href="#i-chart"/></svg><h2 data-th="แนวโน้มผลในเซสชัน" data-en="Session-result trend">แนวโน้มผลในเซสชัน</h2><span class="truth-chip" data-th="ข้อมูลจริงเท่านั้น" data-en="REAL RESULTS ONLY">ข้อมูลจริงเท่านั้น</span></header><div class="empty-chart" role="img" aria-label="กราฟความน่าจะเป็นจากผลในเซสชัน"><div class="chart-grid" aria-hidden="true"></div><svg id="sessionChart" viewBox="0 0 800 160" preserveAspectRatio="none" hidden aria-label="กราฟความน่าจะเป็นของโมเดลจากผลจริงในเซสชัน"></svg><div class="chart-empty-copy" id="chartEmptyCopy"><strong data-th="ยังไม่มีผลในเซสชัน" data-en="No session results">ยังไม่มีผลในเซสชัน</strong><span data-th="กราฟจะใช้เฉพาะผลจาก local model จริง และไม่สร้างเส้นตัวอย่าง" data-en="The chart uses only real local-model outputs and never draws a sample trend.">กราฟจะใช้เฉพาะผลจาก local model จริง และไม่สร้างเส้นตัวอย่าง</span></div></div></article>
           <div class="history-grid">
             <article class="panel history-summary"><header><svg><use href="#i-shield"/></svg><h2 data-th="ขอบเขตข้อมูล" data-en="Data boundary">ขอบเขตข้อมูล</h2></header><dl><div><dt data-th="จำนวนผลในเซสชัน" data-en="Results this session">จำนวนผลในเซสชัน</dt><dd id="historyCount">0</dd></div><div><dt data-th="ภาพที่จัดเก็บ" data-en="Images stored">ภาพที่จัดเก็บ</dt><dd class="success">0</dd></div><div><dt data-th="คะแนนสุขภาพสมมติ" data-en="Fabricated health score">คะแนนสุขภาพสมมติ</dt><dd data-th="ไม่สร้าง" data-en="Not generated">ไม่สร้าง</dd></div></dl><p data-th="ระบบเก็บเพียงเวลา คลาส ความน่าจะเป็น รุ่นโมเดล และเวลา inference ไว้ในหน่วยความจำชั่วคราวของหน้าเว็บ" data-en="Only time, class, probability, model revision, and inference time are kept temporarily in page memory.">ระบบเก็บเพียงเวลา คลาส ความน่าจะเป็น รุ่นโมเดล และเวลา inference ไว้ในหน่วยความจำชั่วคราวของหน้าเว็บ</p></article>
@@ -218,7 +228,7 @@
         </section>
 
         <section class="app-view" id="view-eye-health" data-page="eye-health" hidden>
-          <div class="page-heading"><div><span data-th="เรียนรู้ภาพที่ระบบใช้" data-en="Understand the input">เรียนรู้ภาพที่ระบบใช้</span><h1 data-th="ความรู้เรื่องจอประสาทตา" data-en="Retinal eye health">ความรู้เรื่องจอประสาทตา</h1><p data-th="ภาพ fundus มองเห็นจอประสาทตา เส้นเลือด จุดภาพชัด และขั้วประสาทตา—ไม่ใช่ม่านตา" data-en="Fundus images show the retina, vessels, macula, and optic disc—not the iris.">ภาพ fundus มองเห็นจอประสาทตา เส้นเลือด จุดภาพชัด และขั้วประสาทตา—ไม่ใช่ม่านตา</p></div></div>
+          <div class="page-heading"><div><span data-th="เรียนรู้ภาพที่ระบบใช้" data-en="Understand the input">เรียนรู้ภาพที่ระบบใช้</span><h1 data-th="สุขภาพดวงตา" data-en="Eye Health">สุขภาพดวงตา</h1><p data-th="ภาพ fundus มองเห็นจอประสาทตา เส้นเลือด จุดภาพชัด และขั้วประสาทตา—ไม่ใช่ม่านตา" data-en="Fundus images show the retina, vessels, macula, and optic disc—not the iris.">ภาพ fundus มองเห็นจอประสาทตา เส้นเลือด จุดภาพชัด และขั้วประสาทตา—ไม่ใช่ม่านตา</p></div></div>
           <div class="knowledge-grid">
             <article class="panel anatomy-card"><header><svg><use href="#i-eye"/></svg><h2 data-th="กายวิภาคในภาพ fundus" data-en="Fundus anatomy">กายวิภาคในภาพ fundus</h2></header><figure class="retina-diagram retina-photo"><img src="assets/anatomy.jpg" alt="ภาพตัวอย่างจอประสาทตาที่แสดงเส้นเลือด จุดภาพชัด ขั้วประสาทตา และตัวอย่างรอยโรค"><figcaption data-th="ภาพเพื่อการศึกษา · ไม่ใช่ภาพของผู้ใช้งาน" data-en="Educational image · not the user's image">ภาพเพื่อการศึกษา · ไม่ใช่ภาพของผู้ใช้งาน</figcaption></figure><p data-th="ภาพประกอบช่วยแยก optic disc, macula และเส้นเลือด แต่ไม่ใช้แทนการประเมินของผู้เชี่ยวชาญ" data-en="The illustration identifies the optic disc, macula, and vessels; it does not replace expert assessment.">ภาพประกอบช่วยแยก optic disc, macula และเส้นเลือด แต่ไม่ใช้แทนการประเมินของผู้เชี่ยวชาญ</p></article>
             <article class="panel disease-card"><header><svg><use href="#i-pulse"/></svg><h2 data-th="8 กลุ่มที่ศึกษา" data-en="Eight research labels">8 กลุ่มที่ศึกษา</h2></header><ul><li><b>Normal (N)</b><span data-th="ไม่พบกลุ่มความผิดปกติตาม label" data-en="No labelled target abnormality">ไม่พบกลุ่มความผิดปกติตาม label</span></li><li><b>Diabetes (D)</b><span data-th="ความผิดปกติที่สัมพันธ์กับเบาหวาน" data-en="Diabetes-related findings">ความผิดปกติที่สัมพันธ์กับเบาหวาน</span></li><li><b>Glaucoma (G)</b><span data-th="กลุ่มต้อหิน" data-en="Glaucoma label">กลุ่มต้อหิน</span></li><li><b>Cataract (C)</b><span data-th="กลุ่มต้อกระจก" data-en="Cataract label">กลุ่มต้อกระจก</span></li><li><b>AMD (A)</b><span data-th="จอประสาทตาเสื่อมตามอายุ" data-en="Age-related macular degeneration">จอประสาทตาเสื่อมตามอายุ</span></li><li><b>Hypertension (H)</b><span data-th="ความผิดปกติที่สัมพันธ์กับความดัน" data-en="Hypertension-related findings">ความผิดปกติที่สัมพันธ์กับความดัน</span></li><li><b>Myopia (M)</b><span data-th="สายตาสั้นผิดปกติ" data-en="Pathological myopia label">สายตาสั้นผิดปกติ</span></li><li><b>Other (O)</b><span data-th="ความผิดปกติอื่นในข้อมูล" data-en="Other labelled findings">ความผิดปกติอื่นในข้อมูล</span></li></ul></article>
@@ -247,6 +257,6 @@
   </div>
 
   <noscript>Retinova ต้องใช้ JavaScript เพื่อสลับหน้าจอและตรวจไฟล์ภาพ</noscript>
-  <script src="app.js?v=20260810a"></script>
+  <script src="app.js?v=20260810b"></script>
 </body>
 </html>
