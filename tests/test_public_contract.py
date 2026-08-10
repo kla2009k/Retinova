@@ -26,7 +26,7 @@ class PublicContractTests(unittest.TestCase):
         self.assertIn('class="app-shell"', HTML)
         self.assertIn('class="sidebar"', HTML)
         self.assertIn('class="topbar"', HTML)
-        for view in ("home", "analyze", "history", "eye-health", "evidence"):
+        for view in ("home", "analyze", "history", "eye-health", "evidence", "settings"):
             self.assertIn(f'data-view="{view}"', HTML)
             self.assertIn(f'id="view-{view}"', HTML)
         self.assertIn("--navy-950:#081c2b", re.sub(r"\s+", "", CSS))
@@ -45,6 +45,25 @@ class PublicContractTests(unittest.TestCase):
         self.assertNotIn("Eye health score", public)
         self.assertNotIn("AI Confidence", public)
 
+    def test_reference_layout_has_real_content_in_each_poster_surface(self):
+        for class_name in (
+            "latest-scan-panel",
+            "analysis-summary-panel",
+            "history-chart-panel",
+            "capture-details-panel",
+        ):
+            self.assertRegex(HTML, rf'class="[^"]*\b{class_name}\b')
+        self.assertIn('src="assets/anatomy.jpg"', HTML)
+        self.assertIn('src="assets/fundus-pair.jpg"', HTML)
+
+    def test_reference_layout_never_reintroduces_fabricated_poster_results(self):
+        public = HTML + JS
+        self.assertNotIn("Eye Health Score", public)
+        self.assertNotIn("คะแนนสุขภาพตา", public)
+        self.assertNotRegex(public, r">\s*99%\s*<")
+        self.assertNotIn("progressionSeries", JS)
+        self.assertIn("No session results", public)
+
     def test_welcome_gate_supports_guest_and_optional_local_team_login(self):
         self.assertIn('id="welcomeGate"', HTML)
         self.assertIn('id="guestButton"', HTML)
@@ -62,6 +81,9 @@ class PublicContractTests(unittest.TestCase):
         self.assertIn("MAX_SESSION_RESULTS", JS)
         self.assertIn("renderSessionHistory", JS)
         self.assertNotRegex(JS, r"sessionHistory\.push\([^)]*(image|gradcam)")
+        self.assertIn('id="sessionChart"', HTML)
+        self.assertIn("renderSessionChart", JS)
+        self.assertRegex(JS, r"sessionHistory\.map\([^\n]+probability")
 
     def test_real_gradcam_comparison_has_no_synthetic_heatmap(self):
         self.assertIn('id="comparisonSlider"', HTML)

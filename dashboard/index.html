@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#081c2b">
   <title>Retinova — Retinal screening, explained</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%234da6ef'/%3E%3Cpath d='M10 32s8-13 22-13 22 13 22 13-8 13-22 13S10 32 10 32Z' fill='none' stroke='white' stroke-width='4'/%3E%3Ccircle cx='32' cy='32' r='7' fill='white'/%3E%3C/svg%3E">
-  <link rel="stylesheet" href="styles.css?v=20260803c">
+  <link rel="stylesheet" href="styles.css?v=20260810a">
 </head>
 <body>
   <a class="skip-link" href="#mainContent">ข้ามไปเนื้อหาหลัก</a>
@@ -24,6 +24,7 @@
     <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7h.01"/></symbol>
     <symbol id="i-pulse" viewBox="0 0 24 24"><path d="M2 12h4l2-7 4 14 3-9 2 2h5"/></symbol>
     <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-2.8 2.8-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6v.2h-4V21a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1L4.2 17l.1-.1a1.7 1.7 0 0 0 .3-1.9A1.7 1.7 0 0 0 3 14H2.8v-4H3a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9L4.2 7 7 4.2l.1.1a1.7 1.7 0 0 0 1.9.3A1.7 1.7 0 0 0 10 3v-.2h4V3a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1L19.8 7l-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.2v4H21a1.7 1.7 0 0 0-1.6 1Z"/></symbol>
   </svg>
 
   <section class="welcome-gate" id="welcomeGate" aria-labelledby="welcomeTitle">
@@ -70,7 +71,8 @@
         <button class="nav-item" type="button" data-view="analyze"><svg><use href="#i-image"/></svg><span data-th="วิเคราะห์ภาพ" data-en="Analyze">วิเคราะห์ภาพ</span></button>
         <button class="nav-item" type="button" data-view="history"><svg><use href="#i-clock"/></svg><span data-th="ผลล่าสุด" data-en="Session results">ผลล่าสุด</span></button>
         <button class="nav-item" type="button" data-view="eye-health"><svg><use href="#i-heart"/></svg><span data-th="ความรู้ดวงตา" data-en="Eye health">ความรู้ดวงตา</span></button>
-        <button class="nav-item" type="button" data-view="evidence"><svg><use href="#i-chart"/></svg><span data-th="หลักฐานโมเดล" data-en="Evidence">หลักฐานโมเดล</span></button>
+        <button class="nav-item" type="button" data-view="evidence"><svg><use href="#i-chart"/></svg><span data-th="คำแนะนำ AI" data-en="AI Advice">คำแนะนำ AI</span></button>
+        <button class="nav-item" type="button" data-view="settings"><svg><use href="#i-settings"/></svg><span data-th="ตั้งค่า" data-en="Settings">ตั้งค่า</span></button>
       </nav>
 
       <div class="safety-card">
@@ -108,30 +110,24 @@
           </div>
 
           <div class="dashboard-grid">
-            <article class="panel status-panel">
-              <header><svg><use href="#i-pulse"/></svg><h2 data-th="สถานะโมเดล" data-en="Model status">สถานะโมเดล</h2></header>
+            <article class="panel latest-scan-panel">
+              <header><svg><use href="#i-image"/></svg><h2 data-th="ภาพตัวอย่างสำหรับเริ่มต้น" data-en="Getting-started sample">ภาพตัวอย่างสำหรับเริ่มต้น</h2><span class="illustration-chip" data-th="ภาพสาธิต · ไม่ใช่ผลผู้ป่วย" data-en="Demo image · not a patient result">ภาพสาธิต · ไม่ใช่ผลผู้ป่วย</span></header>
+              <button class="sample-preview" type="button" data-view="analyze" aria-label="ไปยังหน้าวิเคราะห์ภาพ"><img src="assets/fundus-pair.jpg" alt="ตัวอย่างภาพ fundus คู่กับแผนผังเส้นเลือด"><span data-th="เริ่มด้วยภาพของคุณ →" data-en="Continue with your image →">เริ่มด้วยภาพของคุณ →</span></button>
+            </article>
+
+            <article class="panel analysis-summary-panel">
+              <header><svg><use href="#i-pulse"/></svg><h2 data-th="สถานะการวิเคราะห์" data-en="Analysis status">สถานะการวิเคราะห์</h2><span class="research-pill" data-th="สาธิต" data-en="Preview">สาธิต</span></header>
               <div class="model-state">
-                <div class="score-ring"><strong>0.581</strong><span>macro F1</span></div>
-                <div><span class="research-pill" data-th="งานวิจัย" data-en="Research">งานวิจัย</span><h3>EfficientNet-B0</h3><p>95% CI 0.525–0.622</p></div>
+                <div class="score-ring score-ring-ready"><svg><use href="#i-shield"/></svg><strong data-th="พร้อม" data-en="Ready">พร้อม</strong><span data-th="ตรวจคุณสมบัติไฟล์" data-en="file readiness">ตรวจคุณสมบัติไฟล์</span></div>
+                <div><small data-th="โหมดเว็บไซต์สาธารณะ" data-en="Public website mode">โหมดเว็บไซต์สาธารณะ</small><h3 data-th="ยังไม่มีผลวิเคราะห์" data-en="No analysis result yet">ยังไม่มีผลวิเคราะห์</h3><p data-th="อัปโหลดภาพเพื่อเริ่ม ระบบจะไม่สร้างคะแนนสุขภาพหรือผลโรคจำลอง" data-en="Upload an image to begin. No health score or fabricated finding is generated.">อัปโหลดภาพเพื่อเริ่ม ระบบจะไม่สร้างคะแนนสุขภาพหรือผลโรคจำลอง</p></div>
               </div>
-              <p class="panel-note" data-th="เลือกจาก validation macro F1 และประเมิน test แบบแยกผู้ป่วย" data-en="Selected by validation macro F1 and evaluated on a patient-grouped test set.">เลือกจาก validation macro F1 และประเมิน test แบบแยกผู้ป่วย</p>
+              <button class="text-action" type="button" data-view="analyze" data-th="เปิดหน้าวิเคราะห์ →" data-en="Open analysis →">เปิดหน้าวิเคราะห์ →</button>
             </article>
 
-            <article class="panel facts-panel">
-              <header><svg><use href="#i-chart"/></svg><h2 data-th="หลักฐานล่าสุด" data-en="Latest evidence">หลักฐานล่าสุด</h2></header>
-              <dl>
-                <div><dt data-th="ภาพทั้งหมด" data-en="Total images">ภาพทั้งหมด</dt><dd>6,392</dd></div>
-                <div><dt data-th="ผู้ป่วยใน test" data-en="Test patients">ผู้ป่วยใน test</dt><dd>503</dd></div>
-                <div><dt>Patient overlap</dt><dd class="success">0</dd></div>
-                <div><dt>Grad-CAM</dt><dd data-th="ทดสอบแล้ว" data-en="Verified">ทดสอบแล้ว</dd></div>
-              </dl>
-              <button class="text-action" type="button" data-view="evidence" data-th="ดูรายงานฉบับเต็ม →" data-en="Open full evidence →">ดูรายงานฉบับเต็ม →</button>
-            </article>
-
-            <article class="panel scope-panel">
-              <header><svg><use href="#i-info"/></svg><h2 data-th="ขอบเขตของระบบ" data-en="System scope">ขอบเขตของระบบ</h2></header>
-              <p data-th="Retinova ใช้ภาพถ่ายจอประสาทตา (retinal fundus) ไม่ใช่ภาพม่านตาเพื่อยืนยันตัวบุคคล และยังไม่เปิดการทำนายโรคบนเว็บไซต์สาธารณะ" data-en="Retinova uses retinal fundus photographs, not iris identity scans. Public disease inference remains disabled.">Retinova ใช้ภาพถ่ายจอประสาทตา (retinal fundus) ไม่ใช่ภาพม่านตาเพื่อยืนยันตัวบุคคล และยังไม่เปิดการทำนายโรคบนเว็บไซต์สาธารณะ</p>
-              <div class="scope-tags"><span data-th="จอประสาทตา" data-en="Retinal fundus">จอประสาทตา</span><span data-th="8 กลุ่มวิจัย" data-en="8 research labels">8 กลุ่มวิจัย</span><span data-th="ไม่ใช่การวินิจฉัย" data-en="Not diagnosis">ไม่ใช่การวินิจฉัย</span></div>
+            <article class="panel scope-panel evidence-strip">
+              <header><svg><use href="#i-chart"/></svg><h2 data-th="หลักฐานที่ใช้จริง" data-en="Measured evidence">หลักฐานที่ใช้จริง</h2></header>
+              <div class="evidence-facts"><span><small>Test macro F1</small><b>0.581</b></span><span><small>Balanced accuracy</small><b>0.642</b></span><span><small>Patient overlap</small><b>0</b></span><span><small>Grad-CAM</small><b data-th="ทดสอบแล้ว" data-en="Verified">ทดสอบแล้ว</b></span></div>
+              <button class="text-action" type="button" data-view="evidence" data-th="ดูวิธีประเมินและข้อจำกัด →" data-en="Review methods and limitations →">ดูวิธีประเมินและข้อจำกัด →</button>
             </article>
           </div>
         </section>
@@ -179,7 +175,11 @@
 
             <article class="panel result-panel" aria-live="polite">
               <header><svg><use href="#i-pulse"/></svg><h2 data-th="ผลการตรวจสอบ" data-en="Readiness result">ผลการตรวจสอบ</h2><span class="truth-chip" data-th="ไม่ใช่ผลวินิจฉัย" data-en="NOT A DIAGNOSIS">ไม่ใช่ผลวินิจฉัย</span></header>
-              <div class="empty-result" id="emptyResult"><svg><use href="#i-eye"/></svg><h3 data-th="ยังไม่มีภาพ" data-en="No image selected">ยังไม่มีภาพ</h3><p data-th="เลือกภาพ fundus เพื่อดูชนิดไฟล์ ขนาด และความละเอียด" data-en="Choose a fundus image to inspect file type, size, and resolution.">เลือกภาพ fundus เพื่อดูชนิดไฟล์ ขนาด และความละเอียด</p></div>
+              <div class="empty-result capture-details-panel" id="emptyResult">
+                <div class="capture-detail-heading"><svg><use href="#i-info"/></svg><div><h3 data-th="ข้อมูลภาพก่อนวิเคราะห์" data-en="Image details before analysis">ข้อมูลภาพก่อนวิเคราะห์</h3><p data-th="ข้อมูลส่วนนี้อธิบายภาพ ไม่ใช่ประวัติผู้ป่วย และไม่ถูกบันทึก" data-en="These details describe the image, not a patient record, and are not stored.">ข้อมูลส่วนนี้อธิบายภาพ ไม่ใช่ประวัติผู้ป่วย และไม่ถูกบันทึก</p></div></div>
+                <dl class="capture-facts"><div><dt data-th="ชนิดภาพที่รองรับ" data-en="Supported image">ชนิดภาพที่รองรับ</dt><dd>Retinal fundus</dd></div><div><dt data-th="ไฟล์" data-en="File">ไฟล์</dt><dd>JPG / PNG</dd></div><div><dt data-th="แหล่งภาพ" data-en="Source">แหล่งภาพ</dt><dd data-th="อัปโหลดหรือกล้องพร้อมชุด fundus" data-en="Upload or camera with fundus optics">อัปโหลดหรือกล้องพร้อมชุด fundus</dd></div><div><dt data-th="การจัดเก็บ" data-en="Storage">การจัดเก็บ</dt><dd data-th="ไม่เก็บใน Public Preview" data-en="Not stored in Public Preview">ไม่เก็บใน Public Preview</dd></div></dl>
+                <div class="capture-boundary"><svg><use href="#i-shield"/></svg><span data-th="ภาพตาภายนอกจากกล้องมือถือเปล่าอยู่นอกขอบเขตโมเดล" data-en="External-eye photos from a bare phone camera are outside the model's scope.">ภาพตาภายนอกจากกล้องมือถือเปล่าอยู่นอกขอบเขตโมเดล</span></div>
+              </div>
               <div class="check-result" id="checkResult" hidden>
                 <div class="check-line"><span data-th="ไฟล์ภาพ" data-en="Image file">ไฟล์ภาพ</span><strong id="fileCheck">—</strong></div>
                 <div class="check-line"><span data-th="ความละเอียด" data-en="Resolution">ความละเอียด</span><strong id="resolutionCheck">—</strong></div>
@@ -187,7 +187,7 @@
                 <div class="camera-qualification-notice" id="cameraQualificationNotice" hidden><strong data-th="ไม่ส่งภาพนี้เข้าโมเดล" data-en="This frame will not enter the model">ไม่ส่งภาพนี้เข้าโมเดล</strong><p data-th="ภาพมาจากกล้องสดโดยไม่ได้ยืนยันชุดถ่าย fundus ภาพตาภายนอกอยู่นอกขอบเขตข้อมูลฝึก จึงแสดงได้เฉพาะการตรวจคุณสมบัติไฟล์" data-en="This live-camera frame was captured without confirmed fundus optics. External-eye photos are outside the training domain, so only file properties are shown.">ภาพมาจากกล้องสดโดยไม่ได้ยืนยันชุดถ่าย fundus ภาพตาภายนอกอยู่นอกขอบเขตข้อมูลฝึก จึงแสดงได้เฉพาะการตรวจคุณสมบัติไฟล์</p></div>
                 <div class="preview-notice" id="previewNotice"><strong data-th="ขอบเขตโหมดนี้" data-en="Mode boundary">ขอบเขตโหมดนี้</strong><p data-th="เว็บสาธารณะไม่ส่งภาพเข้าโมเดลและไม่สร้าง heatmap เพื่อหลีกเลี่ยงผลทางการแพทย์ที่ยังไม่ผ่านการตรวจสอบ" data-en="The public site does not send images to a model or generate heatmaps, avoiding unvalidated medical output.">เว็บสาธารณะไม่ส่งภาพเข้าโมเดลและไม่สร้าง heatmap เพื่อหลีกเลี่ยงผลทางการแพทย์ที่ยังไม่ผ่านการตรวจสอบ</p></div>
                 <div class="model-output" id="modelOutput" hidden>
-                  <div class="model-decision"><div><small data-th="ผลโมเดลวิจัยในเครื่อง" data-en="Local research-model output">ผลโมเดลวิจัยในเครื่อง</small><h3 id="modelPrediction">—</h3></div><div class="probability-value"><strong id="modelProbability">—</strong><small data-th="ความน่าจะเป็นของโมเดล · ไม่ใช่ Eye Health Score" data-en="Model probability · not an Eye Health Score">ความน่าจะเป็นของโมเดล · ไม่ใช่ Eye Health Score</small></div></div>
+                  <div class="model-decision"><div><small data-th="ผลโมเดลวิจัยในเครื่อง" data-en="Local research-model output">ผลโมเดลวิจัยในเครื่อง</small><h3 id="modelPrediction">—</h3></div><div class="probability-value"><strong id="modelProbability">—</strong><small data-th="ความน่าจะเป็นของโมเดล · ไม่ใช่คะแนนคลินิก" data-en="Model probability · not a clinical score">ความน่าจะเป็นของโมเดล · ไม่ใช่คะแนนคลินิก</small></div></div>
                   <figure class="gradcam-comparison">
                     <div class="comparison-stage"><img id="originalCompareImage" alt="ภาพต้นฉบับที่เลือก"><div class="comparison-overlay" id="comparisonOverlay"><img id="gradcamCompareImage" alt="Grad-CAM จริงจากคลาสที่โมเดลทำนาย"></div><span class="compare-label original-label" data-th="ภาพต้นฉบับ" data-en="Original">ภาพต้นฉบับ</span><span class="compare-label heatmap-label">REAL GRAD-CAM</span></div>
                     <label for="comparisonSlider" data-th="เลื่อนเพื่อเทียบภาพต้นฉบับกับ Grad-CAM" data-en="Slide to compare the original with Grad-CAM">เลื่อนเพื่อเทียบภาพต้นฉบับกับ Grad-CAM</label>
@@ -210,8 +210,9 @@
 
         <section class="app-view" id="view-history" data-page="history" hidden>
           <div class="page-heading"><div><span data-th="เฉพาะแท็บนี้" data-en="This tab only">เฉพาะแท็บนี้</span><h1 data-th="ผลวิเคราะห์ล่าสุด" data-en="Session analysis results">ผลวิเคราะห์ล่าสุด</h1><p data-th="แสดงเฉพาะผลที่โมเดลจริงประมวลผลในเซสชันนี้ ไม่ใช่ประวัติผู้ป่วย และจะหายเมื่อรีเฟรชหรือปิดแท็บ" data-en="Only real model outputs from this session are shown. This is not patient history and disappears when the tab is refreshed or closed.">แสดงเฉพาะผลที่โมเดลจริงประมวลผลในเซสชันนี้ ไม่ใช่ประวัติผู้ป่วย และจะหายเมื่อรีเฟรชหรือปิดแท็บ</p></div></div>
+          <article class="panel history-chart-panel"><header><svg><use href="#i-chart"/></svg><h2 data-th="แนวโน้มผลในเซสชัน" data-en="Session-result trend">แนวโน้มผลในเซสชัน</h2><span class="truth-chip" data-th="ข้อมูลจริงเท่านั้น" data-en="REAL RESULTS ONLY">ข้อมูลจริงเท่านั้น</span></header><div class="empty-chart" role="img" aria-label="กราฟความน่าจะเป็นจากผลในเซสชัน"><div class="chart-grid" aria-hidden="true"></div><svg id="sessionChart" viewBox="0 0 800 160" preserveAspectRatio="none" hidden aria-label="กราฟความน่าจะเป็นของโมเดลจากผลจริงในเซสชัน"></svg><div class="chart-empty-copy" id="chartEmptyCopy"><strong data-th="ยังไม่มีผลในเซสชัน" data-en="No session results">ยังไม่มีผลในเซสชัน</strong><span data-th="กราฟจะใช้เฉพาะผลจาก local model จริง และไม่สร้างเส้นตัวอย่าง" data-en="The chart uses only real local-model outputs and never draws a sample trend.">กราฟจะใช้เฉพาะผลจาก local model จริง และไม่สร้างเส้นตัวอย่าง</span></div></div></article>
           <div class="history-grid">
-            <article class="panel history-summary"><header><svg><use href="#i-shield"/></svg><h2 data-th="ขอบเขตข้อมูล" data-en="Data boundary">ขอบเขตข้อมูล</h2></header><dl><div><dt data-th="จำนวนผลในเซสชัน" data-en="Results this session">จำนวนผลในเซสชัน</dt><dd id="historyCount">0</dd></div><div><dt data-th="ภาพที่จัดเก็บ" data-en="Images stored">ภาพที่จัดเก็บ</dt><dd class="success">0</dd></div><div><dt>Eye Health Score</dt><dd data-th="ไม่สร้าง" data-en="Not generated">ไม่สร้าง</dd></div></dl><p data-th="ระบบเก็บเพียงเวลา คลาส ความน่าจะเป็น รุ่นโมเดล และเวลา inference ไว้ในหน่วยความจำชั่วคราวของหน้าเว็บ" data-en="Only time, class, probability, model revision, and inference time are kept temporarily in page memory.">ระบบเก็บเพียงเวลา คลาส ความน่าจะเป็น รุ่นโมเดล และเวลา inference ไว้ในหน่วยความจำชั่วคราวของหน้าเว็บ</p></article>
+            <article class="panel history-summary"><header><svg><use href="#i-shield"/></svg><h2 data-th="ขอบเขตข้อมูล" data-en="Data boundary">ขอบเขตข้อมูล</h2></header><dl><div><dt data-th="จำนวนผลในเซสชัน" data-en="Results this session">จำนวนผลในเซสชัน</dt><dd id="historyCount">0</dd></div><div><dt data-th="ภาพที่จัดเก็บ" data-en="Images stored">ภาพที่จัดเก็บ</dt><dd class="success">0</dd></div><div><dt data-th="คะแนนสุขภาพสมมติ" data-en="Fabricated health score">คะแนนสุขภาพสมมติ</dt><dd data-th="ไม่สร้าง" data-en="Not generated">ไม่สร้าง</dd></div></dl><p data-th="ระบบเก็บเพียงเวลา คลาส ความน่าจะเป็น รุ่นโมเดล และเวลา inference ไว้ในหน่วยความจำชั่วคราวของหน้าเว็บ" data-en="Only time, class, probability, model revision, and inference time are kept temporarily in page memory.">ระบบเก็บเพียงเวลา คลาส ความน่าจะเป็น รุ่นโมเดล และเวลา inference ไว้ในหน่วยความจำชั่วคราวของหน้าเว็บ</p></article>
             <article class="panel history-panel" aria-live="polite"><header><svg><use href="#i-clock"/></svg><h2 data-th="รายการผลจริง" data-en="Real result list">รายการผลจริง</h2><button id="clearHistoryButton" class="text-action" type="button" data-th="ล้างรายการ" data-en="Clear">ล้างรายการ</button></header><div id="historyEmpty" class="history-empty"><svg><use href="#i-pulse"/></svg><strong data-th="ยังไม่มีผลจาก local model" data-en="No local-model results yet">ยังไม่มีผลจาก local model</strong><p data-th="รายการจะเพิ่มหลังจากวิเคราะห์ภาพด้วยโมเดลจริงเท่านั้น" data-en="An item is added only after a real local-model inference.">รายการจะเพิ่มหลังจากวิเคราะห์ภาพด้วยโมเดลจริงเท่านั้น</p></div><ol id="historyList" hidden></ol></article>
           </div>
         </section>
@@ -219,7 +220,7 @@
         <section class="app-view" id="view-eye-health" data-page="eye-health" hidden>
           <div class="page-heading"><div><span data-th="เรียนรู้ภาพที่ระบบใช้" data-en="Understand the input">เรียนรู้ภาพที่ระบบใช้</span><h1 data-th="ความรู้เรื่องจอประสาทตา" data-en="Retinal eye health">ความรู้เรื่องจอประสาทตา</h1><p data-th="ภาพ fundus มองเห็นจอประสาทตา เส้นเลือด จุดภาพชัด และขั้วประสาทตา—ไม่ใช่ม่านตา" data-en="Fundus images show the retina, vessels, macula, and optic disc—not the iris.">ภาพ fundus มองเห็นจอประสาทตา เส้นเลือด จุดภาพชัด และขั้วประสาทตา—ไม่ใช่ม่านตา</p></div></div>
           <div class="knowledge-grid">
-            <article class="panel anatomy-card"><header><svg><use href="#i-eye"/></svg><h2 data-th="กายวิภาคในภาพ fundus" data-en="Fundus anatomy">กายวิภาคในภาพ fundus</h2></header><figure class="retina-diagram"><svg viewBox="0 0 640 420" role="img" aria-label="แผนภาพจอประสาทตาที่ระบุ optic disc, macula และ retinal vessels"><defs><radialGradient id="fundusFill" cx="60%" cy="48%"><stop offset="0" stop-color="#c86c45"/><stop offset=".62" stop-color="#803d34"/><stop offset="1" stop-color="#301e2a"/></radialGradient><filter id="discGlow"><feGaussianBlur stdDeviation="10"/></filter></defs><circle cx="315" cy="210" r="180" fill="url(#fundusFill)" stroke="#d38b68" stroke-width="3"/><circle cx="420" cy="197" r="34" fill="#f2be7c" opacity=".45" filter="url(#discGlow)"/><circle cx="420" cy="197" r="23" fill="#f4c88e"/><circle cx="248" cy="220" r="18" fill="#4a1d29" opacity=".9"/><g fill="none" stroke="#e8a28a" stroke-width="5" opacity=".75"><path d="M420 197C365 178 330 126 283 86"/><path d="M420 197C360 210 314 262 276 326"/><path d="M420 197C467 157 490 112 509 76"/><path d="M420 197C470 236 493 289 506 334"/><path d="M365 177C333 184 302 176 270 150"/><path d="M356 216C319 215 293 235 268 264"/></g><g fill="#d9ebfb" font-family="Sarabun, sans-serif" font-size="18"><text x="465" y="189">Optic disc</text><text x="128" y="227">Macula</text><text x="102" y="85">Retinal vessels</text></g><g fill="none" stroke="#72d9d0" stroke-width="2"><path d="M459 188h-24"/><path d="M213 220h18"/><path d="M230 91l42 20"/></g></svg><figcaption data-th="แผนภาพเพื่อการศึกษา · ไม่ใช่ภาพผู้ป่วย" data-en="Educational diagram · not a patient image">แผนภาพเพื่อการศึกษา · ไม่ใช่ภาพผู้ป่วย</figcaption></figure><p data-th="ภาพประกอบช่วยแยก optic disc, macula และเส้นเลือด แต่ไม่ใช้แทนการประเมินของผู้เชี่ยวชาญ" data-en="The illustration identifies the optic disc, macula, and vessels; it does not replace expert assessment.">ภาพประกอบช่วยแยก optic disc, macula และเส้นเลือด แต่ไม่ใช้แทนการประเมินของผู้เชี่ยวชาญ</p></article>
+            <article class="panel anatomy-card"><header><svg><use href="#i-eye"/></svg><h2 data-th="กายวิภาคในภาพ fundus" data-en="Fundus anatomy">กายวิภาคในภาพ fundus</h2></header><figure class="retina-diagram retina-photo"><img src="assets/anatomy.jpg" alt="ภาพตัวอย่างจอประสาทตาที่แสดงเส้นเลือด จุดภาพชัด ขั้วประสาทตา และตัวอย่างรอยโรค"><figcaption data-th="ภาพเพื่อการศึกษา · ไม่ใช่ภาพของผู้ใช้งาน" data-en="Educational image · not the user's image">ภาพเพื่อการศึกษา · ไม่ใช่ภาพของผู้ใช้งาน</figcaption></figure><p data-th="ภาพประกอบช่วยแยก optic disc, macula และเส้นเลือด แต่ไม่ใช้แทนการประเมินของผู้เชี่ยวชาญ" data-en="The illustration identifies the optic disc, macula, and vessels; it does not replace expert assessment.">ภาพประกอบช่วยแยก optic disc, macula และเส้นเลือด แต่ไม่ใช้แทนการประเมินของผู้เชี่ยวชาญ</p></article>
             <article class="panel disease-card"><header><svg><use href="#i-pulse"/></svg><h2 data-th="8 กลุ่มที่ศึกษา" data-en="Eight research labels">8 กลุ่มที่ศึกษา</h2></header><ul><li><b>Normal (N)</b><span data-th="ไม่พบกลุ่มความผิดปกติตาม label" data-en="No labelled target abnormality">ไม่พบกลุ่มความผิดปกติตาม label</span></li><li><b>Diabetes (D)</b><span data-th="ความผิดปกติที่สัมพันธ์กับเบาหวาน" data-en="Diabetes-related findings">ความผิดปกติที่สัมพันธ์กับเบาหวาน</span></li><li><b>Glaucoma (G)</b><span data-th="กลุ่มต้อหิน" data-en="Glaucoma label">กลุ่มต้อหิน</span></li><li><b>Cataract (C)</b><span data-th="กลุ่มต้อกระจก" data-en="Cataract label">กลุ่มต้อกระจก</span></li><li><b>AMD (A)</b><span data-th="จอประสาทตาเสื่อมตามอายุ" data-en="Age-related macular degeneration">จอประสาทตาเสื่อมตามอายุ</span></li><li><b>Hypertension (H)</b><span data-th="ความผิดปกติที่สัมพันธ์กับความดัน" data-en="Hypertension-related findings">ความผิดปกติที่สัมพันธ์กับความดัน</span></li><li><b>Myopia (M)</b><span data-th="สายตาสั้นผิดปกติ" data-en="Pathological myopia label">สายตาสั้นผิดปกติ</span></li><li><b>Other (O)</b><span data-th="ความผิดปกติอื่นในข้อมูล" data-en="Other labelled findings">ความผิดปกติอื่นในข้อมูล</span></li></ul></article>
           </div>
           <aside class="urgent-note"><svg><use href="#i-info"/></svg><div><strong data-th="อย่ารอผลจากเว็บไซต์เมื่อมีอาการฉุกเฉิน" data-en="Do not wait for a website result in an emergency">อย่ารอผลจากเว็บไซต์เมื่อมีอาการฉุกเฉิน</strong><p data-th="หากตามัวเฉียบพลัน เห็นแสงแฟลช จุดดำเพิ่มขึ้นมาก ปวดตารุนแรง หรือการมองเห็นลดลง ควรรับการประเมินทางการแพทย์โดยเร็ว" data-en="Seek prompt care for sudden blurred vision, flashes, a rapid increase in floaters, severe eye pain, or vision loss.">หากตามัวเฉียบพลัน เห็นแสงแฟลช จุดดำเพิ่มขึ้นมาก ปวดตารุนแรง หรือการมองเห็นลดลง ควรรับการประเมินทางการแพทย์โดยเร็ว</p></div></aside>
@@ -233,11 +234,19 @@
             <article class="panel limitation-card"><header><svg><use href="#i-shield"/></svg><h2 data-th="ยังขาดอะไร" data-en="What remains unproven">ยังขาดอะไร</h2></header><ul><li data-th="ยังไม่มี external-site clinical validation" data-en="No external-site clinical validation">ยังไม่มี external-site clinical validation</li><li data-th="Hypertension recall 0.389 และ Other recall 0.340 ยังต่ำ" data-en="Hypertension recall 0.389 and Other recall 0.340 remain weak">Hypertension recall 0.389 และ Other recall 0.340 ยังต่ำ</li><li data-th="ยังไม่มี quality rejection และ probability calibration ที่อนุมัติ" data-en="No approved quality rejection or probability calibration">ยังไม่มี quality rejection และ probability calibration ที่อนุมัติ</li><li data-th="ODIR เป็นโจทย์ bilateral multi-label แต่ baseline นี้ลดรูปเป็นภาพเดี่ยว label เดียว" data-en="ODIR is bilateral and multi-label; this baseline reduces it to a single-image label">ODIR เป็นโจทย์ bilateral multi-label แต่ baseline นี้ลดรูปเป็นภาพเดี่ยว label เดียว</li><li data-th="สิทธิ์เผยแพร่ภาพและ derived weights ยังต้องยืนยัน" data-en="Image and derived-weight redistribution rights need confirmation">สิทธิ์เผยแพร่ภาพและ derived weights ยังต้องยืนยัน</li></ul><div class="decision"><strong data-th="คำตัดสินปัจจุบัน" data-en="Current decision">คำตัดสินปัจจุบัน</strong><span data-th="ยังไม่อนุมัติสำหรับ public inference หรือการใช้งานคลินิก" data-en="Not approved for public inference or clinical use">ยังไม่อนุมัติสำหรับ public inference หรือการใช้งานคลินิก</span></div></article>
           </div>
         </section>
+
+        <section class="app-view" id="view-settings" data-page="settings" hidden>
+          <div class="page-heading"><div><span data-th="การตั้งค่าการสาธิต" data-en="Demonstration settings">การตั้งค่าการสาธิต</span><h1 data-th="ตั้งค่า" data-en="Settings">ตั้งค่า</h1><p data-th="ตรวจสอบภาษา โหมดการทำงาน และขอบเขตความเป็นส่วนตัวก่อนให้กรรมการทดลอง" data-en="Review language, operating mode, and privacy boundaries before a judge tries the demo.">ตรวจสอบภาษา โหมดการทำงาน และขอบเขตความเป็นส่วนตัวก่อนให้กรรมการทดลอง</p></div></div>
+          <div class="settings-grid">
+            <article class="panel settings-panel"><header><svg><use href="#i-settings"/></svg><h2 data-th="ภาษาและการแสดงผล" data-en="Language and display">ภาษาและการแสดงผล</h2></header><p data-th="สลับภาษาได้จากปุ่ม TH/EN ด้านขวาบน เนื้อหาและคำเตือนจะเปลี่ยนพร้อมกัน" data-en="Use the TH/EN button in the top bar. Content and safety warnings switch together.">สลับภาษาได้จากปุ่ม TH/EN ด้านขวาบน เนื้อหาและคำเตือนจะเปลี่ยนพร้อมกัน</p><button class="secondary-action settings-language" type="button" id="settingsLanguageButton" data-th="สลับเป็น English" data-en="Switch to ภาษาไทย">สลับเป็น English</button></article>
+            <article class="panel settings-panel"><header><svg><use href="#i-shield"/></svg><h2 data-th="ความเป็นส่วนตัว" data-en="Privacy">ความเป็นส่วนตัว</h2></header><ul><li data-th="Public Preview ไม่อัปโหลดหรือจัดเก็บภาพ" data-en="Public Preview does not upload or store images">Public Preview ไม่อัปโหลดหรือจัดเก็บภาพ</li><li data-th="ผลใน History อยู่เฉพาะหน่วยความจำของแท็บ" data-en="History results remain only in this tab's memory">ผลใน History อยู่เฉพาะหน่วยความจำของแท็บ</li><li data-th="การทำนายจริงต้องใช้ local model server" data-en="Real inference requires the local model server">การทำนายจริงต้องใช้ local model server</li></ul></article>
+          </div>
+        </section>
       </main>
     </div>
   </div>
 
   <noscript>Retinova ต้องใช้ JavaScript เพื่อสลับหน้าจอและตรวจไฟล์ภาพ</noscript>
-  <script src="app.js?v=20260803c"></script>
+  <script src="app.js?v=20260810a"></script>
 </body>
 </html>

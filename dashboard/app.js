@@ -27,13 +27,14 @@ const cameraStatus = document.querySelector('#cameraStatus');
 const capturePhotoButton = document.querySelector('#capturePhotoButton');
 const fundusEquipmentCheck = document.querySelector('#fundusEquipmentCheck');
 
-const validViews = new Set(['home', 'analyze', 'history', 'eye-health', 'evidence']);
+const validViews = new Set(['home', 'analyze', 'history', 'eye-health', 'evidence', 'settings']);
 const viewTitles = {
   home: ['หน้าแรก', 'Home'],
   analyze: ['วิเคราะห์ภาพ', 'Analyze'],
   history: ['ผลล่าสุด', 'Session results'],
   'eye-health': ['ความรู้ดวงตา', 'Eye health'],
   evidence: ['หลักฐานโมเดล', 'Evidence'],
+  settings: ['ตั้งค่า', 'Settings'],
 };
 const classNames = {
   N: ['ปกติ', 'Normal'],
@@ -381,6 +382,37 @@ function renderSessionHistory() {
   });
   empty.hidden = sessionHistory.length > 0;
   list.hidden = sessionHistory.length === 0;
+  renderSessionChart();
+}
+
+function renderSessionChart() {
+  const chart = document.querySelector('#sessionChart');
+  const emptyCopy = document.querySelector('#chartEmptyCopy');
+  const probabilities = sessionHistory.map((record) => record.probability).slice().reverse();
+  chart.replaceChildren();
+  chart.hidden = probabilities.length === 0;
+  emptyCopy.hidden = probabilities.length > 0;
+  if (!probabilities.length) return;
+  const points = probabilities.map((probability, index) => {
+    const x = probabilities.length === 1 ? 400 : 40 + (index / (probabilities.length - 1)) * 720;
+    const y = 140 - Math.max(0, Math.min(1, probability)) * 110;
+    return {x, y};
+  });
+  const namespace = 'http://www.w3.org/2000/svg';
+  if (points.length > 1) {
+    const line = document.createElementNS(namespace, 'polyline');
+    line.setAttribute('points', points.map(({x, y}) => `${x},${y}`).join(' '));
+    line.setAttribute('class', 'session-chart-line');
+    chart.append(line);
+  }
+  points.forEach(({x, y}) => {
+    const dot = document.createElementNS(namespace, 'circle');
+    dot.setAttribute('cx', x);
+    dot.setAttribute('cy', y);
+    dot.setAttribute('r', 5);
+    dot.setAttribute('class', 'session-chart-dot');
+    chart.append(dot);
+  });
 }
 
 function setLocalModelUi() {
@@ -458,6 +490,7 @@ function searchDestination(query) {
   if (/ล่าสุด|ประวัติ|session|history/.test(normalized)) return 'history';
   if (/ดวงตา|จอประสาท|retina|eye|โรค/.test(normalized)) return 'eye-health';
   if (/หลักฐาน|โมเดล|metric|evidence|f1|grad/.test(normalized)) return 'evidence';
+  if (/ตั้งค่า|setting|ภาษา|language|privacy|ส่วนตัว/.test(normalized)) return 'settings';
   return 'home';
 }
 
@@ -489,6 +522,7 @@ input.addEventListener('change', () => {
 removeButton.addEventListener('click', resetImage);
 analyzeButton.addEventListener('click', checkReadiness);
 langButton.addEventListener('click', () => applyLanguage(language === 'th' ? 'en' : 'th'));
+document.querySelector('#settingsLanguageButton').addEventListener('click', () => applyLanguage(language === 'th' ? 'en' : 'th'));
 searchForm.addEventListener('submit', (event) => {
   event.preventDefault();
   showView(searchDestination(searchInput.value));

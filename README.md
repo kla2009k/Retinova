@@ -39,6 +39,7 @@ Never add the key to `dashboard/app.js` or commit `.env`.
 
 - [Thai training-to-usage guide](docs/TRAINING_AND_USAGE_GUIDE_TH.md)
 - [Thai live-camera and current model guide](docs/CAMERA_AND_MODEL_USAGE_TH.md)
+- [Thai poster UI and demonstration guide](docs/POSTER_UI_GUIDE_TH.md)
 - [Thai team presentation script and judge Q&A](docs/TEAM_PRESENTATION_SCRIPT_TH.md)
 - [Model card](docs/MODEL_CARD.md)
 - [Patient-grouped baseline evaluation](docs/EVALUATION_BASELINE_V1.md)
