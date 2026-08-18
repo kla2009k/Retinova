@@ -54,6 +54,7 @@ let language = 'th';
 let localModelReady = false;
 let localAuthRequired = false;
 let teamAuthenticated = false;
+let modelDeploymentMode = 'public';
 let activeView = 'home';
 let cameraStream = null;
 let cameraFacingMode = 'environment';
@@ -418,20 +419,26 @@ function renderSessionChart() {
 
 function setLocalModelUi() {
   if (localModelReady) {
-    analyzeButton.textContent = language === 'th' ? 'วิเคราะห์ด้วยโมเดลจริงในเครื่อง' : 'Analyze with local model';
+    const isCloud = modelDeploymentMode === 'cloud';
+    analyzeButton.textContent = language === 'th'
+      ? (isCloud ? 'วิเคราะห์ด้วยโมเดลจริงบนเซิร์ฟเวอร์' : 'วิเคราะห์ด้วยโมเดลจริงในเครื่อง')
+      : (isCloud ? 'Analyze with cloud model' : 'Analyze with local model');
     const modeChip = document.querySelector('#modeChip');
-    modeChip.textContent = language === 'th' ? 'เชื่อมต่อโมเดลวิจัยในเครื่อง' : 'Local research model connected';
+    modeChip.textContent = language === 'th'
+      ? (isCloud ? 'เชื่อมต่อโมเดลวิจัยบนเซิร์ฟเวอร์' : 'เชื่อมต่อโมเดลวิจัยในเครื่อง')
+      : (isCloud ? 'Cloud research model connected' : 'Local research model connected');
     modeChip.classList.add('success');
   }
 }
 
 async function detectLocalModel() {
-  if (!['127.0.0.1', 'localhost'].includes(location.hostname)) return;
   try {
     const response = await fetch('/health', {cache: 'no-store', credentials: 'same-origin'});
     const status = await response.json();
-    const isModelServer = response.ok && status.mode === 'local-research-model';
+    const modelModes = new Set(['local-research-model', 'cloud-research-model']);
+    const isModelServer = response.ok && modelModes.has(status.mode);
     if (!isModelServer) {
+      modelDeploymentMode = 'public';
       localModelReady = false;
       localAuthRequired = false;
       teamLoginButton.disabled = true;
@@ -440,6 +447,7 @@ async function detectLocalModel() {
         : 'Team Login is available only through the local model server.';
       return;
     }
+    modelDeploymentMode = status.mode === 'cloud-research-model' ? 'cloud' : 'local';
     localAuthRequired = status.auth_mode === 'team-passcode';
     teamAuthenticated = Boolean(status.authenticated);
     localModelReady = !localAuthRequired || teamAuthenticated;
@@ -447,7 +455,7 @@ async function detectLocalModel() {
     if (localAuthRequired) {
       teamLoginStatus.textContent = teamAuthenticated
         ? (language === 'th' ? 'เซสชันทีมนี้ยืนยันแล้ว' : 'This team session is authenticated.')
-        : (language === 'th' ? 'local server พร้อมรับรหัสผ่านทีม' : 'The local server is ready for Team Login.');
+        : (language === 'th' ? 'เซิร์ฟเวอร์พร้อมรับรหัสผ่านทีม' : 'The server is ready for Team Login.');
     } else {
       teamLoginStatus.textContent = language === 'th'
         ? 'local server นี้ไม่ได้ตั้งรหัสผ่านทีม — ใช้โหมดผู้เยี่ยมชมได้'

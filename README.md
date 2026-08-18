@@ -6,9 +6,9 @@ Retinova is a research prototype for screening **retinal fundus photographs**. I
 
 - Website: https://kla2009k.github.io/Retinova/
 - Current mode: safe static preview; local image-readiness checks only
-- Live disease inference: not connected to the public site
-- Grad-CAM: real class-specific implementation validated offline; not connected publicly
-- Welcome page: Guest access is public; Team Login is enabled only by the optional localhost server
+- Live disease inference: GitHub Pages remains a static preview; the optional Render service runs the real checkpoint behind Team Login
+- Grad-CAM: real class-specific implementation validated offline and available through the authenticated Render/local model server
+- Welcome page: Guest access is public; Team Login is enabled by the optional localhost or authenticated Render server
 - Session results: no fabricated patient records; only real local results are held in page memory and disappear on refresh
 - Mobile camera: live rear/front camera capture on HTTPS/localhost; bare-phone external-eye captures are blocked from model inference
 
@@ -76,7 +76,7 @@ python -m scripts.gradcam_retinova `
   --image path/to/fundus.jpg
 ```
 
-EfficientNet-B0 was selected over ResNet-18 by validation macro F1 (0.577 versus 0.552), before comparing held-out test results. Its test macro F1 is 0.581 and balanced accuracy is 0.642. See the evaluation report for patient-bootstrap intervals, the controlled comparison, and class-level failures. Checkpoints and ODIR images remain local until licensing is clarified.
+EfficientNet-B0 was selected over ResNet-18 by validation macro F1 (0.577 versus 0.552), before comparing held-out test results. Its test macro F1 is 0.581 and balanced accuracy is 0.642. See the evaluation report for patient-bootstrap intervals, the controlled comparison, and class-level failures. On 2026-08-18, the project owner confirmed the right to publish and deploy the selected research-demo checkpoint. ODIR images are still not redistributed.
 
 ## Run the real local model + Grad-CAM web mode
 
@@ -103,6 +103,12 @@ Remove-Item Env:RETINOVA_TEAM_PASSCODE
 The passcode is compared server-side and is never written to browser storage. A successful login receives an in-memory, eight-hour `HttpOnly; SameSite=Strict` localhost cookie. `/predict` returns HTTP 401 without that session. Logging out deletes the server session and cookie. If `RETINOVA_TEAM_PASSCODE` is unset, the loopback server remains in open-local demonstration mode.
 
 This is a team demonstration gate, not a production identity system or medical-record login. It has no user accounts, password reset, database, audit trail, TLS termination, or role-based authorization. Do not expose this development server to a network.
+
+## Deploy the authenticated research demo on Render
+
+The repository-root `render.yaml` defines one Singapore-region Standard web service. Render prompts for `RETINOVA_TEAM_PASSCODE`; use a unique value of at least 12 characters. The service loads the versioned EfficientNet-B0 checkpoint from the repository and serves the UI, prediction API, and real Grad-CAM from one HTTPS origin.
+
+Automatic service deploys are disabled in the Blueprint. Also set the Blueprint's **Auto Sync** setting to **No** after creation so future YAML edits cannot change paid resources without a manual review. See the [Thai Render deployment and three-day cost guide](docs/RENDER_DEPLOYMENT_TH.md).
 
 ### Live phone camera
 

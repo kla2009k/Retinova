@@ -1,9 +1,10 @@
-"""Serve the Retinova UI with local checkpoint inference on localhost only."""
+"""Serve the Retinova UI with real checkpoint inference locally or on Render."""
 import argparse
 import base64
 import binascii
 from http.cookies import SimpleCookie
 import hmac
+import ipaddress
 import json
 import os
 import secrets
@@ -20,16 +21,38 @@ SESSION_SECONDS = 8 * 60 * 60
 LOGIN_WINDOW_SECONDS = 60
 MAX_LOGIN_ATTEMPTS = 5
 MAX_ACTIVE_SESSIONS = 32
+MAX_LOGIN_CLIENTS = 1_024
 MIN_TEAM_PASSCODE_LENGTH = 12
 
 
-def create_handler(predictor, dashboard, team_passcode=None):
+def create_handler(predictor, dashboard, team_passcode=None, deployment_mode="local"):
+    if deployment_mode not in {"local", "cloud"}:
+        raise ValueError("deployment_mode must be 'local' or 'cloud'")
+    cloud_mode = deployment_mode == "cloud"
     sessions = {}
-    failed_logins = []
+    failed_logins_by_client = {}
 
     class Handler(SimpleHTTPRequestHandler):
         def __init__(self, *args, **kwargs):
             super().__init__(*args, directory=str(dashboard), **kwargs)
+
+        def end_headers(self):
+            self.send_header("X-Content-Type-Options", "nosniff")
+            self.send_header("X-Frame-Options", "DENY")
+            self.send_header("Referrer-Policy", "no-referrer")
+            self.send_header(
+                "Permissions-Policy",
+                "camera=(self), microphone=(), geolocation=(), payment=()",
+            )
+            self.send_header(
+                "Content-Security-Policy",
+                "default-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; "
+                "style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self'; "
+                "object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'",
+            )
+            if cloud_mode:
+                self.send_header("Strict-Transport-Security", "max-age=31536000")
+            super().end_headers()
 
         def send_json(self, status, payload, headers=None):
             body = json.dumps(payload).encode("utf-8")
@@ -59,6 +82,26 @@ def create_handler(predictor, dashboard, team_passcode=None):
                 return False
             return True
 
+        def same_origin(self):
+            if not cloud_mode:
+                return True
+            origin = self.headers.get("Origin", "")
+            host = self.headers.get("Host", "")
+            forwarded_proto = self.headers.get("X-Forwarded-Proto", "https").split(",", 1)[0].strip()
+            if forwarded_proto != "https" or not origin or not host:
+                return False
+            return hmac.compare_digest(origin, f"https://{host}")
+
+        def client_key(self):
+            if cloud_mode:
+                forwarded_for = self.headers.get("X-Forwarded-For", "")
+                candidate = forwarded_for.split(",", 1)[0].strip()
+                try:
+                    return str(ipaddress.ip_address(candidate))
+                except ValueError:
+                    pass
+            return self.client_address[0]
+
         def read_json(self, maximum_bytes):
             length = int(self.headers.get("Content-Length", "0"))
             if length <= 0 or length > maximum_bytes:
@@ -71,7 +114,7 @@ def create_handler(predictor, dashboard, team_passcode=None):
                     200,
                     {
                         "status": "ready",
-                        "mode": "local-research-model",
+                        "mode": "cloud-research-model" if cloud_mode else "local-research-model",
                         "auth_mode": "team-passcode" if team_passcode else "open-local",
                         "authenticated": self.authenticated(),
                     },
@@ -83,6 +126,9 @@ def create_handler(predictor, dashboard, team_passcode=None):
             super().do_GET()
 
         def do_POST(self):
+            if not self.same_origin():
+                self.send_json(403, {"error": "origin not allowed"})
+                return
             if self.path == "/session":
                 self.create_session()
                 return
@@ -108,11 +154,16 @@ def create_handler(predictor, dashboard, team_passcode=None):
 
         def create_session(self):
             now = time.monotonic()
-            failed_logins[:] = [
-                attempt
-                for attempt in failed_logins
-                if now - attempt < LOGIN_WINDOW_SECONDS
-            ]
+            for client, attempts in list(failed_logins_by_client.items()):
+                current = [
+                    attempt for attempt in attempts if now - attempt < LOGIN_WINDOW_SECONDS
+                ]
+                if current:
+                    failed_logins_by_client[client] = current
+                else:
+                    failed_logins_by_client.pop(client, None)
+            client = self.client_key()
+            failed_logins = failed_logins_by_client.setdefault(client, [])
             if len(failed_logins) >= MAX_LOGIN_ATTEMPTS:
                 self.send_json(429, {"error": "too many login attempts; wait one minute"})
                 return
@@ -123,9 +174,11 @@ def create_handler(predictor, dashboard, team_passcode=None):
                     raise ValueError("team login is not configured")
                 if not hmac.compare_digest(supplied, team_passcode):
                     failed_logins.append(now)
+                    if len(failed_logins_by_client) > MAX_LOGIN_CLIENTS:
+                        failed_logins_by_client.pop(next(iter(failed_logins_by_client)), None)
                     self.send_json(401, {"error": "invalid team passcode"})
                     return
-                failed_logins.clear()
+                failed_logins_by_client.pop(client, None)
                 expired_tokens = [
                     session_token
                     for session_token, expiry in sessions.items()
@@ -141,11 +194,17 @@ def create_handler(predictor, dashboard, team_passcode=None):
                     f"retinova_session={token}; HttpOnly; SameSite=Strict; "
                     f"Path=/; Max-Age={SESSION_SECONDS}"
                 )
-                self.send_json(200, {"authenticated": True, "role": "local-team"}, {"Set-Cookie": cookie})
+                if cloud_mode:
+                    cookie += "; Secure"
+                role = "cloud-team" if cloud_mode else "local-team"
+                self.send_json(200, {"authenticated": True, "role": role}, {"Set-Cookie": cookie})
             except (ValueError, json.JSONDecodeError) as error:
                 self.send_json(400, {"error": str(error)})
 
         def do_DELETE(self):
+            if not self.same_origin():
+                self.send_json(403, {"error": "origin not allowed"})
+                return
             if self.path != "/session":
                 self.send_json(404, {"error": "not found"})
                 return
@@ -153,6 +212,8 @@ def create_handler(predictor, dashboard, team_passcode=None):
             if token:
                 sessions.pop(token, None)
             cookie = "retinova_session=; HttpOnly; SameSite=Strict; Path=/; Max-Age=0"
+            if cloud_mode:
+                cookie += "; Secure"
             self.send_json(200, {"authenticated": False}, {"Set-Cookie": cookie})
 
     return Handler
@@ -161,20 +222,31 @@ def create_handler(predictor, dashboard, team_passcode=None):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--checkpoint", required=True)
-    parser.add_argument("--port", type=int, default=8000)
+    parser.add_argument("--host", default="127.0.0.1")
+    parser.add_argument("--port", type=int, default=int(os.environ.get("PORT", "8000")))
     parser.add_argument("--dashboard", default="dashboard")
+    parser.add_argument("--deployment-mode", choices=("local", "cloud"), default="local")
     args = parser.parse_args()
-    predictor = RetinovaPredictor(args.checkpoint)
-    dashboard = Path(args.dashboard).resolve()
     team_passcode = os.environ.get("RETINOVA_TEAM_PASSCODE")
     if team_passcode and len(team_passcode) < MIN_TEAM_PASSCODE_LENGTH:
         parser.error(
             f"RETINOVA_TEAM_PASSCODE must contain at least {MIN_TEAM_PASSCODE_LENGTH} characters"
         )
-    handler = create_handler(predictor, dashboard, team_passcode=team_passcode)
+    if args.deployment_mode == "cloud" and not team_passcode:
+        parser.error("RETINOVA_TEAM_PASSCODE is required in cloud mode")
+    if args.deployment_mode == "cloud" and args.host != "0.0.0.0":
+        parser.error("cloud mode must bind to 0.0.0.0")
+    predictor = RetinovaPredictor(args.checkpoint)
+    dashboard = Path(args.dashboard).resolve()
+    handler = create_handler(
+        predictor,
+        dashboard,
+        team_passcode=team_passcode,
+        deployment_mode=args.deployment_mode,
+    )
     # Single-request serving prevents concurrent hooks from sharing model state.
-    with HTTPServer(("127.0.0.1", args.port), handler) as server:
-        print(f"Retinova local research server: http://127.0.0.1:{args.port}", flush=True)
+    with HTTPServer((args.host, args.port), handler) as server:
+        print(f"Retinova {args.deployment_mode} research server ready on port {args.port}", flush=True)
         server.serve_forever()
 
 

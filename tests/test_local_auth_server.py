@@ -73,6 +73,115 @@ class LocalAuthServerTests(unittest.TestCase):
         )
         self.assertEqual(response.status, 401)
 
+    def test_cloud_mode_requires_same_origin_and_sets_secure_cookie(self):
+        self.connection.close()
+        self.server.shutdown()
+        self.server.server_close()
+        self.thread.join(timeout=2)
+
+        dashboard = Path(self.temporary.name)
+        handler = create_handler(
+            FakePredictor(),
+            dashboard,
+            team_passcode="correct horse",
+            deployment_mode="cloud",
+        )
+        self.server = HTTPServer(("127.0.0.1", 0), handler)
+        self.thread = threading.Thread(target=self.server.serve_forever, daemon=True)
+        self.thread.start()
+        self.connection = http.client.HTTPConnection("127.0.0.1", self.server.server_port)
+        host = f"127.0.0.1:{self.server.server_port}"
+
+        response, result = self.request_json(
+            "POST",
+            "/session",
+            {"passcode": "correct horse"},
+            {"Host": host, "Origin": "https://attacker.example"},
+        )
+        self.assertEqual(response.status, 403)
+        self.assertEqual(result["error"], "origin not allowed")
+
+        response, result = self.request_json(
+            "POST",
+            "/session",
+            {"passcode": "correct horse"},
+            {
+                "Host": host,
+                "Origin": f"https://{host}",
+                "X-Forwarded-Proto": "https",
+            },
+        )
+        self.assertEqual(response.status, 200)
+        self.assertTrue(result["authenticated"])
+        self.assertIn("Secure", response.getheader("Set-Cookie"))
+        self.assertEqual(response.getheader("X-Content-Type-Options"), "nosniff")
+        self.assertEqual(response.getheader("X-Frame-Options"), "DENY")
+
+    def test_cloud_health_identifies_the_remote_model_server(self):
+        self.connection.close()
+        self.server.shutdown()
+        self.server.server_close()
+        self.thread.join(timeout=2)
+
+        dashboard = Path(self.temporary.name)
+        handler = create_handler(
+            FakePredictor(),
+            dashboard,
+            team_passcode="correct horse",
+            deployment_mode="cloud",
+        )
+        self.server = HTTPServer(("127.0.0.1", 0), handler)
+        self.thread = threading.Thread(target=self.server.serve_forever, daemon=True)
+        self.thread.start()
+        self.connection = http.client.HTTPConnection("127.0.0.1", self.server.server_port)
+
+        response, result = self.request_json("GET", "/health")
+        self.assertEqual(response.status, 200)
+        self.assertEqual(result["mode"], "cloud-research-model")
+        self.assertEqual(result["auth_mode"], "team-passcode")
+
+    def test_cloud_login_throttle_isolated_by_render_client_ip(self):
+        self.connection.close()
+        self.server.shutdown()
+        self.server.server_close()
+        self.thread.join(timeout=2)
+
+        dashboard = Path(self.temporary.name)
+        handler = create_handler(
+            FakePredictor(),
+            dashboard,
+            team_passcode="correct horse",
+            deployment_mode="cloud",
+        )
+        self.server = HTTPServer(("127.0.0.1", 0), handler)
+        self.thread = threading.Thread(target=self.server.serve_forever, daemon=True)
+        self.thread.start()
+        self.connection = http.client.HTTPConnection("127.0.0.1", self.server.server_port)
+        host = f"127.0.0.1:{self.server.server_port}"
+        common_headers = {
+            "Host": host,
+            "Origin": f"https://{host}",
+            "X-Forwarded-Proto": "https",
+        }
+
+        for _ in range(5):
+            response, _ = self.request_json(
+                "POST",
+                "/session",
+                {"passcode": "wrong"},
+                {**common_headers, "X-Forwarded-For": "203.0.113.10"},
+            )
+            self.assertEqual(response.status, 401)
+
+        response, result = self.request_json(
+            "POST",
+            "/session",
+            {"passcode": "correct horse"},
+            {**common_headers, "X-Forwarded-For": "203.0.113.20"},
+        )
+        self.assertEqual(response.status, 200)
+        self.assertTrue(result["authenticated"])
+
 
 if __name__ == "__main__":
     unittest.main()

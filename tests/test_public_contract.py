@@ -176,14 +176,27 @@ class PublicContractTests(unittest.TestCase):
     def test_chat_does_not_render_user_html(self):
         self.assertNotIn("insertAdjacentHTML", JS)
 
-    def test_model_api_is_probed_only_on_localhost(self):
-        self.assertIn("['127.0.0.1', 'localhost'].includes(location.hostname)", JS)
+    def test_model_api_probe_accepts_same_origin_local_or_cloud_server(self):
+        self.assertIn("fetch('/health'", JS)
+        self.assertIn("cloud-research-model", JS)
         self.assertIn("fetch('/predict'", JS)
 
-    def test_local_model_server_is_loopback_and_single_request(self):
+    def test_model_server_defaults_to_loopback_and_remains_single_request(self):
         server = (ROOT / "scripts" / "serve_retinova.py").read_text(encoding="utf-8")
-        self.assertIn('HTTPServer(("127.0.0.1", args.port)', server)
+        self.assertIn('default="127.0.0.1"', server)
+        self.assertIn("HTTPServer((args.host, args.port)", server)
         self.assertNotIn("ThreadingHTTPServer", server)
+
+    def test_render_blueprint_runs_the_real_checkpoint_in_singapore(self):
+        blueprint = (ROOT / "render.yaml").read_text(encoding="utf-8")
+        self.assertIn("runtime: python", blueprint)
+        self.assertIn("region: singapore", blueprint)
+        self.assertIn("plan: standard", blueprint)
+        self.assertIn("healthCheckPath: /health", blueprint)
+        self.assertIn("autoDeployTrigger: off", blueprint)
+        self.assertIn("RETINOVA_TEAM_PASSCODE", blueprint)
+        self.assertIn("sync: false", blueprint)
+        self.assertIn("retinova_efficientnet_b0_best.pt", blueprint)
 
     def test_server_contract_uses_environment_and_documented_port(self):
         self.assertIn('os.environ.get("ROBOFLOW_API_KEY")', SERVER)

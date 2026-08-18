@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: retinova
+    runtime: python
+    region: singapore
+    plan: standard
+    buildCommand: python -m pip install torch==2.11.0 torchvision==0.26.0 --index-url https://download.pytorch.org/whl/cpu && python -m pip install -r requirements-render.txt
+    startCommand: python -m scripts.serve_retinova --checkpoint models/efficientnet_b0_patient_grouped_v1/retinova_efficientnet_b0_best.pt --host 0.0.0.0 --deployment-mode cloud
+    healthCheckPath: /health
+    autoDeployTrigger: off
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.14.3
+      - key: RETINOVA_TEAM_PASSCODE
+        sync: false

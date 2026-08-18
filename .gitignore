@@ -38,3 +38,10 @@ runs/
 Thumbs.db
 .vscode/
 .idea/
+
+# Rights confirmed by the project owner for the deployed research-demo checkpoint only.
+!models/
+models/*
+!models/efficientnet_b0_patient_grouped_v1/
+models/efficientnet_b0_patient_grouped_v1/*
+!models/efficientnet_b0_patient_grouped_v1/retinova_efficientnet_b0_best.pt

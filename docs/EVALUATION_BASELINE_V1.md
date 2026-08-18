@@ -89,7 +89,7 @@ The same EfficientNet-B0 checkpoint used for prediction generates class-specific
 
 In one glaucoma-labelled test example, a Grad-CAM explicitly targeted to G emphasized the optic-disc region, but the model predicted Normal with probability 0.610 and assigned G only 0.131. This is a useful counterexample: plausible-looking attribution does not prove that a prediction is correct, clinically grounded, or causal.
 
-The test image, generated overlay, and checkpoint are not published because ODIR redistribution and derived-weight licensing have not been confirmed.
+The test image and generated overlay are not published because ODIR image redistribution has not been confirmed. On 2026-08-18, the project owner confirmed the right to publish and deploy the selected derived checkpoint for the research demonstration.
 
 ## What improved and what did not
 
