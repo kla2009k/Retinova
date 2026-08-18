@@ -9,7 +9,7 @@ import torch
 
 from .gradcam import GradCAM
 from .model import build_model, gradcam_target
-from .training import build_transform
+from .preprocessing import build_transform
 
 
 class RetinovaPredictor:
