@@ -1,0 +1,18 @@
+{
+  "architecture": "efficientnet_b0",
+  "class_names": [
+    "N",
+    "D",
+    "G",
+    "C",
+    "A",
+    "H",
+    "M",
+    "O"
+  ],
+  "image_size": 224,
+  "interpolation": "bicubic",
+  "model_revision": "0132f70dbfffa6c0e34de0319260051683619dcb",
+  "target_layer": "features.8",
+  "attribution_method": "class_activation_mapping"
+}

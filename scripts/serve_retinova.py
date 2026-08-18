@@ -12,9 +12,6 @@ from http.server import HTTPServer, SimpleHTTPRequestHandler
 from pathlib import Path
 import time
 
-from retinova_ml.inference import RetinovaPredictor
-
-
 MAX_REQUEST_BYTES = 14_000_000
 MAX_LOGIN_BYTES = 4_096
 SESSION_SECONDS = 8 * 60 * 60
@@ -221,7 +218,10 @@ def create_handler(predictor, dashboard, team_passcode=None, deployment_mode="lo
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--checkpoint", required=True)
+    model_source = parser.add_mutually_exclusive_group(required=True)
+    model_source.add_argument("--checkpoint")
+    model_source.add_argument("--onnx-model")
+    parser.add_argument("--metadata")
     parser.add_argument("--host", default="127.0.0.1")
     parser.add_argument("--port", type=int, default=int(os.environ.get("PORT", "8000")))
     parser.add_argument("--dashboard", default="dashboard")
@@ -236,7 +236,16 @@ def main():
         parser.error("RETINOVA_TEAM_PASSCODE is required in cloud mode")
     if args.deployment_mode == "cloud" and args.host != "0.0.0.0":
         parser.error("cloud mode must bind to 0.0.0.0")
-    predictor = RetinovaPredictor(args.checkpoint)
+    if args.onnx_model:
+        if not args.metadata:
+            parser.error("--metadata is required with --onnx-model")
+        from retinova_ml.onnx_inference import RetinovaONNXPredictor
+
+        predictor = RetinovaONNXPredictor(args.onnx_model, args.metadata)
+    else:
+        from retinova_ml.inference import RetinovaPredictor
+
+        predictor = RetinovaPredictor(args.checkpoint)
     dashboard = Path(args.dashboard).resolve()
     handler = create_handler(
         predictor,

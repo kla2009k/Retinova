@@ -45,3 +45,5 @@ models/*
 !models/efficientnet_b0_patient_grouped_v1/
 models/efficientnet_b0_patient_grouped_v1/*
 !models/efficientnet_b0_patient_grouped_v1/retinova_efficientnet_b0_best.pt
+!models/efficientnet_b0_patient_grouped_v1/retinova_efficientnet_b0_cam.onnx
+!models/efficientnet_b0_patient_grouped_v1/retinova_efficientnet_b0_cam.json

@@ -199,14 +199,14 @@
                 <div class="model-output" id="modelOutput" hidden>
                   <div class="model-decision"><div><small data-th="ผลโมเดลวิจัยในเครื่อง" data-en="Local research-model output">ผลโมเดลวิจัยในเครื่อง</small><h3 id="modelPrediction">—</h3></div><div class="probability-value"><strong id="modelProbability">—</strong><small data-th="ความน่าจะเป็นของโมเดล · ไม่ใช่คะแนนคลินิก" data-en="Model probability · not a clinical score">ความน่าจะเป็นของโมเดล · ไม่ใช่คะแนนคลินิก</small></div></div>
                   <figure class="gradcam-comparison">
-                    <div class="comparison-stage"><img id="originalCompareImage" alt="ภาพต้นฉบับที่เลือก"><div class="comparison-overlay" id="comparisonOverlay"><img id="gradcamCompareImage" alt="Grad-CAM จริงจากคลาสที่โมเดลทำนาย"></div><span class="compare-label original-label" data-th="ภาพต้นฉบับ" data-en="Original">ภาพต้นฉบับ</span><span class="compare-label heatmap-label">REAL GRAD-CAM</span></div>
-                    <label for="comparisonSlider" data-th="เลื่อนเพื่อเทียบภาพต้นฉบับกับ Grad-CAM" data-en="Slide to compare the original with Grad-CAM">เลื่อนเพื่อเทียบภาพต้นฉบับกับ Grad-CAM</label>
+                    <div class="comparison-stage"><img id="originalCompareImage" alt="ภาพต้นฉบับที่เลือก"><div class="comparison-overlay" id="comparisonOverlay"><img id="gradcamCompareImage" alt="แผนที่ CAM จากคลาสที่โมเดลทำนาย"></div><span class="compare-label original-label" data-th="ภาพต้นฉบับ" data-en="Original">ภาพต้นฉบับ</span><span class="compare-label heatmap-label">MODEL CAM</span></div>
+                    <label for="comparisonSlider" data-th="เลื่อนเพื่อเทียบภาพต้นฉบับกับ CAM" data-en="Slide to compare the original with CAM">เลื่อนเพื่อเทียบภาพต้นฉบับกับ CAM</label>
                     <input id="comparisonSlider" type="range" min="0" max="100" value="50" aria-label="สัดส่วนภาพต้นฉบับและ Grad-CAM">
-                    <figcaption data-th="Grad-CAM แสดงบริเวณที่มีอิทธิพลต่อคลาสที่ทำนาย ไม่ใช่ขอบเขตรอยโรค" data-en="Grad-CAM shows regions influencing the predicted class; it is not a lesion boundary.">Grad-CAM แสดงบริเวณที่มีอิทธิพลต่อคลาสที่ทำนาย ไม่ใช่ขอบเขตรอยโรค</figcaption>
+                    <figcaption data-th="CAM แสดงบริเวณที่มีอิทธิพลต่อคลาสที่ทำนาย ไม่ใช่ขอบเขตรอยโรค" data-en="CAM shows regions influencing the predicted class; it is not a lesion boundary.">CAM แสดงบริเวณที่มีอิทธิพลต่อคลาสที่ทำนาย ไม่ใช่ขอบเขตรอยโรค</figcaption>
                   </figure>
                   <ol id="probabilityList"></ol>
                   <p class="provenance" id="modelProvenance"></p>
-                  <p class="model-warning" data-th="ผลคัดกรองวิจัย ไม่ใช่การวินิจฉัย และ Grad-CAM ไม่ใช่ขอบเขตรอยโรค" data-en="Research screening output, not a diagnosis. Grad-CAM is not a lesion boundary.">ผลคัดกรองวิจัย ไม่ใช่การวินิจฉัย และ Grad-CAM ไม่ใช่ขอบเขตรอยโรค</p>
+                  <p class="model-warning" data-th="ผลคัดกรองวิจัย ไม่ใช่การวินิจฉัย และ CAM ไม่ใช่ขอบเขตรอยโรค" data-en="Research screening output, not a diagnosis. CAM is not a lesion boundary.">ผลคัดกรองวิจัย ไม่ใช่การวินิจฉัย และ CAM ไม่ใช่ขอบเขตรอยโรค</p>
                 </div>
               </div>
             </article>

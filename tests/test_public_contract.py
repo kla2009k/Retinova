@@ -187,16 +187,17 @@ class PublicContractTests(unittest.TestCase):
         self.assertIn("HTTPServer((args.host, args.port)", server)
         self.assertNotIn("ThreadingHTTPServer", server)
 
-    def test_render_blueprint_runs_the_real_checkpoint_in_singapore(self):
+    def test_render_blueprint_runs_the_real_onnx_model_on_free_plan(self):
         blueprint = (ROOT / "render.yaml").read_text(encoding="utf-8")
         self.assertIn("runtime: python", blueprint)
         self.assertIn("region: singapore", blueprint)
-        self.assertIn("plan: standard", blueprint)
+        self.assertIn("plan: free", blueprint)
         self.assertIn("healthCheckPath: /health", blueprint)
         self.assertIn("autoDeployTrigger: off", blueprint)
         self.assertIn("RETINOVA_TEAM_PASSCODE", blueprint)
         self.assertIn("sync: false", blueprint)
-        self.assertIn("retinova_efficientnet_b0_best.pt", blueprint)
+        self.assertIn("retinova_efficientnet_b0_cam.onnx", blueprint)
+        self.assertNotIn("pip install torch", blueprint)
 
     def test_server_contract_uses_environment_and_documented_port(self):
         self.assertIn('os.environ.get("ROBOFLOW_API_KEY")', SERVER)
