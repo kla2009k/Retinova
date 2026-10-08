@@ -9,7 +9,8 @@ Retinova เป็นเว็บต้นแบบสำหรับภาพ�
 - **E3 — เว็บสาธารณะ:** `https://kla2009k.github.io/Retinova/` เปิดได้ แต่เป็นพรีวิวแบบ static; เว็บนี้ยังไม่ส่งภาพเข้าบริการโมเดลจริง
 - **E4 — บริการ Render:** พบ service เดิมชื่อ `retinova` ในบัญชี Render ที่ URL จริง `https://retinova-f70k.onrender.com/health` (ไม่ใช่ `retinova.onrender.com`); endpoint นี้ตอบ HTTP 200 พร้อม `mode: cloud-research-model`, `auth_mode: team-passcode` ก่อน deploy รุ่นล่าสุด ยังต้องตรวจ login/inference หลัง deploy
 - **E5 — Hugging Face:** การสร้าง Docker Space สำหรับ ONNX ถูกปฏิเสธ HTTP 402 ก่อนสร้าง Space เพราะบัญชีที่ใช้อยู่ต้องมีแพ็กเกจที่รองรับ compute Space; ไม่มีการอ้างว่าบริการนี้ deploy สำเร็จ
-- **E6 — ชุดทดสอบโค้ด:** หลังปรับ contract ให้ตรงกับ UI สามภาษา มี 46 tests ผ่าน และ smoke inference ด้วยภาพสังเคราะห์ผ่าน; ภาพสังเคราะห์ไม่ใช่การทดสอบความแม่นทางคลินิก
+- **E6 — ชุดทดสอบโค้ด:** หลังปรับ contract ให้ตรงกับ UI สามภาษาและเพิ่มกรณีภาพเสีย มี 47 tests ผ่าน และ smoke inference ด้วยภาพสังเคราะห์ผ่าน; ภาพสังเคราะห์ไม่ใช่การทดสอบความแม่นทางคลินิก
+- **E7 — deploy ล่าสุด:** GitHub Pages workflow สำเร็จที่ commit `fa12ff8`; Render deploy `dep-db3l01ui0phs73ak94r0` สถานะ `live` ที่ commit เดียวกัน; browser smoke 390px/1440px ทั้งสอง URL ได้ HTTP 200, ไม่มี JavaScript error หรือแนวนอนล้นจอ; `/health` ตอบ 200 และ `/predict` โดยไม่ล็อกอินตอบ 401
 
 ## สิ่งที่พัฒนาในรอบนี้
 
