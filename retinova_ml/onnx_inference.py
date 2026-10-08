@@ -23,12 +23,15 @@ MAX_IMAGE_PIXELS = 24_000_000
 
 def decode_candidate_image(image_bytes: bytes, image_size: int = 224) -> Image.Image:
     """Apply conservative technical checks before running the research model."""
-    with Image.open(BytesIO(image_bytes)) as encoded:
-        if encoded.format not in {"JPEG", "PNG"}:
-            raise ValueError("only JPEG and PNG fundus images are accepted")
-        if encoded.width * encoded.height > MAX_IMAGE_PIXELS:
-            raise ValueError("image dimensions exceed the 24 megapixel limit")
-        source = encoded.convert("RGB")
+    try:
+        with Image.open(BytesIO(image_bytes)) as encoded:
+            if encoded.format not in {"JPEG", "PNG"}:
+                raise ValueError("only JPEG and PNG fundus images are accepted")
+            if encoded.width * encoded.height > MAX_IMAGE_PIXELS:
+                raise ValueError("image dimensions exceed the 24 megapixel limit")
+            source = encoded.convert("RGB")
+    except OSError as error:
+        raise ValueError("invalid or unreadable image") from error
     if min(source.size) < image_size:
         raise ValueError(f"image must be at least {image_size} px on its shortest side")
     ratio = source.width / source.height

@@ -27,6 +27,10 @@ class ONNXPreprocessingTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "JPEG and PNG"):
             decode_candidate_image(buffer.getvalue())
 
+    def test_corrupt_image_is_a_client_error(self):
+        with self.assertRaisesRegex(ValueError, "invalid or unreadable image"):
+            decode_candidate_image(b"not an image")
+
     def test_preprocess_produces_normalized_nchw_float32(self):
         source = Image.new("RGB", (400, 300), color=(128, 64, 32))
 
