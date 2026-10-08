@@ -106,7 +106,7 @@ This is a team demonstration gate, not a production identity system or medical-r
 
 ## Deploy the authenticated research demo on Render
 
-The repository-root `render.yaml` defines one Singapore-region Free web service. Render prompts for `RETINOVA_TEAM_PASSCODE`; use a unique value of at least 12 characters. The service loads the versioned EfficientNet-B0 ONNX checkpoint from the repository and serves the UI, prediction API, and class activation map from one HTTPS origin. The Render service is not yet live; the GitHub Pages URL remains a static preview.
+The repository-root `render.yaml` defines one Singapore-region Free web service. Render prompts for `RETINOVA_TEAM_PASSCODE`; use a unique value of at least 12 characters. The service loads the versioned EfficientNet-B0 ONNX checkpoint from the repository and serves the UI, prediction API, and class activation map from one HTTPS origin. The existing service URL is https://retinova-f70k.onrender.com/ and its `/health` endpoint reports `cloud-research-model` with Team Login required. GitHub Pages remains a separate static preview.
 
 Automatic service deploys are disabled in the Blueprint. Also set the Blueprint's **Auto Sync** setting to **No** after creation so future YAML edits cannot change paid resources without a manual review. See the [Thai Render deployment and three-day cost guide](docs/RENDER_DEPLOYMENT_TH.md).
 

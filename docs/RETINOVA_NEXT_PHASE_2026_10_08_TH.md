@@ -7,7 +7,7 @@ Retinova เป็นเว็บต้นแบบสำหรับภาพ�
 - **E1 — ชุดทดสอบเดิม:** `artifacts/evaluation_efficientnet_b0_v1.json` และ `docs/EVALUATION_BASELINE_V1.md` ระบุ test 957 ภาพจาก 503 ผู้ป่วย, macro F1 0.581 (95% CI 0.525–0.622), balanced accuracy 0.642 (95% CI 0.579–0.689), ผู้ป่วยซ้ำข้าม split = 0
 - **E2 — โมเดลที่ใช้:** `models/efficientnet_b0_patient_grouped_v1/retinova_efficientnet_b0_cam.onnx` และ metadata ในโฟลเดอร์เดียวกัน; hash/checkpoint ต้นทางดูในเอกสารประเมิน
 - **E3 — เว็บสาธารณะ:** `https://kla2009k.github.io/Retinova/` เปิดได้ แต่เป็นพรีวิวแบบ static; เว็บนี้ยังไม่ส่งภาพเข้าบริการโมเดลจริง
-- **E4 — บริการ Render:** `https://retinova.onrender.com/health` ตอบ 404 ขณะตรวจ 8 ต.ค. 2569 จึงยังไม่ใช่ inference endpoint ที่ใช้งานได้
+- **E4 — บริการ Render:** พบ service เดิมชื่อ `retinova` ในบัญชี Render ที่ URL จริง `https://retinova-f70k.onrender.com/health` (ไม่ใช่ `retinova.onrender.com`); endpoint นี้ตอบ HTTP 200 พร้อม `mode: cloud-research-model`, `auth_mode: team-passcode` ก่อน deploy รุ่นล่าสุด ยังต้องตรวจ login/inference หลัง deploy
 - **E5 — Hugging Face:** การสร้าง Docker Space สำหรับ ONNX ถูกปฏิเสธ HTTP 402 ก่อนสร้าง Space เพราะบัญชีที่ใช้อยู่ต้องมีแพ็กเกจที่รองรับ compute Space; ไม่มีการอ้างว่าบริการนี้ deploy สำเร็จ
 - **E6 — ชุดทดสอบโค้ด:** หลังปรับ contract ให้ตรงกับ UI สามภาษา มี 46 tests ผ่าน และ smoke inference ด้วยภาพสังเคราะห์ผ่าน; ภาพสังเคราะห์ไม่ใช่การทดสอบความแม่นทางคลินิก
 
@@ -46,8 +46,8 @@ Technical gate ปัจจุบันเป็นเพียง baseline ต�
 
 ### E. การเปิดใช้เว็บ
 
-GitHub Pages เป็นพรีวิวหน้าเว็บเท่านั้น; การเปิดใช้โมเดลจริงต้องมีบริการ HTTPS แยกหรือเว็บ/โมเดลอยู่ origin เดียวกัน โค้ดสำหรับ Docker Space ถูกเตรียมแล้ว แต่สถานะบัญชี HF ปัจจุบันยังสร้าง compute Space ไม่ได้ ทาง Render มี Blueprint อยู่แต่ endpoint ที่คาดไว้ยังไม่ live การเปิดบริการใหม่ให้ตรวจ secret, URL, คำเตือนข้อมูลภาพ, health check, login, inference จริง และ CAM ใน browser ก่อนส่งลิงก์ให้กรรมการ
+GitHub Pages เป็นพรีวิวหน้าเว็บเท่านั้น; เว็บและโมเดลจริงอยู่บน Render ที่ `https://retinova-f70k.onrender.com/` พร้อม Team Login โค้ดสำหรับ Docker Space ถูกเตรียมแล้ว แต่สถานะบัญชี HF ปัจจุบันยังสร้าง compute Space ใหม่ไม่ได้ หลัง deploy รุ่นล่าสุดต้องตรวจ health check, login, inference จริง และ CAM ใน browser ก่อนส่งลิงก์ให้กรรมการ
 
 ## สิ่งที่นำเสนอได้ขณะนี้
 
-สาธิตเว็บพรีวิว, โครงงานและผลทดสอบภายในที่แยกผู้ป่วย, ONNX inference และ CAM ในเครื่อง ส่วนที่ยังเป็นงานวิจัยต่อคือ external validation, quality model, calibration, clinical workflow และ hosted inference ที่ live จริง ห้ามเรียกคะแนน macro F1 ว่า “accuracy 94%” หรืออ้างว่า CAM เป็นการแบ่งรอยโรค
+สาธิตเว็บพรีวิว, โครงงานและผลทดสอบภายในที่แยกผู้ป่วย, ONNX inference และ CAM ในเครื่อง; Render มีบริการออนไลน์พร้อม Team Login แต่การทดสอบ end-to-end ด้วยรหัสทีมยังต้องตรวจเพิ่ม ส่วนที่ยังเป็นงานวิจัยต่อคือ external validation, quality model, calibration และ clinical workflow ห้ามเรียกคะแนน macro F1 ว่า “accuracy 94%” หรืออ้างว่า CAM เป็นการแบ่งรอยโรค
