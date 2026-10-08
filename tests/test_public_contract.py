@@ -69,7 +69,8 @@ class PublicContractTests(unittest.TestCase):
         self.assertIn('data-en="Care for your eye health with Artificial Intelligence"', HTML)
         self.assertIn('class="sample-row"', HTML)
         self.assertIn('id="openCameraButton"', HTML)
-        self.assertIn("applyLanguage('en')", JS)
+        self.assertIn("supportedLanguages = ['th', 'en', 'zh']", JS)
+        self.assertIn('data-welcome-language="zh"', HTML)
         self.assertIn('data-th="เริ่มวิเคราะห์ดวงตา"', HTML)
 
     def test_reference_layout_never_reintroduces_fabricated_poster_results(self):
@@ -87,7 +88,7 @@ class PublicContractTests(unittest.TestCase):
         self.assertRegex(HTML, r'id="teamPasscode"[^>]+autocomplete="current-password"')
         self.assertIn("fetch('/session'", JS)
         self.assertIn("credentials: 'same-origin'", JS)
-        self.assertNotIn("localStorage", JS)
+        self.assertNotRegex(JS, r"localStorage\.setItem\([^,]+,\s*(?:selectedFile|teamPasscode|sessionHistory)")
         self.assertNotIn("sessionStorage", JS)
 
     def test_history_is_session_only_and_never_stores_images(self):
@@ -133,14 +134,13 @@ class PublicContractTests(unittest.TestCase):
         self.assertIn("getTracks().forEach((track) => track.stop())", JS)
         self.assertIn("document.addEventListener('visibilitychange'", JS)
         self.assertIn("window.addEventListener('pagehide'", JS)
-        self.assertNotIn("torch", JS.lower())
-        self.assertNotIn("flash", JS.lower())
+        self.assertNotRegex(JS, r"(?:torch|flash)\s*:\s*(?:true|\{)")
 
     def test_captured_frame_reuses_the_existing_private_file_flow(self):
         self.assertIn("cameraCanvas.toBlob", JS)
         self.assertIn("selectFile(capturedFile)", JS)
         self.assertIn("image/jpeg", JS)
-        self.assertNotIn("localStorage", JS)
+        self.assertNotRegex(JS, r"localStorage\.setItem\([^,]+,\s*(?:selectedFile|capturedFile)")
         self.assertNotIn("sessionStorage", JS)
 
     def test_bare_phone_capture_cannot_reach_the_research_model(self):

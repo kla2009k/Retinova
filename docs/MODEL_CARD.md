@@ -1,7 +1,7 @@
 # Retinova Model Card
 
-Status: **baseline trained — no production checkpoint approved**
-Last updated: 2026-08-01
+Status: **research baseline — derived checkpoint approved by project owner for demonstration, not clinical use**
+Last updated: 2026-10-08
 
 ## Intended task
 
@@ -44,4 +44,4 @@ EfficientNet-B0 was selected over ResNet-18 using validation macro F1 (0.577 ver
 - Weakest recall: Other 0.340 and Hypertension 0.389
 - Patient overlap across train/validation/test: 0
 
-The ResNet-18 comparator reached test macro F1 0.562 and balanced accuracy 0.617. See [Baseline Evaluation v1](EVALUATION_BASELINE_V1.md). These values are development evidence, not a clinical performance claim. Both checkpoints are withheld pending dataset and derived-weight licensing clarification.
+The ResNet-18 comparator reached test macro F1 0.562 and balanced accuracy 0.617. See [Baseline Evaluation v1](EVALUATION_BASELINE_V1.md). These values are development evidence, not a clinical performance claim. The project owner confirmed permission to publish the selected derived EfficientNet-B0 checkpoint for a research demonstration on 2026-08-18. Source images remain undistributed; this permission does not establish clinical suitability or resolve every source-dataset term.

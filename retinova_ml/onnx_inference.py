@@ -18,6 +18,27 @@ INTERPOLATION_MODES = {
     "bilinear": Image.Resampling.BILINEAR,
     "bicubic": Image.Resampling.BICUBIC,
 }
+MAX_IMAGE_PIXELS = 24_000_000
+
+
+def decode_candidate_image(image_bytes: bytes, image_size: int = 224) -> Image.Image:
+    """Apply conservative technical checks before running the research model."""
+    with Image.open(BytesIO(image_bytes)) as encoded:
+        if encoded.format not in {"JPEG", "PNG"}:
+            raise ValueError("only JPEG and PNG fundus images are accepted")
+        if encoded.width * encoded.height > MAX_IMAGE_PIXELS:
+            raise ValueError("image dimensions exceed the 24 megapixel limit")
+        source = encoded.convert("RGB")
+    if min(source.size) < image_size:
+        raise ValueError(f"image must be at least {image_size} px on its shortest side")
+    ratio = source.width / source.height
+    if ratio < 0.5 or ratio > 2.0:
+        raise ValueError("image aspect ratio is outside the accepted range")
+    # This catches only near-uniform uploads; it does not establish fundus quality.
+    thumbnail = np.asarray(source.resize((64, 64)).convert("L"), dtype=np.uint8)
+    if int(thumbnail.max()) - int(thumbnail.min()) < 8:
+        raise ValueError("image appears blank or has insufficient visual contrast")
+    return source
 
 
 def _resample_mode(name: str) -> Image.Resampling:
@@ -107,13 +128,7 @@ class RetinovaONNXPredictor:
 
     def predict(self, image_bytes: bytes) -> dict:
         started_at = perf_counter()
-        with Image.open(BytesIO(image_bytes)) as encoded:
-            source = encoded.convert("RGB")
-        if min(source.size) < self.image_size:
-            raise ValueError(f"image must be at least {self.image_size} px on its shortest side")
-        ratio = source.width / source.height
-        if ratio < 0.5 or ratio > 2.0:
-            raise ValueError("image aspect ratio is outside the accepted range")
+        source = decode_candidate_image(image_bytes, self.image_size)
 
         tensor = preprocess_image(source, self.image_size, self.interpolation)
         logits_batch, cams_batch = self.session.run(None, {self.input_name: tensor})

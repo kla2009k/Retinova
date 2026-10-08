@@ -5,7 +5,7 @@ Retinova is a research prototype for screening **retinal fundus photographs**. I
 ## Public preview
 
 - Website: https://kla2009k.github.io/Retinova/
-- Current mode: safe static preview; local image-readiness checks only
+- Current mode: static preview with local image-readiness checks; real inference requires the separate ONNX server
 - Live disease inference: GitHub Pages remains a static preview; the optional Render service runs the real checkpoint behind Team Login
 - Grad-CAM: real class-specific implementation validated offline and available through the authenticated Render/local model server
 - Welcome page: Guest access is public; Team Login is enabled by the optional localhost or authenticated Render server
@@ -106,7 +106,7 @@ This is a team demonstration gate, not a production identity system or medical-r
 
 ## Deploy the authenticated research demo on Render
 
-The repository-root `render.yaml` defines one Singapore-region Standard web service. Render prompts for `RETINOVA_TEAM_PASSCODE`; use a unique value of at least 12 characters. The service loads the versioned EfficientNet-B0 checkpoint from the repository and serves the UI, prediction API, and real Grad-CAM from one HTTPS origin.
+The repository-root `render.yaml` defines one Singapore-region Free web service. Render prompts for `RETINOVA_TEAM_PASSCODE`; use a unique value of at least 12 characters. The service loads the versioned EfficientNet-B0 ONNX checkpoint from the repository and serves the UI, prediction API, and class activation map from one HTTPS origin. The Render service is not yet live; the GitHub Pages URL remains a static preview.
 
 Automatic service deploys are disabled in the Blueprint. Also set the Blueprint's **Auto Sync** setting to **No** after creation so future YAML edits cannot change paid resources without a manual review. See the [Thai Render deployment and three-day cost guide](docs/RENDER_DEPLOYMENT_TH.md).
 
@@ -126,3 +126,7 @@ A bare smartphone camera does not produce the retinal fundus photographs used fo
 ## License and intended use
 
 The repository currently has no clinical-use license or regulatory approval. Use it for education, research, and supervised demonstrations only. Dataset use remains subject to the original dataset terms.
+
+## 2026-10-08 development status
+
+The ONNX endpoint now rejects unsupported formats, over-24-megapixel files, and near-uniform blank images before inference. This is a technical upload gate, not a validated retinal image-quality model. The public preview and model-service status, deployment attempt, verification evidence, and next development priorities are recorded in [the Thai release note](docs/RETINOVA_NEXT_PHASE_2026_10_08_TH.md).

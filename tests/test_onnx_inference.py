@@ -1,12 +1,32 @@
 import unittest
+from io import BytesIO
 
 import numpy as np
 from PIL import Image
 
-from retinova_ml.onnx_inference import normalize_cam, preprocess_image
+from retinova_ml.onnx_inference import decode_candidate_image, normalize_cam, preprocess_image
 
 
 class ONNXPreprocessingTests(unittest.TestCase):
+    def test_blank_upload_is_rejected_before_inference(self):
+        buffer = BytesIO()
+        Image.new("RGB", (400, 400), color=(40, 40, 40)).save(buffer, "PNG")
+        with self.assertRaisesRegex(ValueError, "blank|contrast"):
+            decode_candidate_image(buffer.getvalue())
+
+    def test_varied_image_passes_technical_gate(self):
+        pixels = np.zeros((300, 300, 3), dtype=np.uint8)
+        pixels[:, 150:] = (220, 100, 70)
+        buffer = BytesIO()
+        Image.fromarray(pixels).save(buffer, "PNG")
+        self.assertEqual((300, 300), decode_candidate_image(buffer.getvalue()).size)
+
+    def test_gif_upload_is_rejected(self):
+        buffer = BytesIO()
+        Image.new("RGB", (300, 300), color="red").save(buffer, "GIF")
+        with self.assertRaisesRegex(ValueError, "JPEG and PNG"):
+            decode_candidate_image(buffer.getvalue())
+
     def test_preprocess_produces_normalized_nchw_float32(self):
         source = Image.new("RGB", (400, 300), color=(128, 64, 32))
 
