@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#081c2b">
   <title>Retinova — Retinal screening, explained</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%234da6ef'/%3E%3Cpath d='M10 32s8-13 22-13 22 13 22 13-8 13-22 13S10 32 10 32Z' fill='none' stroke='white' stroke-width='4'/%3E%3Ccircle cx='32' cy='32' r='7' fill='white'/%3E%3C/svg%3E">
-  <link rel="stylesheet" href="styles.css?v=20260810b">
+  <link rel="stylesheet" href="styles.css?v=20261008a">
 </head>
 <body>
   <a class="skip-link" href="#mainContent">ข้ามไปเนื้อหาหลัก</a>
@@ -34,10 +34,10 @@
       <div class="welcome-brand"><span class="brand-icon"><svg><use href="#i-eye"/></svg></span><span><strong>Retinova</strong><small>SMART RETINAL RESEARCH</small></span></div>
       <span class="welcome-kicker">EVIDENCE-AWARE AI · PUBLIC PREVIEW</span>
       <h1 id="welcomeTitle" data-th="มองเห็นหลักฐาน ก่อนเชื่อผลจาก AI" data-en="See the evidence before trusting an AI result">มองเห็นหลักฐาน<br>ก่อนเชื่อผลจาก AI</h1>
-      <p data-th="ต้นแบบคัดกรองภาพถ่ายจอประสาทตาที่แสดงผลประเมินจริง ข้อจำกัด และ Grad-CAM จริงจากโมเดลในเครื่อง" data-en="A retinal-fundus research prototype that shows measured evaluation, limitations, and real Grad-CAM from the local model.">ต้นแบบคัดกรองภาพถ่ายจอประสาทตาที่แสดงผลประเมินจริง ข้อจำกัด และ Grad-CAM จริงจากโมเดลในเครื่อง</p>
+      <p data-th="ต้นแบบคัดกรองภาพ fundus ที่แสดงผลประเมินจริง และแผนที่อิทธิพลจากโมเดลวิจัย" data-en="A fundus-image research prototype with measured evaluation and model attribution maps.">ต้นแบบคัดกรองภาพ fundus ที่แสดงผลประเมินจริง และแผนที่อิทธิพลจากโมเดลวิจัย</p>
       <ul>
         <li><svg><use href="#i-chart"/></svg><span data-th="ผล test แบบแยกผู้ป่วย: macro F1 0.581 (95% CI 0.525–0.622)" data-en="Patient-grouped test result: macro F1 0.581 (95% CI 0.525–0.622)">ผล test แบบแยกผู้ป่วย: macro F1 0.581 (95% CI 0.525–0.622)</span></li>
-        <li><svg><use href="#i-eye"/></svg><span data-th="เปรียบเทียบภาพต้นฉบับกับ Grad-CAM จริงเมื่อใช้ local model" data-en="Compare the original image with real Grad-CAM when using the local model">เปรียบเทียบภาพต้นฉบับกับ Grad-CAM จริงเมื่อใช้ local model</span></li>
+        <li><svg><use href="#i-eye"/></svg><span data-th="เปรียบเทียบภาพต้นฉบับกับ CAM (ออนไลน์) หรือ Grad-CAM (ในเครื่อง)" data-en="Compare the original with CAM (cloud) or Grad-CAM (local)">เปรียบเทียบภาพต้นฉบับกับ CAM (ออนไลน์) หรือ Grad-CAM (ในเครื่อง)</span></li>
         <li><svg><use href="#i-shield"/></svg><span data-th="ไม่สร้างประวัติผู้ป่วย และไม่เก็บภาพหรือรหัสผ่านในเบราว์เซอร์" data-en="No fabricated patient records; images and passwords are not stored in the browser">ไม่สร้างประวัติผู้ป่วย และไม่เก็บภาพหรือรหัสผ่านในเบราว์เซอร์</span></li>
       </ul>
     </div>
@@ -46,16 +46,17 @@
       <div class="welcome-language" aria-label="Language"><button type="button" data-welcome-language="th" class="active">ไทย</button><button type="button" data-welcome-language="en">EN</button><button type="button" data-welcome-language="zh">中文</button></div>
       <span class="login-eyebrow" data-th="ยินดีต้อนรับ" data-en="Welcome">ยินดีต้อนรับ</span>
       <h2 data-th="เข้าสู่ Retinova" data-en="Enter Retinova">เข้าสู่ Retinova</h2>
-      <p data-th="เลือกเข้าเว็บสาธิต หรือเข้าสู่ระบบทีมเพื่อใช้โมเดลที่รันอยู่บนเครื่องนี้" data-en="Continue to the public demo, or use Team Login for a model running on this computer.">เลือกเข้าเว็บสาธิต หรือเข้าสู่ระบบทีมเพื่อใช้โมเดลที่รันอยู่บนเครื่องนี้</p>
+      <p data-th="เข้าชมพรีวิว หรือใช้ Team Login เมื่อเปิดเว็บผ่านเซิร์ฟเวอร์โมเดล" data-en="Explore the preview, or use Team Login on the model server.">เข้าชมพรีวิว หรือใช้ Team Login เมื่อเปิดเว็บผ่านเซิร์ฟเวอร์โมเดล</p>
 
       <button class="guest-button" id="guestButton" type="button"><span data-th="เข้าชมแบบผู้เยี่ยมชม" data-en="Continue as guest">เข้าชมแบบผู้เยี่ยมชม</span><small data-th="ดูหน้าจอ หลักฐาน และตรวจคุณสมบัติไฟล์" data-en="Explore the UI, evidence, and file readiness">ดูหน้าจอ หลักฐาน และตรวจคุณสมบัติไฟล์</small></button>
-      <div class="login-divider"><span data-th="หรือ · เฉพาะ local server" data-en="or · local server only">หรือ · เฉพาะ local server</span></div>
+      <a class="model-site-link" href="https://retinova-f70k.onrender.com/" rel="noopener" data-th="เปิดเว็บโมเดลจริง · Team Login ↗" data-en="Open the live model · Team Login ↗">เปิดเว็บโมเดลจริง · Team Login ↗</a>
+      <div class="login-divider"><span data-th="หรือ · เฉพาะเว็บเซิร์ฟเวอร์โมเดล" data-en="or · model server only">หรือ · เฉพาะเว็บเซิร์ฟเวอร์โมเดล</span></div>
 
       <form id="teamLoginForm" class="team-login">
         <label for="teamPasscode" data-th="รหัสผ่านทีม" data-en="Team passcode">รหัสผ่านทีม</label>
         <div class="passcode-field"><svg><use href="#i-shield"/></svg><input id="teamPasscode" name="passcode" type="password" autocomplete="current-password" required placeholder="••••••••"></div>
         <button id="teamLoginButton" class="primary-action full" type="submit" disabled data-th="เข้าสู่ระบบทีม" data-en="Team login">เข้าสู่ระบบทีม</button>
-        <p id="teamLoginStatus" class="login-status" role="status" data-th="เปิดเว็บผ่าน local server ที่ตั้ง RETINOVA_TEAM_PASSCODE เพื่อใช้งาน" data-en="Open the local server with RETINOVA_TEAM_PASSCODE configured to enable this login.">เปิดเว็บผ่าน local server ที่ตั้ง RETINOVA_TEAM_PASSCODE เพื่อใช้งาน</p>
+        <p id="teamLoginStatus" class="login-status" role="status" data-th="Team Login ใช้ได้เมื่อเปิดจากเซิร์ฟเวอร์โมเดลที่ตั้งรหัสทีม" data-en="Team Login is available on a model server with a team passcode.">Team Login ใช้ได้เมื่อเปิดจากเซิร์ฟเวอร์โมเดลที่ตั้งรหัสทีม</p>
       </form>
       <p class="login-boundary"><svg><use href="#i-info"/></svg><span data-th="GitHub Pages ไม่มีระบบบัญชีและไม่รับรหัสผ่าน หน้านี้จึงไม่ใช่ระบบเวชระเบียน" data-en="GitHub Pages has no account system and receives no passwords. This is not a medical-record system.">GitHub Pages ไม่มีระบบบัญชีและไม่รับรหัสผ่าน หน้านี้จึงไม่ใช่ระบบเวชระเบียน</span></p>
     </aside>
@@ -130,14 +131,14 @@
 
             <article class="panel scope-panel evidence-strip">
               <header><svg><use href="#i-chart"/></svg><h2 data-th="หลักฐานที่ใช้จริง" data-en="Measured evidence">หลักฐานที่ใช้จริง</h2></header>
-              <div class="evidence-facts"><span><small>Test macro F1</small><b>0.581</b></span><span><small>Balanced accuracy</small><b>0.642</b></span><span><small>Patient overlap</small><b>0</b></span><span><small>Grad-CAM</small><b data-th="ทดสอบแล้ว" data-en="Verified">ทดสอบแล้ว</b></span></div>
+      <div class="evidence-facts"><span><small>Test macro F1</small><b>0.581</b></span><span><small>Balanced accuracy</small><b>0.642</b></span><span><small>Patient overlap</small><b>0</b></span><span><small>CAM / Grad-CAM</small><b data-th="ทดสอบแล้ว" data-en="Verified">ทดสอบแล้ว</b></span></div>
               <button class="text-action" type="button" data-view="evidence" data-th="ดูวิธีประเมินและข้อจำกัด →" data-en="Review methods and limitations →">ดูวิธีประเมินและข้อจำกัด →</button>
             </article>
           </div>
         </section>
 
         <section class="app-view" id="view-analyze" data-page="analyze" hidden>
-          <div class="page-heading"><div><span data-th="พื้นที่ทดลอง" data-en="Analysis workspace">พื้นที่ทดลอง</span><h1 data-th="ตรวจภาพจอประสาทตา" data-en="Retinal image analysis">ตรวจภาพจอประสาทตา</h1><p data-th="Public Preview ตรวจไฟล์ในเบราว์เซอร์ ส่วนโมเดลจริงทำงานเฉพาะ local server" data-en="Public Preview checks the file in-browser; real inference runs only with the local server.">Public Preview ตรวจไฟล์ในเบราว์เซอร์ ส่วนโมเดลจริงทำงานเฉพาะ local server</p></div><span class="mode-chip" id="modeChip" data-th="โหมดสาธิตสาธารณะ" data-en="Public preview mode">โหมดสาธิตสาธารณะ</span></div>
+          <div class="page-heading"><div><span data-th="พื้นที่ทดลอง" data-en="Analysis workspace">พื้นที่ทดลอง</span><h1 data-th="ตรวจภาพจอประสาทตา" data-en="Retinal image analysis">ตรวจภาพจอประสาทตา</h1><p data-th="GitHub Pages ตรวจไฟล์ในเบราว์เซอร์; โมเดลจริงทำงานบนเว็บ Render ที่ต้องใช้ Team Login" data-en="GitHub Pages checks files in-browser; live inference is available through the Team Login model server.">GitHub Pages ตรวจไฟล์ในเบราว์เซอร์; โมเดลจริงทำงานบนเว็บ Render ที่ต้องใช้ Team Login</p></div><span class="mode-chip" id="modeChip" data-th="โหมดสาธิตสาธารณะ" data-en="Public preview mode">โหมดสาธิตสาธารณะ</span></div>
 
           <div class="analysis-grid">
             <article class="panel upload-panel">
@@ -164,7 +165,7 @@
                 <ul class="camera-safety">
                   <li data-th="Retinova ไม่เปิดไฟฉายหรือแฟลชอัตโนมัติ และไม่ควรจ่อแสงสว่างจ้าใกล้ตา" data-en="Retinova never enables the torch or flash automatically; do not aim a bright light close to the eye.">Retinova ไม่เปิดไฟฉายหรือแฟลชอัตโนมัติ และไม่ควรจ่อแสงสว่างจ้าใกล้ตา</li>
                   <li data-th="ภาพอยู่ในหน่วยความจำของแท็บนี้ กล้องจะหยุดเมื่อปิดหน้ากล้อง สลับหน้า หรือซ่อนแท็บ" data-en="The frame stays in this tab's memory. The camera stops when this panel closes, the page changes, or the tab is hidden.">ภาพอยู่ในหน่วยความจำของแท็บนี้ กล้องจะหยุดเมื่อปิดหน้ากล้อง สลับหน้า หรือซ่อนแท็บ</li>
-                  <li data-th="เว็บไซต์สาธารณะตรวจได้เฉพาะคุณสมบัติไฟล์ ส่วน prediction และ Grad-CAM ใช้ได้เฉพาะ local model server" data-en="The public site checks file properties only. Prediction and Grad-CAM require the local model server.">เว็บไซต์สาธารณะตรวจได้เฉพาะคุณสมบัติไฟล์ ส่วน prediction และ Grad-CAM ใช้ได้เฉพาะ local model server</li>
+                  <li data-th="เว็บ GitHub Pages ตรวจได้เฉพาะคุณสมบัติไฟล์; prediction และ CAM/Grad-CAM ใช้ผ่านเซิร์ฟเวอร์โมเดล" data-en="The GitHub Pages preview checks files only. Prediction and CAM/Grad-CAM require the model server.">เว็บ GitHub Pages ตรวจได้เฉพาะคุณสมบัติไฟล์; prediction และ CAM/Grad-CAM ใช้ผ่านเซิร์ฟเวอร์โมเดล</li>
                 </ul>
               </section>
               <label class="dropzone" id="dropzone" for="imageInput">
@@ -197,11 +198,11 @@
                 <div class="camera-qualification-notice" id="cameraQualificationNotice" hidden><strong data-th="ไม่ส่งภาพนี้เข้าโมเดล" data-en="This frame will not enter the model">ไม่ส่งภาพนี้เข้าโมเดล</strong><p data-th="ภาพมาจากกล้องสดโดยไม่ได้ยืนยันชุดถ่าย fundus ภาพตาภายนอกอยู่นอกขอบเขตข้อมูลฝึก จึงแสดงได้เฉพาะการตรวจคุณสมบัติไฟล์" data-en="This live-camera frame was captured without confirmed fundus optics. External-eye photos are outside the training domain, so only file properties are shown.">ภาพมาจากกล้องสดโดยไม่ได้ยืนยันชุดถ่าย fundus ภาพตาภายนอกอยู่นอกขอบเขตข้อมูลฝึก จึงแสดงได้เฉพาะการตรวจคุณสมบัติไฟล์</p></div>
                 <div class="preview-notice" id="previewNotice"><strong data-th="ขอบเขตโหมดนี้" data-en="Mode boundary">ขอบเขตโหมดนี้</strong><p data-th="เว็บสาธารณะไม่ส่งภาพเข้าโมเดลและไม่สร้าง heatmap เพื่อหลีกเลี่ยงผลทางการแพทย์ที่ยังไม่ผ่านการตรวจสอบ" data-en="The public site does not send images to a model or generate heatmaps, avoiding unvalidated medical output.">เว็บสาธารณะไม่ส่งภาพเข้าโมเดลและไม่สร้าง heatmap เพื่อหลีกเลี่ยงผลทางการแพทย์ที่ยังไม่ผ่านการตรวจสอบ</p></div>
                 <div class="model-output" id="modelOutput" hidden>
-                  <div class="model-decision"><div><small data-th="ผลโมเดลวิจัยในเครื่อง" data-en="Local research-model output">ผลโมเดลวิจัยในเครื่อง</small><h3 id="modelPrediction">—</h3></div><div class="probability-value"><strong id="modelProbability">—</strong><small data-th="ความน่าจะเป็นของโมเดล · ไม่ใช่คะแนนคลินิก" data-en="Model probability · not a clinical score">ความน่าจะเป็นของโมเดล · ไม่ใช่คะแนนคลินิก</small></div></div>
+                  <div class="model-decision"><div><small data-th="ผลจากโมเดลวิจัย" data-en="Research-model output">ผลจากโมเดลวิจัย</small><h3 id="modelPrediction">—</h3></div><div class="probability-value"><strong id="modelProbability">—</strong><small data-th="ความน่าจะเป็นของโมเดล · ไม่ใช่คะแนนคลินิก" data-en="Model probability · not a clinical score">ความน่าจะเป็นของโมเดล · ไม่ใช่คะแนนคลินิก</small></div></div>
                   <figure class="gradcam-comparison">
                     <div class="comparison-stage"><img id="originalCompareImage" alt="ภาพต้นฉบับที่เลือก"><div class="comparison-overlay" id="comparisonOverlay"><img id="gradcamCompareImage" alt="แผนที่ CAM จากคลาสที่โมเดลทำนาย"></div><span class="compare-label original-label" data-th="ภาพต้นฉบับ" data-en="Original">ภาพต้นฉบับ</span><span class="compare-label heatmap-label">MODEL CAM</span></div>
                     <label for="comparisonSlider" data-th="เลื่อนเพื่อเทียบภาพต้นฉบับกับ CAM" data-en="Slide to compare the original with CAM">เลื่อนเพื่อเทียบภาพต้นฉบับกับ CAM</label>
-                    <input id="comparisonSlider" type="range" min="0" max="100" value="50" aria-label="สัดส่วนภาพต้นฉบับและ Grad-CAM">
+                    <input id="comparisonSlider" type="range" min="0" max="100" value="50" aria-label="สัดส่วนภาพต้นฉบับและแผนที่อิทธิพลของโมเดล">
                     <figcaption data-th="CAM แสดงบริเวณที่มีอิทธิพลต่อคลาสที่ทำนาย ไม่ใช่ขอบเขตรอยโรค" data-en="CAM shows regions influencing the predicted class; it is not a lesion boundary.">CAM แสดงบริเวณที่มีอิทธิพลต่อคลาสที่ทำนาย ไม่ใช่ขอบเขตรอยโรค</figcaption>
                   </figure>
                   <ol id="probabilityList"></ol>
@@ -214,7 +215,7 @@
 
           <article class="panel pipeline-panel">
             <header><svg><use href="#i-pulse"/></svg><h2 data-th="กระบวนการของระบบ" data-en="System pipeline">กระบวนการของระบบ</h2></header>
-            <ol><li><span>1</span><b data-th="รับภาพ" data-en="Receive">รับภาพ</b></li><li><span>2</span><b data-th="ตรวจไฟล์" data-en="Validate">ตรวจไฟล์</b></li><li><span>3</span><b data-th="ปรับภาพ" data-en="Preprocess">ปรับภาพ</b></li><li><span>4</span><b data-th="จำแนก" data-en="Classify">จำแนก</b></li><li><span>5</span><b>Grad-CAM</b></li><li><span>6</span><b data-th="รายงานข้อจำกัด" data-en="Report limits">รายงานข้อจำกัด</b></li></ol>
+            <ol><li><span>1</span><b data-th="รับภาพ" data-en="Receive">รับภาพ</b></li><li><span>2</span><b data-th="ตรวจไฟล์" data-en="Validate">ตรวจไฟล์</b></li><li><span>3</span><b data-th="ปรับภาพ" data-en="Preprocess">ปรับภาพ</b></li><li><span>4</span><b data-th="จำแนก" data-en="Classify">จำแนก</b></li><li><span>5</span><b>CAM / Grad-CAM</b></li><li><span>6</span><b data-th="รายงานข้อจำกัด" data-en="Report limits">รายงานข้อจำกัด</b></li></ol>
           </article>
         </section>
 
@@ -240,7 +241,7 @@
           <div class="page-heading"><div><span data-th="ตรวจสอบย้อนกลับได้" data-en="Traceable evidence">ตรวจสอบย้อนกลับได้</span><h1 data-th="หลักฐานและข้อจำกัดของโมเดล" data-en="Model evidence and limitations">หลักฐานและข้อจำกัดของโมเดล</h1><p data-th="ตัวเลขด้านล่างมาจาก patient-grouped baseline ไม่ใช่คำกล่าวอ้างทางคลินิก" data-en="These figures come from a patient-grouped research baseline, not a clinical claim.">ตัวเลขด้านล่างมาจาก patient-grouped baseline ไม่ใช่คำกล่าวอ้างทางคลินิก</p></div></div>
           <div class="metric-grid"><article><span>0.581</span><b>Test macro F1</b><small>95% CI 0.525–0.622</small></article><article><span>0.642</span><b>Balanced accuracy</b><small>95% CI 0.579–0.689</small></article><article><span>0</span><b>Patient overlap</b><small>train / val / test</small></article><article><span>503</span><b data-th="ผู้ป่วยใน test" data-en="Test patients">ผู้ป่วยใน test</b><small>957 images</small></article></div>
           <div class="evidence-grid">
-            <article class="panel evidence-card"><header><svg><use href="#i-chart"/></svg><h2 data-th="วิธีสร้าง baseline" data-en="Baseline method">วิธีสร้าง baseline</h2></header><dl><div><dt>Architecture</dt><dd>EfficientNet-B0</dd></div><div><dt>Input</dt><dd>224×224 RGB</dd></div><div><dt>Split</dt><dd>StratifiedGroupKFold</dd></div><div><dt>Selection</dt><dd>Validation macro F1</dd></div><div><dt>Grad-CAM layer</dt><dd>features.8</dd></div><div><dt>Dataset</dt><dd>6,392 ODIR-derived images</dd></div></dl><a href="https://github.com/kla2009k/Retinova/blob/main/docs/EVALUATION_BASELINE_V1.md" target="_blank" rel="noopener" data-th="เปิดรายงานการประเมิน →" data-en="Open evaluation report →">เปิดรายงานการประเมิน →</a></article>
+            <article class="panel evidence-card"><header><svg><use href="#i-chart"/></svg><h2 data-th="วิธีสร้าง baseline" data-en="Baseline method">วิธีสร้าง baseline</h2></header><dl><div><dt>Architecture</dt><dd>EfficientNet-B0</dd></div><div><dt>Input</dt><dd>224×224 RGB</dd></div><div><dt>Split</dt><dd>StratifiedGroupKFold</dd></div><div><dt>Selection</dt><dd>Validation macro F1</dd></div><div><dt>Attribution layer</dt><dd>features.8</dd></div><div><dt>Dataset</dt><dd>6,392 ODIR-derived images</dd></div></dl><a href="https://github.com/kla2009k/Retinova/blob/main/docs/EVALUATION_BASELINE_V1.md" target="_blank" rel="noopener" data-th="เปิดรายงานการประเมิน →" data-en="Open evaluation report →">เปิดรายงานการประเมิน →</a></article>
             <article class="panel limitation-card"><header><svg><use href="#i-shield"/></svg><h2 data-th="ยังขาดอะไร" data-en="What remains unproven">ยังขาดอะไร</h2></header><ul><li data-th="ยังไม่มี external-site clinical validation" data-en="No external-site clinical validation">ยังไม่มี external-site clinical validation</li><li data-th="Hypertension recall 0.389 และ Other recall 0.340 ยังต่ำ" data-en="Hypertension recall 0.389 and Other recall 0.340 remain weak">Hypertension recall 0.389 และ Other recall 0.340 ยังต่ำ</li><li data-th="ยังไม่มี quality rejection และ probability calibration ที่อนุมัติ" data-en="No approved quality rejection or probability calibration">ยังไม่มี quality rejection และ probability calibration ที่อนุมัติ</li><li data-th="ODIR เป็นโจทย์ bilateral multi-label แต่ baseline นี้ลดรูปเป็นภาพเดี่ยว label เดียว" data-en="ODIR is bilateral and multi-label; this baseline reduces it to a single-image label">ODIR เป็นโจทย์ bilateral multi-label แต่ baseline นี้ลดรูปเป็นภาพเดี่ยว label เดียว</li><li data-th="สิทธิ์เผยแพร่ภาพและ derived weights ยังต้องยืนยัน" data-en="Image and derived-weight redistribution rights need confirmation">สิทธิ์เผยแพร่ภาพและ derived weights ยังต้องยืนยัน</li></ul><div class="decision"><strong data-th="คำตัดสินปัจจุบัน" data-en="Current decision">คำตัดสินปัจจุบัน</strong><span data-th="ยังไม่อนุมัติสำหรับ public inference หรือการใช้งานคลินิก" data-en="Not approved for public inference or clinical use">ยังไม่อนุมัติสำหรับ public inference หรือการใช้งานคลินิก</span></div></article>
           </div>
         </section>
@@ -249,7 +250,7 @@
           <div class="page-heading"><div><span data-th="การตั้งค่าการสาธิต" data-en="Demonstration settings">การตั้งค่าการสาธิต</span><h1 data-th="ตั้งค่า" data-en="Settings">ตั้งค่า</h1><p data-th="ตรวจสอบภาษา โหมดการทำงาน และขอบเขตความเป็นส่วนตัวก่อนให้กรรมการทดลอง" data-en="Review language, operating mode, and privacy boundaries before a judge tries the demo.">ตรวจสอบภาษา โหมดการทำงาน และขอบเขตความเป็นส่วนตัวก่อนให้กรรมการทดลอง</p></div></div>
           <div class="settings-grid">
             <article class="panel settings-panel"><header><svg><use href="#i-settings"/></svg><h2 data-th="ภาษาและการแสดงผล" data-en="Language and display">ภาษาและการแสดงผล</h2></header><p data-th="สลับภาษาได้จากปุ่ม TH/EN ด้านขวาบน เนื้อหาและคำเตือนจะเปลี่ยนพร้อมกัน" data-en="Use the TH/EN button in the top bar. Content and safety warnings switch together.">สลับภาษาได้จากปุ่ม TH/EN ด้านขวาบน เนื้อหาและคำเตือนจะเปลี่ยนพร้อมกัน</p><button class="secondary-action settings-language" type="button" id="settingsLanguageButton" data-th="สลับเป็น English" data-en="Switch to ภาษาไทย">สลับเป็น English</button></article>
-            <article class="panel settings-panel"><header><svg><use href="#i-shield"/></svg><h2 data-th="ความเป็นส่วนตัว" data-en="Privacy">ความเป็นส่วนตัว</h2></header><ul><li data-th="Public Preview ไม่อัปโหลดหรือจัดเก็บภาพ" data-en="Public Preview does not upload or store images">Public Preview ไม่อัปโหลดหรือจัดเก็บภาพ</li><li data-th="ผลใน History อยู่เฉพาะหน่วยความจำของแท็บ" data-en="History results remain only in this tab's memory">ผลใน History อยู่เฉพาะหน่วยความจำของแท็บ</li><li data-th="การทำนายจริงต้องใช้ local model server" data-en="Real inference requires the local model server">การทำนายจริงต้องใช้ local model server</li></ul></article>
+            <article class="panel settings-panel"><header><svg><use href="#i-shield"/></svg><h2 data-th="ความเป็นส่วนตัว" data-en="Privacy">ความเป็นส่วนตัว</h2></header><ul><li data-th="Public Preview ไม่อัปโหลดหรือจัดเก็บภาพ" data-en="Public Preview does not upload or store images">Public Preview ไม่อัปโหลดหรือจัดเก็บภาพ</li><li data-th="ผลใน History อยู่เฉพาะหน่วยความจำของแท็บ" data-en="History results remain only in this tab's memory">ผลใน History อยู่เฉพาะหน่วยความจำของแท็บ</li><li data-th="การทำนายจริงต้องใช้เซิร์ฟเวอร์โมเดล" data-en="Real inference requires the model server">การทำนายจริงต้องใช้เซิร์ฟเวอร์โมเดล</li></ul></article>
           </div>
         </section>
       </main>
@@ -257,6 +258,6 @@
   </div>
 
   <noscript>Retinova ต้องใช้ JavaScript เพื่อสลับหน้าจอและตรวจไฟล์ภาพ</noscript>
-  <script src="app.js?v=20260821zh6"></script>
+  <script src="app.js?v=20261008a"></script>
 </body>
 </html>

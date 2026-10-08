@@ -85,6 +85,7 @@ class PublicContractTests(unittest.TestCase):
         self.assertIn('id="welcomeGate"', HTML)
         self.assertIn('id="guestButton"', HTML)
         self.assertIn('id="teamLoginForm"', HTML)
+        self.assertIn('href="https://retinova-f70k.onrender.com/"', HTML)
         self.assertRegex(HTML, r'id="teamPasscode"[^>]+autocomplete="current-password"')
         self.assertIn("fetch('/session'", JS)
         self.assertIn("credentials: 'same-origin'", JS)
@@ -108,6 +109,7 @@ class PublicContractTests(unittest.TestCase):
         self.assertIn('id="gradcamCompareImage"', HTML)
         self.assertIn("clipPath", JS)
         self.assertNotIn("radial-gradient", JS)
+        self.assertIn("CAM (cloud) or Grad-CAM (local)", HTML)
 
     def test_mobile_camera_capture_has_explicit_controls_and_medical_boundary(self):
         for element_id in (

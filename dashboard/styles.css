@@ -70,6 +70,9 @@ svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width:
 .guest-button { width: 100%; display: grid; gap: 3px; margin-top: 22px; padding: 17px 19px; border: 0; border-radius: 15px; background: linear-gradient(110deg, #247ec7, #42bad2); color: white; text-align: left; cursor: pointer; box-shadow: 0 14px 25px rgba(36, 126, 199, .2); }
 .guest-button span { font-weight: 800; }
 .guest-button small { color: rgba(255, 255, 255, .82); }
+.model-site-link { display: block; margin-top: 13px; padding: 10px 12px; border: 1px solid #b8d9e8; border-radius: 10px; color: #145b88; text-align: center; font-size: 13px; font-weight: 750; text-decoration: none; }
+.model-site-link:hover { background: #ebf7fb; }
+.model-site-link:focus-visible { outline: 3px solid rgba(82, 199, 223, .55); outline-offset: 3px; }
 .login-divider { display: flex; align-items: center; gap: 12px; margin: 22px 0; color: #8193a2; font-size: 12px; }
 .login-divider::before, .login-divider::after { content: ""; height: 1px; flex: 1; background: #d8e2e9; }
 .team-login label { display: block; margin-bottom: 7px; color: #29465b; font-weight: 800; }

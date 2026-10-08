@@ -49,6 +49,16 @@ const classNames = {
 };
 
 const zhTranslations = {
+  'Open the live model · Team Login ↗': '打开在线模型 · 团队登录 ↗',
+  'A fundus-image research prototype with measured evaluation and model attribution maps.': '眼底图像研究原型，展示实测评估和模型归因图。',
+  'Compare the original with CAM (cloud) or Grad-CAM (local)': '比较原图与云端 CAM 或本地 Grad-CAM。',
+  'Explore the preview, or use Team Login on the model server.': '浏览预览，或在模型服务器上使用团队登录。',
+  'or · model server only': '或 · 仅限模型服务器',
+  'Team Login is available on a model server with a team passcode.': '团队登录仅在配置团队密码的模型服务器上可用。',
+  'GitHub Pages checks files in-browser; live inference is available through the Team Login model server.': 'GitHub Pages 只在浏览器中检查文件；真实推理需通过团队登录模型服务器。',
+  'The GitHub Pages preview checks files only. Prediction and CAM/Grad-CAM require the model server.': 'GitHub Pages 仅检查文件；预测和 CAM/Grad-CAM 需要模型服务器。',
+  'Research-model output': '研究模型输出',
+  'Real inference requires the model server': '真实推理需要模型服务器',
   'Welcome': '欢迎',
   'Enter Retinova': '进入 Retinova',
   'Continue to the public demo, or use Team Login for a model running on this computer.': '继续进入公开演示，或使用团队登录连接本机模型。',

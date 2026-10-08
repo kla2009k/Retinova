@@ -7,7 +7,7 @@ Retinova is a research prototype for screening **retinal fundus photographs**. I
 - Website: https://kla2009k.github.io/Retinova/
 - Current mode: static preview with local image-readiness checks; real inference requires the separate ONNX server
 - Live disease inference: GitHub Pages remains a static preview; the optional Render service runs the real checkpoint behind Team Login
-- Grad-CAM: real class-specific implementation validated offline and available through the authenticated Render/local model server
+- Attribution: class-specific Grad-CAM is available in the local PyTorch server; the authenticated Render ONNX server returns class-specific CAM from the same selected checkpoint
 - Welcome page: Guest access is public; Team Login is enabled by the optional localhost or authenticated Render server
 - Session results: no fabricated patient records; only real local results are held in page memory and disappear on refresh
 - Mobile camera: live rear/front camera capture on HTTPS/localhost; bare-phone external-eye captures are blocked from model inference
